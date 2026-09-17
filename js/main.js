@@ -45,3 +45,62 @@
 
   init();
 })();
+
+// ---------------------------------------------------------------------------
+// Language switching: swap text on every [data-i18n] element using the
+// dictionaries in translations.js, remember the choice in localStorage,
+// and set <html lang="..."> to the correct BCP-47 code (note "cz" is our
+// own internal key matching the flag/country, but the real ISO 639-1
+// language code for Czech is "cs" — that's what the lang attribute needs).
+// ---------------------------------------------------------------------------
+(function () {
+  const HTML_LANG_CODE = {
+    en: "en",
+    it: "it",
+    de: "de",
+    pl: "pl",
+    cz: "cs",
+  };
+
+  const STORAGE_KEY = "preferredLang";
+
+  function applyLanguage(lang) {
+    const dict = (window.translations && window.translations[lang]) || window.translations.en;
+
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.dataset.i18n;
+      if (dict[key]) {
+        el.textContent = dict[key];
+      }
+    });
+
+    document.querySelectorAll(".lang-switcher button").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+
+    document.documentElement.lang = HTML_LANG_CODE[lang] || "en";
+
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch (e) {
+      // localStorage can throw in some private-browsing contexts; not critical.
+    }
+  }
+
+  function init() {
+    document.querySelectorAll(".lang-switcher button").forEach((btn) => {
+      btn.addEventListener("click", () => applyLanguage(btn.dataset.lang));
+    });
+
+    let savedLang = "en";
+    try {
+      savedLang = localStorage.getItem(STORAGE_KEY) || "en";
+    } catch (e) {
+      // ignore
+    }
+
+    applyLanguage(savedLang);
+  }
+
+  init();
+})();
