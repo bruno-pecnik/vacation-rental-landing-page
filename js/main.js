@@ -176,6 +176,47 @@
     }
   }
 
+  const TRANSITION_MS = 280;
+  let animating = false;
+
+  function goTo(direction) {
+    if (animating) return;
+
+    const grid = document.getElementById("reviews-grid");
+    const prevBtn = document.getElementById("reviews-prev");
+    const nextBtn = document.getElementById("reviews-next");
+    if (!grid) return;
+
+    animating = true;
+    if (prevBtn) prevBtn.disabled = true;
+    if (nextBtn) nextBtn.disabled = true;
+
+    // Slide out in the direction of travel, swap the content while it's
+    // invisible, then slide the new set in from the opposite side.
+    grid.style.setProperty("--reviews-slide", direction > 0 ? "-14px" : "14px");
+    grid.classList.add("reviews__grid--transitioning");
+
+    window.setTimeout(() => {
+      start = (start + direction + REVIEWS.length) % REVIEWS.length;
+      renderReviews();
+
+      grid.style.setProperty("--reviews-slide", direction > 0 ? "14px" : "-14px");
+
+      // Force layout so the browser registers the reversed offset before
+      // transitioning back to 0, instead of collapsing the two into one.
+      // eslint-disable-next-line no-unused-expressions
+      grid.offsetHeight;
+
+      grid.classList.remove("reviews__grid--transitioning");
+
+      window.setTimeout(() => {
+        animating = false;
+        if (prevBtn) prevBtn.disabled = false;
+        if (nextBtn) nextBtn.disabled = false;
+      }, TRANSITION_MS);
+    }, TRANSITION_MS);
+  }
+
   function init() {
     const grid = document.getElementById("reviews-grid");
     if (!grid) return;
@@ -184,17 +225,11 @@
     const nextBtn = document.getElementById("reviews-next");
 
     if (prevBtn) {
-      prevBtn.addEventListener("click", () => {
-        start = (start - 1 + REVIEWS.length) % REVIEWS.length;
-        renderReviews();
-      });
+      prevBtn.addEventListener("click", () => goTo(-1));
     }
 
     if (nextBtn) {
-      nextBtn.addEventListener("click", () => {
-        start = (start + 1) % REVIEWS.length;
-        renderReviews();
-      });
+      nextBtn.addEventListener("click", () => goTo(1));
     }
 
     renderReviews();
