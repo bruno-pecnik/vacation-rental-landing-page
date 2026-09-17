@@ -4,7 +4,7 @@
 // and the browser back/forward buttons work as expected).
 // ---------------------------------------------------------------------------
 (function () {
-  const SECTION_IDS = ["apartman", "novalja"];
+  const SECTION_IDS = ["apartman", "novalja", "host"];
   const DEFAULT_SECTION = "apartman";
 
   function showSection(id) {
@@ -100,6 +100,104 @@
     }
 
     applyLanguage(savedLang);
+  }
+
+  init();
+})();
+
+
+// ---------------------------------------------------------------------------
+// Guest reviews carousel: shows 3 real guest reviews at a time out of the
+// full set, with prev/next arrows that rotate the window by one review.
+// ---------------------------------------------------------------------------
+(function () {
+  const REVIEWS = [
+    {
+      stars: 5,
+      quote: "Everything was great. Quiet location, next to Babe Beach \u2014 about 12 minutes on foot. Great owners.",
+      author: "Andrej, Slovakia",
+    },
+    {
+      stars: 5,
+      quote: "A few minutes' walk from the sea, with a choice of beaches nearby \u2014 sandy, pebble, rocky, even dog-friendly. The pool is excellent and cleaned every day.",
+      author: "Angerman, Hungary",
+    },
+    {
+      stars: 5,
+      quote: "We stayed as a group of four and had a wonderful time. The owner was very friendly and helpful, Uber and Bolt are easy to get, and the pool was a big plus.",
+      author: "Manuel, Italy",
+    },
+    {
+      stars: 5,
+      quote: "Absolutely perfect accommodation!",
+      author: "Radek, Czech Republic",
+    },
+    {
+      stars: 5,
+      quote: null,
+      author: "Artem, Ukraine",
+    },
+  ];
+
+  const VISIBLE = 3;
+  let start = 0;
+
+  function renderReviews() {
+    const grid = document.getElementById("reviews-grid");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    for (let i = 0; i < VISIBLE; i++) {
+      const review = REVIEWS[(start + i) % REVIEWS.length];
+
+      const card = document.createElement("div");
+      card.className = "review-card";
+
+      const stars = document.createElement("p");
+      stars.className = "review-card__stars";
+      stars.setAttribute("aria-hidden", "true");
+      stars.textContent = "\u2605".repeat(review.stars);
+      card.appendChild(stars);
+
+      const quote = document.createElement("p");
+      quote.className = "review-card__quote";
+      quote.textContent = review.quote
+        ? "\u201C" + review.quote + "\u201D"
+        : "Rated 10/10 \u2014 Exceptional.";
+      card.appendChild(quote);
+
+      const author = document.createElement("p");
+      author.className = "review-card__author";
+      author.textContent = review.author;
+      card.appendChild(author);
+
+      grid.appendChild(card);
+    }
+  }
+
+  function init() {
+    const grid = document.getElementById("reviews-grid");
+    if (!grid) return;
+
+    const prevBtn = document.getElementById("reviews-prev");
+    const nextBtn = document.getElementById("reviews-next");
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        start = (start - 1 + REVIEWS.length) % REVIEWS.length;
+        renderReviews();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        start = (start + 1) % REVIEWS.length;
+        renderReviews();
+      });
+    }
+
+    renderReviews();
   }
 
   init();

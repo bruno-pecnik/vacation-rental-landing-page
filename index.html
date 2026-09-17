@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=3">
+  <link rel="stylesheet" href="css/styles.css?v=4">
 </head>
 <body>
 
@@ -72,6 +72,7 @@
     <ul>
       <li><a href="#apartman" data-section="apartman" data-i18n="nav_apartman" class="nav-link">Apartment</a></li>
       <li><a href="#novalja" data-section="novalja" data-i18n="nav_novalja" class="nav-link">Novalja</a></li>
+      <li><a href="#host" data-section="host" data-i18n="nav_host" class="nav-link">Host</a></li>
     </ul>
   </nav>
 
@@ -117,32 +118,10 @@
         <div class="reviews">
           <p class="eyebrow" data-i18n="eyebrow_reviews">Guest Reviews</p>
           <h2 data-i18n="nav_reviews">What Guests Say</h2>
-          <div class="reviews__grid">
-            <div class="review-card">
-              <p class="review-card__stars" aria-hidden="true">★★★★★</p>
-              <p class="review-card__quote">&ldquo;Everything was great. Quiet location, next to Babe Beach &mdash; about 12 minutes on foot. Great owners.&rdquo;</p>
-              <p class="review-card__author">Andrej, Slovakia</p>
-            </div>
-            <div class="review-card">
-              <p class="review-card__stars" aria-hidden="true">★★★★★</p>
-              <p class="review-card__quote">&ldquo;A few minutes' walk from the sea, with a choice of beaches nearby &mdash; sandy, pebble, rocky, even dog-friendly. The pool is excellent and cleaned every day.&rdquo;</p>
-              <p class="review-card__author">Angerman, Hungary</p>
-            </div>
-            <div class="review-card">
-              <p class="review-card__stars" aria-hidden="true">★★★★★</p>
-              <p class="review-card__quote">&ldquo;We stayed as a group of four and had a wonderful time. The owner was very friendly and helpful, Uber and Bolt are easy to get, and the pool was a big plus.&rdquo;</p>
-              <p class="review-card__author">Manuel, Italy</p>
-            </div>
-            <div class="review-card">
-              <p class="review-card__stars" aria-hidden="true">★★★★★</p>
-              <p class="review-card__quote">&ldquo;Naprosto perfektn&iacute; ubytov&aacute;n&iacute;!&rdquo; &mdash; &ldquo;Absolutely perfect accommodation!&rdquo;</p>
-              <p class="review-card__author">Radek, Czech Republic</p>
-            </div>
-            <div class="review-card">
-              <p class="review-card__stars" aria-hidden="true">★★★★★</p>
-              <p class="review-card__quote">Rated 10/10 &mdash; Exceptional.</p>
-              <p class="review-card__author">Artem, Ukraine</p>
-            </div>
+          <div class="reviews__carousel">
+            <button type="button" class="reviews__arrow reviews__arrow--prev" id="reviews-prev" aria-label="Previous reviews">&#8249;</button>
+            <div class="reviews__grid" id="reviews-grid"></div>
+            <button type="button" class="reviews__arrow reviews__arrow--next" id="reviews-next" aria-label="Next reviews">&#8250;</button>
           </div>
         </div>
       </div>
@@ -156,13 +135,21 @@
       </div>
     </section>
 
+    <section id="host" class="page-section">
+      <div class="section-body">
+        <p class="eyebrow" data-i18n="eyebrow_host">Your Hosts</p>
+        <h2 data-i18n="nav_host">Host</h2>
+        <p data-i18n="desc_host">Luxury Apartments Cuba is run directly by the family that owns it &mdash; no management company, no call centre. We live nearby, so if anything comes up during your stay we're quick to help, and happy to share tips on our favourite beaches, restaurants, and things to do around Novalja. Message us on WhatsApp any time before or during your stay &mdash; we're glad to answer questions directly.</p>
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">
     <p data-i18n="footer_copyright">&copy; 2026 Luxury Apartments Cuba Novalja</p>
   </footer>
 
-  <script src="js/translations.js?v=3" defer></script>
-  <script src="js/main.js?v=3" defer></script>
+  <script src="js/translations.js?v=4" defer></script>
+  <script src="js/main.js?v=4" defer></script>
 </body>
 </html>

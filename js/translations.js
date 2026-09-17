@@ -28,6 +28,9 @@ const translations = {
     badge_reviews: "See our guest reviews on Booking.com",
     eyebrow_reviews: "Guest Reviews",
     nav_reviews: "What Guests Say",
+    nav_host: "Host",
+    eyebrow_host: "Your Hosts",
+    desc_host: "Luxury Apartments Cuba is run directly by the family that owns it — no management company, no call centre. We live nearby, so if anything comes up during your stay we're quick to help, and happy to share tips on our favourite beaches, restaurants, and things to do around Novalja. Message us on WhatsApp any time before or during your stay — we're glad to answer questions directly.",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
   it: {
@@ -54,6 +57,9 @@ const translations = {
     badge_reviews: "Guarda le recensioni degli ospiti su Booking.com",
     eyebrow_reviews: "Recensioni degli ospiti",
     nav_reviews: "Cosa dicono gli ospiti",
+    nav_host: "Host",
+    eyebrow_host: "I vostri host",
+    desc_host: "Luxury Apartments Cuba è gestito direttamente dalla famiglia proprietaria — nessuna agenzia, nessun call center. Viviamo nelle vicinanze, quindi se durante il soggiorno dovesse servire qualcosa siamo rapidi ad aiutarvi, e siamo felici di consigliarvi le nostre spiagge, i ristoranti e le attività preferite intorno a Novalja. Scriveteci su WhatsApp in qualsiasi momento, prima o durante il soggiorno — siamo lieti di rispondere direttamente.",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
   de: {
@@ -80,6 +86,9 @@ const translations = {
     badge_reviews: "Lesen Sie unsere Gästebewertungen auf Booking.com",
     eyebrow_reviews: "Gästebewertungen",
     nav_reviews: "Was Gäste sagen",
+    nav_host: "Gastgeber",
+    eyebrow_host: "Ihre Gastgeber",
+    desc_host: "Luxury Apartments Cuba wird direkt von der Familie geführt, der die Unterkunft gehört — keine Verwaltungsfirma, kein Callcenter. Wir wohnen in der Nähe und helfen daher schnell, falls während Ihres Aufenthalts etwas ansteht. Gerne verraten wir auch unsere liebsten Strände, Restaurants und Ausflugstipps rund um Novalja. Schreiben Sie uns jederzeit vor oder während Ihres Aufenthalts auf WhatsApp — wir antworten Ihnen gerne direkt.",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
   pl: {
@@ -106,6 +115,9 @@ const translations = {
     badge_reviews: "Zobacz opinie gości na Booking.com",
     eyebrow_reviews: "Opinie gości",
     nav_reviews: "Co mowia goscie",
+    nav_host: "Gospodarz",
+    eyebrow_host: "Twoi gospodarze",
+    desc_host: "Luxury Apartments Cuba jest prowadzony bezpośrednio przez rodzinę, do której należy obiekt — bez firmy zarządzającej, bez call center. Mieszkamy w pobliżu, więc jeśli podczas pobytu coś się wydarzy, szybko pomożemy, a chętnie podpowiemy też nasze ulubione plaże, restauracje i atrakcje w okolicy Novalji. Napisz do nas na WhatsApp w dowolnym momencie przed lub w trakcie pobytu — chętnie odpowiemy bezpośrednio.",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
   cz: {
@@ -132,6 +144,9 @@ const translations = {
     badge_reviews: "Přečtěte si hodnocení hostů na Booking.com",
     eyebrow_reviews: "Hodnoceni hostu",
     nav_reviews: "Co rikaji hoste",
+    nav_host: "Hostitel",
+    eyebrow_host: "Vaši hostitelé",
+    desc_host: "Luxury Apartments Cuba provozuje přímo rodina, které apartmán patří — žádná správcovská firma, žádné call centrum. Bydlíme poblíž, takže pokud by během pobytu něco nastalo, rychle pomůžeme, a rádi poradíme i s oblíbenými plážemi, restauracemi a tipy na výlety v okolí Novalje. Napište nám kdykoli před pobytem nebo během něj na WhatsApp — rádi odpovíme přímo.",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
 };

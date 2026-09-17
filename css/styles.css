@@ -270,17 +270,18 @@ main {
 .booking-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.7em;
-  margin: 0 0.75rem 0.75rem 0;
-  padding: 0.55rem 1.15rem 0.55rem 0.55rem;
+  gap: 0.85em;
+  margin: 1.25rem 0.75rem 0.75rem 0;
+  padding: 0.9rem 1.7rem 0.9rem 0.8rem;
   background: #003580;
   border: 1px solid #003580;
   border-radius: 4px;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   color: #ffffff;
   text-decoration: none;
+  white-space: nowrap;
   box-shadow: 0 6px 16px rgba(0, 53, 128, 0.25);
   transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
@@ -295,15 +296,15 @@ main {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.9em;
-  height: 1.9em;
+  width: 2.1em;
+  height: 2.1em;
   flex-shrink: 0;
   border-radius: 3px;
   background: #ffffff;
   color: #003580;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 0.95em;
+  font-size: 1em;
 }
 
 /* Guest reviews */
@@ -311,11 +312,43 @@ main {
   margin-top: 3rem;
 }
 
-.reviews__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+.reviews__carousel {
+  display: flex;
+  align-items: stretch;
   gap: 1.25rem;
   margin-top: 1.5rem;
+}
+
+.reviews__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.reviews__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-self: center;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-navy);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.reviews__arrow:hover {
+  background: var(--color-off-white);
+  border-color: var(--color-navy);
+  transform: translateY(-1px);
 }
 
 .review-card {
@@ -371,13 +404,28 @@ main {
   .gallery img {
     height: 160px;
   }
+
+  .reviews__carousel {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .reviews__grid {
+    order: 1;
+    flex-basis: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .reviews__arrow {
+    order: 2;
+  }
 }
 
 /* Map embed — given the same elevated-card treatment as the hero bar,
    so it reads as a designed element rather than a raw dropped-in widget */
 .map-embed {
   margin-top: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   border: 1px solid var(--color-line);
   border-radius: 6px;
   overflow: hidden;
