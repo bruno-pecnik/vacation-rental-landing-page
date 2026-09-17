@@ -317,12 +317,15 @@ main {
   }
 }
 
-/* Map embed (real content, no placeholder styling needed) */
+/* Map embed — given the same elevated-card treatment as the hero bar,
+   so it reads as a designed element rather than a raw dropped-in widget */
 .map-embed {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
   border: 1px solid var(--color-line);
-  border-radius: var(--radius);
+  border-radius: 6px;
   overflow: hidden;
+  box-shadow: 0 12px 30px rgba(11, 22, 38, 0.12);
 }
 
 .map-embed iframe {
