@@ -4,7 +4,7 @@
 // and the browser back/forward buttons work as expected).
 // ---------------------------------------------------------------------------
 (function () {
-  const SECTION_IDS = ["apartman", "okolica", "novalja", "book-direct"];
+  const SECTION_IDS = ["apartman", "novalja"];
   const DEFAULT_SECTION = "apartman";
 
   function showSection(id) {

@@ -127,45 +127,37 @@ a {
   text-transform: none;
 }
 
-.main-nav ul {
+.sub-nav {
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.sub-nav ul {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0.6rem;
+  gap: 2.25rem;
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
-.main-nav li {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.main-nav li:not(:last-child)::after {
-  content: "";
+.sub-nav a {
   display: inline-block;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: rgba(143, 166, 194, 0.45);
-}
-
-.main-nav a {
-  color: rgba(255, 255, 255, 0.72);
-  text-decoration: none;
+  padding: 1.9rem 0 1.15rem;
   font-size: 0.78rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: color 0.2s ease;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.main-nav a:hover,
-.main-nav a.active {
-  color: var(--color-steel-light);
+.sub-nav a:hover,
+.sub-nav a.active {
+  color: var(--color-navy);
+  border-bottom-color: var(--color-navy);
 }
 
 .lang-switcher {
@@ -241,7 +233,7 @@ main {
 }
 
 .page-section {
-  padding: 4.5rem 0;
+  padding: 0 0 4.5rem;
 }
 
 .page-section + .page-section {
@@ -375,7 +367,7 @@ main {
   }
 
   .page-section {
-    padding: 3rem 0;
+    padding: 0 0 3rem;
   }
 
   .specs li {
@@ -391,15 +383,6 @@ main {
    ========================================================================== */
 .hero-section {
   padding: 0 0 4.5rem;
-  /* Break out of <main>'s max-width so the hero spans the full viewport
-     width edge-to-edge, instead of sitting in a boxed column like the
-     rest of the page. */
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
 }
 
 .hero {
@@ -536,14 +519,16 @@ main {
   padding: 3.5rem 2rem 0;
 }
 
-#apartman .section-body {
-  padding-top: 4.5rem;
+/* A quiet neutral tint on the second tab for rhythm between the two panels */
+#novalja {
+  background: var(--color-off-white);
 }
 
-/* Alternate a cool neutral tint on every other section for rhythm */
-#okolica,
-#book-direct {
-  background: var(--color-off-white);
+.section-divider {
+  height: 1px;
+  background: var(--color-line);
+  margin: 3rem 0;
+  max-width: var(--measure);
 }
 
 @media (max-width: 640px) {
