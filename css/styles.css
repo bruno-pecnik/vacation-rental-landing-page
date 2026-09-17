@@ -94,8 +94,8 @@ a {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 1.1rem 2rem;
+  gap: 1.25rem;
+  padding: 1.6rem 2rem;
 }
 
 .header-actions {
@@ -163,21 +163,28 @@ a {
 .whatsapp-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   text-decoration: none;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.6rem 1.05rem;
-  border-radius: var(--radius);
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
   white-space: nowrap;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 6px 16px rgba(37, 162, 90, 0.32);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.whatsapp-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(37, 162, 90, 0.4);
 }
 
 .whatsapp-icon {
-  width: 1.05em;
-  height: 1.05em;
+  width: 1.3em;
+  height: 1.3em;
   flex-shrink: 0;
 }
 
@@ -185,8 +192,8 @@ a {
   background: var(--color-whatsapp);
   color: var(--color-white);
   border: 1px solid var(--color-whatsapp);
-  font-size: 0.7rem;
-  padding: 0.5rem 0.9rem;
+  font-size: 0.78rem;
+  padding: 0.75rem 1.25rem;
 }
 
 .whatsapp-btn--nav:hover {
@@ -198,8 +205,8 @@ a {
   background: var(--color-whatsapp);
   color: var(--color-white);
   border: 1px solid var(--color-whatsapp);
-  padding: 0.9rem 1.6rem;
-  font-size: 0.82rem;
+  padding: 1.05rem 2rem;
+  font-size: 0.95rem;
   flex-shrink: 0;
 }
 
@@ -263,27 +270,40 @@ main {
 .booking-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 0.7em;
   margin: 0 0.75rem 0.75rem 0;
-  padding: 0.55rem 1rem;
-  border: 1px solid var(--color-line);
-  border-radius: 999px;
-  font-size: 0.8rem;
+  padding: 0.55rem 1.15rem 0.55rem 0.55rem;
+  background: #003580;
+  border: 1px solid #003580;
+  border-radius: 4px;
+  font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.01em;
-  color: var(--color-navy);
+  color: #ffffff;
   text-decoration: none;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  box-shadow: 0 6px 16px rgba(0, 53, 128, 0.25);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
 
 .booking-badge:hover {
-  border-color: var(--color-navy);
-  background: var(--color-off-white);
+  background: #00234f;
+  box-shadow: 0 8px 20px rgba(0, 53, 128, 0.32);
+  transform: translateY(-1px);
 }
 
-.booking-badge__star {
-  color: #f2a83c;
-  font-size: 0.9em;
+.booking-badge__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9em;
+  height: 1.9em;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: #ffffff;
+  color: #003580;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95em;
 }
 
 /* Guest reviews */
