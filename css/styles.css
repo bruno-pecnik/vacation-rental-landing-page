@@ -2,20 +2,22 @@
    Design tokens
    ========================================================================== */
 :root {
-  --color-navy: #1b2a4a;
-  --color-navy-light: #2c3f66;
-  --color-sand: #e9dfce;
-  --color-sand-light: #f6f1e7;
+  --color-navy: #16223a;
+  --color-navy-deep: #0e1626;
+  --color-ink: #1a1a1a;
+  --color-sand: #ece5d8;
+  --color-sand-light: #f8f5ee;
   --color-white: #ffffff;
-  --color-text: #23262b;
-  --color-text-muted: #5c6270;
-  --color-gold: #b08d4f;
+  --color-text-muted: #6b6f76;
+  --color-gold: #a3813f;
+  --color-line: #e2ddd0;
 
   --font-heading: "Playfair Display", Georgia, serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-  --max-width: 1100px;
-  --radius: 10px;
+  --max-width: 1120px;
+  --measure: 42em;
+  --radius: 2px;
 }
 
 /* ==========================================================================
@@ -28,31 +30,48 @@
 body {
   margin: 0;
   font-family: var(--font-body);
-  color: var(--color-text);
+  color: var(--color-ink);
   background: var(--color-white);
-  line-height: 1.6;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2 {
   font-family: var(--font-heading);
+  font-weight: 600;
   color: var(--color-navy);
-  margin: 0 0 0.6em;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
 }
 
 h1 {
-  font-size: 2.4rem;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  line-height: 1.08;
+  max-width: 16em;
 }
 
 h2 {
-  font-size: 1.8rem;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  line-height: 1.2;
 }
 
 p {
-  margin: 0 0 1em;
+  margin: 0 0 1.1em;
+  max-width: var(--measure);
 }
 
 a {
   color: var(--color-navy);
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin: 0 0 0.85em;
 }
 
 /* ==========================================================================
@@ -64,88 +83,91 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 1.5rem;
-  background: var(--color-navy);
+  padding: 1.1rem 2rem;
+  background: var(--color-navy-deep);
   color: var(--color-white);
 }
 
 .site-header .logo {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--color-white);
 }
 
 .main-nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.25rem;
+  gap: 1.75rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .main-nav a {
-  color: var(--color-sand-light);
+  color: rgba(255, 255, 255, 0.72);
   text-decoration: none;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  padding-bottom: 0.2rem;
-  border-bottom: 2px solid transparent;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
 }
 
 .main-nav a:hover,
 .main-nav a.active {
   color: var(--color-white);
-  border-bottom-color: var(--color-gold);
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
 }
 
 .lang-switcher {
   display: flex;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .lang-switcher button {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: var(--color-sand-light);
-  font-size: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.68rem;
   font-family: var(--font-body);
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius);
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .lang-switcher button:hover,
 .lang-switcher button.active {
-  background: var(--color-white);
-  color: var(--color-navy);
+  border-color: var(--color-white);
+  color: var(--color-white);
 }
 
 .whatsapp-btn {
-  background: var(--color-gold);
-  color: var(--color-navy);
+  background: var(--color-white);
+  color: var(--color-navy-deep);
   text-decoration: none;
+  font-size: 0.78rem;
   font-weight: 600;
-  font-size: 0.9rem;
-  padding: 0.55rem 1rem;
-  border-radius: 999px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.15rem;
+  border-radius: var(--radius);
   white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .whatsapp-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: var(--color-gold);
+  color: var(--color-white);
 }
 
 /* ==========================================================================
@@ -154,85 +176,99 @@ a {
 main {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 4rem;
+  padding: 0 2rem;
 }
 
 .page-section {
-  padding: 2rem 0;
-  border-bottom: 1px solid var(--color-sand);
+  padding: 4.5rem 0;
 }
 
-.page-section:last-of-type {
-  border-bottom: none;
+.page-section + .page-section {
+  border-top: 1px solid var(--color-line);
 }
 
 .tagline {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--color-text-muted);
-  max-width: 40em;
+  max-width: var(--measure);
 }
 
-/* Highlight badges */
-.highlights {
+/* Spec list — plain, editorial, not badge/pill styled */
+.specs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
   list-style: none;
-  padding: 0;
-  margin: 1.5rem 0;
+  padding: 0.9rem 0;
+  margin: 1.75rem 0;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  font-size: 0.88rem;
+  color: var(--color-navy);
 }
 
-.highlights li {
-  background: var(--color-sand-light);
-  border: 1px solid var(--color-sand);
-  color: var(--color-navy);
-  font-size: 0.9rem;
-  padding: 0.5rem 0.9rem;
-  border-radius: 999px;
+.specs li {
+  padding: 0.3rem 1rem;
+  border-right: 1px solid var(--color-line);
+}
+
+.specs li:first-child {
+  padding-left: 0;
+}
+
+.specs li:last-child {
+  border-right: none;
 }
 
 /* Booking.com trust badge */
 .booking-badge {
-  margin: 1.25rem 0;
+  margin: 1.5rem 0;
 }
 
 .booking-badge a {
-  display: inline-block;
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.82rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
   color: var(--color-navy);
   text-decoration: none;
-  border-bottom: 1px solid var(--color-gold);
+  border-bottom: 1px solid var(--color-navy);
+  padding-bottom: 0.15em;
 }
 
 .booking-badge a:hover {
   color: var(--color-gold);
+  border-bottom-color: var(--color-gold);
 }
 
 /* Gallery + map placeholders */
 .gallery,
 .map-embed {
-  margin-top: 1.5rem;
-  min-height: 220px;
+  margin-top: 2rem;
+  min-height: 260px;
   background: var(--color-sand-light);
-  border: 1px dashed var(--color-sand);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-text-muted);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* ==========================================================================
    Footer
    ========================================================================== */
 .site-footer {
-  background: var(--color-navy);
-  color: var(--color-sand-light);
+  background: var(--color-navy-deep);
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
-  padding: 1.25rem;
-  font-size: 0.85rem;
+  padding: 1.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
 }
 
 .site-footer p {
@@ -248,7 +284,17 @@ main {
     align-items: flex-start;
   }
 
-  h1 {
-    font-size: 1.9rem;
+  main {
+    padding: 0 1.25rem;
+  }
+
+  .page-section {
+    padding: 3rem 0;
+  }
+
+  .specs li {
+    border-right: none;
+    padding: 0.25rem 0;
+    width: 100%;
   }
 }
