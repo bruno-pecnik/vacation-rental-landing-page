@@ -319,18 +319,26 @@ main {
   margin-top: 1.5rem;
 }
 
+/* A fixed-height window: the outgoing and incoming card sets are both
+   absolutely positioned inside it and cross over each other, so the
+   viewport's own height never changes and the page never jumps. */
+.reviews__viewport {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 17.5rem;
+  overflow: hidden;
+}
+
 .reviews__grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
-  flex: 1 1 auto;
-  min-width: 0;
-  transition: opacity 0.28s ease, transform 0.28s ease;
-}
-
-.reviews__grid--transitioning {
-  opacity: 0;
-  transform: translateX(var(--reviews-slide, 0));
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
 }
 
 .reviews__arrow {
@@ -366,7 +374,7 @@ main {
 .review-card {
   display: flex;
   flex-direction: column;
-  min-height: 15rem;
+  min-height: 16rem;
   padding: 1.5rem;
   border: 1px solid var(--color-line);
   border-radius: 6px;
@@ -426,9 +434,13 @@ main {
     justify-content: space-between;
   }
 
-  .reviews__grid {
+  .reviews__viewport {
     order: 1;
     flex-basis: 100%;
+    min-height: 47rem;
+  }
+
+  .reviews__grid {
     grid-template-columns: 1fr;
   }
 

@@ -146,16 +146,19 @@
   ];
 
   const VISIBLE = 3;
+  const TRANSITION_MS = 450;
+  const SLIDE_PX = 36;
+
   let start = 0;
+  let animating = false;
+  let currentGrid = null;
 
-  function renderReviews() {
-    const grid = document.getElementById("reviews-grid");
-    if (!grid) return;
-
-    grid.innerHTML = "";
+  function buildGrid(startIndex) {
+    const grid = document.createElement("div");
+    grid.className = "reviews__grid";
 
     for (let i = 0; i < VISIBLE; i++) {
-      const review = REVIEWS[(start + i) % REVIEWS.length];
+      const review = REVIEWS[(startIndex + i) % REVIEWS.length];
 
       const card = document.createElement("div");
       card.className = "review-card";
@@ -180,65 +183,68 @@
 
       grid.appendChild(card);
     }
+
+    return grid;
   }
 
-  const TRANSITION_MS = 280;
-  let animating = false;
-
-  function goTo(direction) {
-    if (animating) return;
-
-    const grid = document.getElementById("reviews-grid");
-    const prevBtn = document.getElementById("reviews-prev");
-    const nextBtn = document.getElementById("reviews-next");
-    if (!grid) return;
-
+  // Rather than swapping content in place, a fresh set of 3 cards slides
+  // and fades in from the direction of travel while the old set slides
+  // and fades out the opposite way — a real, visible motion instead of a
+  // flat cross-fade. Both sets are absolutely positioned inside a
+  // fixed-height viewport, so the page never jumps.
+  function goTo(direction, viewport, prevBtn, nextBtn) {
+    if (animating || !currentGrid) return;
     animating = true;
     if (prevBtn) prevBtn.disabled = true;
     if (nextBtn) nextBtn.disabled = true;
 
-    // Slide out in the direction of travel, swap the content while it's
-    // invisible, then slide the new set in from the opposite side.
-    grid.style.setProperty("--reviews-slide", direction > 0 ? "-14px" : "14px");
-    grid.classList.add("reviews__grid--transitioning");
+    const nextStart = (start + direction + REVIEWS.length) % REVIEWS.length;
+    const incoming = buildGrid(nextStart);
+
+    incoming.style.transform = "translateX(" + (direction > 0 ? SLIDE_PX : -SLIDE_PX) + "px)";
+    incoming.style.opacity = "0";
+    viewport.appendChild(incoming);
+
+    // Force layout so the browser registers the starting position above
+    // before we transition both sets to their resting/exit state.
+    // eslint-disable-next-line no-unused-expressions
+    incoming.offsetHeight;
+
+    const outgoing = currentGrid;
+    outgoing.style.transform = "translateX(" + (direction > 0 ? -SLIDE_PX : SLIDE_PX) + "px)";
+    outgoing.style.opacity = "0";
+
+    incoming.style.transform = "translateX(0)";
+    incoming.style.opacity = "1";
+
+    currentGrid = incoming;
+    start = nextStart;
 
     window.setTimeout(() => {
-      start = (start + direction + REVIEWS.length) % REVIEWS.length;
-      renderReviews();
-
-      grid.style.setProperty("--reviews-slide", direction > 0 ? "14px" : "-14px");
-
-      // Force layout so the browser registers the reversed offset before
-      // transitioning back to 0, instead of collapsing the two into one.
-      // eslint-disable-next-line no-unused-expressions
-      grid.offsetHeight;
-
-      grid.classList.remove("reviews__grid--transitioning");
-
-      window.setTimeout(() => {
-        animating = false;
-        if (prevBtn) prevBtn.disabled = false;
-        if (nextBtn) nextBtn.disabled = false;
-      }, TRANSITION_MS);
+      if (outgoing.parentNode) outgoing.parentNode.removeChild(outgoing);
+      animating = false;
+      if (prevBtn) prevBtn.disabled = false;
+      if (nextBtn) nextBtn.disabled = false;
     }, TRANSITION_MS);
   }
 
   function init() {
-    const grid = document.getElementById("reviews-grid");
-    if (!grid) return;
+    const viewport = document.getElementById("reviews-viewport");
+    if (!viewport) return;
 
     const prevBtn = document.getElementById("reviews-prev");
     const nextBtn = document.getElementById("reviews-next");
 
+    currentGrid = buildGrid(start);
+    viewport.appendChild(currentGrid);
+
     if (prevBtn) {
-      prevBtn.addEventListener("click", () => goTo(-1));
+      prevBtn.addEventListener("click", () => goTo(-1, viewport, prevBtn, nextBtn));
     }
 
     if (nextBtn) {
-      nextBtn.addEventListener("click", () => goTo(1));
+      nextBtn.addEventListener("click", () => goTo(1, viewport, prevBtn, nextBtn));
     }
-
-    renderReviews();
   }
 
   init();
