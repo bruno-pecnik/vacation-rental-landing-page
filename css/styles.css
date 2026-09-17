@@ -7,9 +7,12 @@
   --color-ink: #1a1a1a;
   --color-sand: #ece5d8;
   --color-sand-light: #f8f5ee;
+  --color-cream: #f1ead9;
+  --color-espresso: #2a2019;
   --color-white: #ffffff;
   --color-text-muted: #6b6f76;
   --color-gold: #a3813f;
+  --color-gold-light: #c7a35f;
   --color-line: #e2ddd0;
 
   --font-heading: "Playfair Display", Georgia, serif;
@@ -78,56 +81,86 @@ a {
    Header
    ========================================================================== */
 .site-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.1rem 2rem;
-  background: var(--color-navy-deep);
+  background: var(--color-espresso);
   color: var(--color-white);
 }
 
+.utility-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 2rem;
+  background: var(--color-cream);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.main-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1.1rem 2rem;
+}
+
 .site-header .logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--font-heading);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--color-white);
+  margin: 0 1.5rem;
+}
+
+.logo-mark {
+  color: var(--color-gold-light);
+  font-size: 1rem;
 }
 
 .main-nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.75rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+.main-nav li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.main-nav li:not(:last-child)::after {
+  content: "\2726";
+  color: rgba(199, 163, 95, 0.55);
+  font-size: 0.65rem;
+}
+
 .main-nav a {
   color: rgba(255, 255, 255, 0.72);
   text-decoration: none;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: color 0.2s ease;
 }
 
 .main-nav a:hover,
 .main-nav a.active {
-  color: var(--color-white);
+  color: var(--color-gold-light);
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-}
-
-.lang-switcher {
+.utility-bar .lang-switcher {
   display: flex;
   gap: 0.3rem;
 }
@@ -135,7 +168,7 @@ a {
 .lang-switcher button {
   background: transparent;
   border: 1px solid transparent;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: 1;
   padding: 0.3rem;
   border-radius: var(--radius);
@@ -147,26 +180,45 @@ a {
 .lang-switcher button:hover,
 .lang-switcher button.active {
   opacity: 1;
-  border-color: rgba(255, 255, 255, 0.35);
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
 .whatsapp-btn {
-  background: var(--color-white);
-  color: var(--color-navy-deep);
+  display: inline-block;
   text-decoration: none;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 0.7rem 1.15rem;
+  padding: 0.6rem 1.05rem;
   border-radius: var(--radius);
   white-space: nowrap;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.whatsapp-btn:hover {
+.whatsapp-btn--utility {
+  background: transparent;
+  color: var(--color-espresso);
+  border: 1px solid var(--color-espresso);
+}
+
+.whatsapp-btn--utility:hover {
+  background: var(--color-espresso);
+  color: var(--color-white);
+}
+
+.whatsapp-btn--hero {
   background: var(--color-gold);
   color: var(--color-white);
+  border: 1px solid var(--color-gold);
+  padding: 0.85rem 1.4rem;
+  font-size: 0.8rem;
+}
+
+.whatsapp-btn--hero:hover {
+  background: var(--color-white);
+  color: var(--color-espresso);
+  border-color: var(--color-white);
 }
 
 /* ==========================================================================
@@ -295,5 +347,127 @@ main {
     border-right: none;
     padding: 0.25rem 0;
     width: 100%;
+  }
+}
+
+
+/* ==========================================================================
+   Hero (full-bleed media band with overlaid content + floating CTA bar)
+   ========================================================================== */
+.hero-section {
+  padding: 0 0 4.5rem;
+}
+
+.hero {
+  position: relative;
+  min-height: 68vh;
+  display: flex;
+  align-items: flex-end;
+  color: var(--color-white);
+  overflow: hidden;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #3a2f22, #6b5a3f 55%, #8a7550);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(14, 11, 7, 0.85) 0%, rgba(14, 11, 7, 0.35) 55%, rgba(14, 11, 7, 0.05) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 0 2rem 6rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.eyebrow--light {
+  color: var(--color-gold-light);
+}
+
+.tagline--light {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.hero-title {
+  color: var(--color-white);
+}
+
+.hero-bar {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  transform: translateY(50%);
+  background: var(--color-cream);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.specs--hero {
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--color-espresso);
+}
+
+.section-body {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 3.5rem 2rem 0;
+}
+
+#apartman .section-body {
+  padding-top: 4.5rem;
+}
+
+/* Alternate a warm tint on every other section for rhythm */
+#okolica,
+#book-direct {
+  background: var(--color-sand-light);
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: 55vh;
+  }
+
+  .hero-bar {
+    transform: translateY(30%);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .specs--hero {
+    flex-direction: column;
+  }
+
+  .specs--hero li {
+    border-right: none;
+    width: 100%;
+    padding: 0.2rem 0;
+  }
+
+  .main-bar {
+    flex-direction: column;
+  }
+
+  .utility-bar {
+    padding: 0.6rem 1.25rem;
   }
 }
