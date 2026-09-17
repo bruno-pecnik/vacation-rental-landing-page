@@ -85,23 +85,19 @@ a {
   color: var(--color-white);
 }
 
-.utility-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.55rem 2rem;
-  background: var(--color-white);
-  border-bottom: 1px solid var(--color-line);
-}
-
 .main-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
+  justify-content: space-between;
+  gap: 1rem;
   padding: 1.1rem 2rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .site-header .logo {
@@ -114,7 +110,6 @@ a {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-white);
-  margin: 0 1.5rem;
 }
 
 .logo-mark {
@@ -173,7 +168,7 @@ a {
   color: var(--color-steel-light);
 }
 
-.utility-bar .lang-switcher {
+.lang-switcher {
   display: flex;
   gap: 0.3rem;
 }
@@ -193,7 +188,7 @@ a {
 .lang-switcher button:hover,
 .lang-switcher button.active {
   opacity: 1;
-  border-color: rgba(11, 22, 38, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .whatsapp-btn {
@@ -209,13 +204,15 @@ a {
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.whatsapp-btn--utility {
+.whatsapp-btn--nav {
   background: var(--color-whatsapp);
   color: var(--color-white);
   border: 1px solid var(--color-whatsapp);
+  font-size: 0.7rem;
+  padding: 0.5rem 0.9rem;
 }
 
-.whatsapp-btn--utility:hover {
+.whatsapp-btn--nav:hover {
   background: var(--color-whatsapp-dark);
   border-color: var(--color-whatsapp-dark);
 }
@@ -454,6 +451,9 @@ main {
   color: var(--color-white);
 }
 
+/* The hero bar is the centerpiece of the whole page: the direct-booking
+   pitch and the WhatsApp button dominate on the left, specs are a quieter,
+   secondary column on the right. */
 .hero-bar {
   position: relative;
   z-index: 1;
@@ -463,47 +463,71 @@ main {
   transform: translateY(50%);
   background: var(--color-navy-deep);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius);
-  padding: 1.1rem 1.5rem;
+  border-radius: 6px;
+  padding: 1.75rem 2rem;
+  display: flex;
+  align-items: stretch;
+  gap: 2rem;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+}
+
+.hero-cta {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+  align-items: flex-start;
+  gap: 0.5rem;
+  border-left: 3px solid var(--color-whatsapp);
+  padding-left: 1.25rem;
 }
 
-.specs--hero {
-  border: none;
-  padding: 0;
+.hero-cta__eyebrow {
   margin: 0;
-  flex-wrap: wrap;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-whatsapp);
 }
 
-.specs--hero li {
-  border-right: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.specs--hero li:last-child {
-  border-right: none;
-}
-
-/* CTA row — always its own full-width band under the specs, so the WhatsApp
-   button can never wrap away or get lost the way it did as a shared flex row. */
-.hero-cta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.85rem;
-  padding-top: 0.95rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+.hero-cta__headline {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: var(--color-white);
+  max-width: 20em;
 }
 
 .hero-cta__note {
-  margin: 0;
+  margin: 0 0 0.4rem;
   font-size: 0.85rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.hero-bar .whatsapp-btn--hero {
+  margin-top: 0.15rem;
+}
+
+.specs--hero {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.55rem;
+  border: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0 0 0 2rem;
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.specs--hero li {
+  border-right: none;
+  padding: 0;
+  white-space: nowrap;
 }
 
 .section-body {
@@ -530,22 +554,20 @@ main {
   .hero-bar {
     transform: translateY(30%);
     flex-direction: column;
-    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.5rem;
   }
 
   .specs--hero {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 1rem 0 0;
   }
 
   .specs--hero li {
-    border-right: none;
-    width: 100%;
-    padding: 0.2rem 0;
-  }
-
-  .hero-cta {
-    flex-direction: column;
-    align-items: flex-start;
+    padding-right: 0.85rem;
   }
 
   .whatsapp-btn--hero {
@@ -555,9 +577,11 @@ main {
 
   .main-bar {
     flex-direction: column;
+    align-items: flex-start;
   }
 
-  .utility-bar {
-    padding: 0.6rem 1.25rem;
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 }
