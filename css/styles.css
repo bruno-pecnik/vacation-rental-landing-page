@@ -294,17 +294,27 @@ main {
 /* Gallery placeholder (still awaiting real photos) */
 .gallery {
   margin-top: 2rem;
-  min-height: 260px;
-  background: var(--color-off-white);
-  border: 1px solid var(--color-line);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.gallery img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
   border-radius: var(--radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text-muted);
-  font-size: 0.82rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery img {
+    height: 160px;
+  }
 }
 
 /* Map embed (real content, no placeholder styling needed) */
@@ -389,7 +399,14 @@ main {
 .hero-media {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #060d17, #16273f 55%, #26405f);
+  background: var(--color-navy-deep);
+}
+
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .hero-overlay {
