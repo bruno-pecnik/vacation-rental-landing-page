@@ -130,3 +130,5 @@ const translations = {
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
 };
+
+window.translations = translations;
