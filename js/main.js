@@ -7,6 +7,12 @@
   const SECTION_IDS = ["apartman", "novalja", "host"];
   const DEFAULT_SECTION = "apartman";
 
+  // Stop the browser from restoring a mid-page scroll position on reload
+  // or back/forward navigation — every visit should land at the top.
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
   function showSection(id) {
     if (!SECTION_IDS.includes(id)) {
       id = DEFAULT_SECTION;
