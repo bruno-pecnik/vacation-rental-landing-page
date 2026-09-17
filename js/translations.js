@@ -26,6 +26,8 @@ const translations = {
     eyebrow_novalja: "About the Area",
     desc_novalja: "Novalja is one of the island of Pag's liveliest coastal towns — known for its beaches, relaxed Adriatic atmosphere, and the famous Zrće Beach nightlife nearby. It's a great base for exploring the island's beaches, dry-stone walls, and local specialties like Pag cheese and lace.",
     badge_reviews: "See our guest reviews on Booking.com",
+    eyebrow_reviews: "Guest Reviews",
+    nav_reviews: "What Guests Say",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
   it: {
@@ -50,6 +52,8 @@ const translations = {
     eyebrow_novalja: "Sulla zona",
     desc_novalja: "Novalja è una delle località costiere più vivaci dell'isola di Pag — nota per le sue spiagge, l'atmosfera rilassata dell'Adriatico e la celebre vita notturna di Zrće Beach lì vicino. È un'ottima base per esplorare le spiagge dell'isola, i muretti a secco e specialità locali come il formaggio e il pizzo di Pag.",
     badge_reviews: "Guarda le recensioni degli ospiti su Booking.com",
+    eyebrow_reviews: "Recensioni degli ospiti",
+    nav_reviews: "Cosa dicono gli ospiti",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
   de: {
@@ -74,6 +78,8 @@ const translations = {
     eyebrow_novalja: "Über die Gegend",
     desc_novalja: "Novalja ist einer der lebendigsten Küstenorte der Insel Pag — bekannt für seine Strände, die entspannte Adria-Atmosphäre und das berühmte Nachtleben am nahen Zrće Beach. Von hier aus lassen sich die Strände der Insel, Trockensteinmauern und lokale Spezialitäten wie Pager Käse und Spitze wunderbar erkunden.",
     badge_reviews: "Lesen Sie unsere Gästebewertungen auf Booking.com",
+    eyebrow_reviews: "Gästebewertungen",
+    nav_reviews: "Was Gäste sagen",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
   pl: {
@@ -98,6 +104,8 @@ const translations = {
     eyebrow_novalja: "O okolicy",
     desc_novalja: "Novalja to jedno z najbardziej żywych nadmorskich miasteczek wyspy Pag — znane z plaż, spokojnej adriatyckiej atmosfery oraz słynnego nocnego życia na pobliskiej plaży Zrće. To świetna baza do zwiedzania plaż wyspy, suchych murów kamiennych oraz lokalnych specjałów, takich jak ser i koronka z Pagu.",
     badge_reviews: "Zobacz opinie gości na Booking.com",
+    eyebrow_reviews: "Opinie gości",
+    nav_reviews: "Co mowia goscie",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
   cz: {
@@ -122,6 +130,8 @@ const translations = {
     eyebrow_novalja: "O okolí",
     desc_novalja: "Novalja je jedno z nejživějších pobřežních měst ostrova Pag — známé svými plážemi, uvolněnou adriatickou atmosférou a proslulým nočním životem na nedaleké pláži Zrće. Je to skvělá základna pro objevování pláží ostrova, kamenných zídek a místních specialit, jako je pagský sýr a krajka.",
     badge_reviews: "Přečtěte si hodnocení hostů na Booking.com",
+    eyebrow_reviews: "Hodnoceni hostu",
+    nav_reviews: "Co rikaji hoste",
     footer_copyright: "© 2026 Luxury Apartments Cuba Novalja",
   },
 };
