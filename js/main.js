@@ -232,13 +232,13 @@
     incoming.style.opacity = "0";
     viewport.appendChild(incoming);
 
-    // Reading offsetHeight both forces the layout the browser needs to
-    // register the starting position above (before we transition both
-    // slides to their resting/exit state) and gives the incoming slide's
-    // real content height, which the viewport then animates to — so a
-    // short review gets a short box and a long one gets a tall one,
-    // instead of every review sitting in a box sized for the longest.
-    viewport.style.height = incoming.offsetHeight + "px";
+    // Force the layout the browser needs to register the starting
+    // position above, before we transition both slides to their
+    // resting/exit state. The viewport's height itself is fixed (set
+    // once by applyFixedHeight, not touched here) so the box never
+    // visibly resizes as you flip between reviews.
+    // eslint-disable-next-line no-unused-expressions
+    incoming.offsetHeight;
 
     const outgoing = currentSlide;
     outgoing.style.transform = "translateX(" + (direction > 0 ? -SLIDE_PX : SLIDE_PX) + "px)";
@@ -276,14 +276,44 @@
     const prevBtn = document.getElementById("reviews-prev");
     const nextBtn = document.getElementById("reviews-next");
 
+    // Measures one review without it ever being visible — built,
+    // measured and removed in the same tick, so there's no flash of
+    // the wrong review while sizing.
+    function measureSlideHeight(index) {
+      const probe = buildSlide(index);
+      probe.style.position = "absolute";
+      probe.style.visibility = "hidden";
+      probe.style.transform = "none";
+      probe.style.opacity = "1";
+      probe.style.pointerEvents = "none";
+      viewport.appendChild(probe);
+      const height = probe.offsetHeight;
+      viewport.removeChild(probe);
+      return height;
+    }
+
+    // The box holds one stable height — the tallest of the current
+    // language's reviews — set once rather than resized on every slide,
+    // so flipping through reviews never makes the box visibly grow or
+    // shrink. Only a real reason to resize (switching language, since
+    // translated text can need more or less room, or the viewport
+    // itself changing width) re-measures it.
+    function applyFixedHeight() {
+      let max = 0;
+      for (let i = 0; i < REVIEWS.length; i++) {
+        max = Math.max(max, measureSlideHeight(i));
+      }
+      viewport.style.height = max + "px";
+    }
+
     currentSlide = buildSlide(current);
     viewport.appendChild(currentSlide);
-    viewport.style.height = currentSlide.offsetHeight + "px";
+    applyFixedHeight();
 
     // Switching languages doesn't rebuild the slide (that would restart
     // its slide/fade animation) — it just swaps the quote/author text
-    // inside whichever slide is currently showing. The translated text
-    // can wrap differently, so the viewport's height is re-measured too.
+    // inside whichever slide is currently showing, then re-measures the
+    // fixed height for the new language's text.
     document.addEventListener("langchange", () => {
       if (!currentSlide) return;
       const dict = currentDict();
@@ -292,15 +322,15 @@
       const authorEl = currentSlide.querySelector(".review-spotlight__author");
       if (quoteEl) quoteEl.textContent = quoteTextFor(review, dict);
       if (authorEl) authorEl.textContent = authorTextFor(review, dict);
-      viewport.style.height = currentSlide.offsetHeight + "px";
+      applyFixedHeight();
     });
 
-    // The slide's own width (and so how its text wraps) depends on the
+    // The slides' width (and so how their text wraps) depends on the
     // viewport's width, which a window resize or orientation change can
-    // alter — re-measure so the box stays sized to the content rather
-    // than getting stuck at whatever height fit the previous width.
+    // alter — re-measure so the fixed height still fits every review at
+    // the new width instead of clipping the tallest one.
     window.addEventListener("resize", () => {
-      if (currentSlide) viewport.style.height = currentSlide.offsetHeight + "px";
+      applyFixedHeight();
     });
 
     function stopAutoAdvance() {
@@ -395,7 +425,7 @@
     const dotsContainer = document.getElementById("gallery-dots");
     if (!gallery) return;
 
-    const slides = Array.from(gallery.querySelectorAll("img"));
+    const slides = Array.from(gallery.querySelectorAll(".gallery__item"));
     const slideCount = slides.length;
     if (slideCount === 0) return;
 
@@ -617,6 +647,137 @@
       window.open(url, "_blank", "noopener");
       form.reset();
     });
+  }
+
+  init();
+})();
+
+// ---------------------------------------------------------------------------
+// Photo lightbox: clicking any gallery photo (desktop grid or mobile
+// carousel alike) opens a single, reused full-screen viewer with prev/next
+// arrows and keyboard support, instead of the grid being purely decorative.
+// ---------------------------------------------------------------------------
+(function () {
+  function init() {
+    const items = Array.from(document.querySelectorAll(".gallery__item"));
+    if (!items.length) return;
+
+    const overlay = document.createElement("div");
+    overlay.className = "lightbox";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", "Photo viewer");
+    overlay.innerHTML =
+      '<button type="button" class="lightbox__close" aria-label="Close">&times;</button>' +
+      '<button type="button" class="lightbox__arrow lightbox__arrow--prev" aria-label="Previous photo">&#8249;</button>' +
+      '<img class="lightbox__img" alt="">' +
+      '<button type="button" class="lightbox__arrow lightbox__arrow--next" aria-label="Next photo">&#8250;</button>';
+    document.body.appendChild(overlay);
+
+    const imgEl = overlay.querySelector(".lightbox__img");
+    const closeBtn = overlay.querySelector(".lightbox__close");
+    const prevBtn = overlay.querySelector(".lightbox__arrow--prev");
+    const nextBtn = overlay.querySelector(".lightbox__arrow--next");
+
+    let index = 0;
+    let lastFocused = null;
+
+    function show(i) {
+      index = (i + items.length) % items.length;
+      const img = items[index].querySelector("img");
+      if (!img) return;
+      imgEl.src = img.currentSrc || img.src;
+      imgEl.alt = img.alt || "";
+    }
+
+    function onKeydown(event) {
+      if (event.key === "Escape") close();
+      if (event.key === "ArrowLeft") show(index - 1);
+      if (event.key === "ArrowRight") show(index + 1);
+    }
+
+    function open(i) {
+      lastFocused = document.activeElement;
+      show(i);
+      overlay.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+      document.addEventListener("keydown", onKeydown);
+    }
+
+    function close() {
+      overlay.classList.remove("is-open");
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKeydown);
+      if (lastFocused && typeof lastFocused.focus === "function") {
+        lastFocused.focus();
+      }
+    }
+
+    items.forEach((item, i) => {
+      item.addEventListener("click", () => open(i));
+    });
+
+    closeBtn.addEventListener("click", close);
+    prevBtn.addEventListener("click", () => show(index - 1));
+    nextBtn.addEventListener("click", () => show(index + 1));
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) close();
+    });
+  }
+
+  init();
+})();
+
+// ---------------------------------------------------------------------------
+// Map loading skeleton: the Google Maps iframe is loading="lazy", so this
+// spinner only appears once a visitor actually scrolls near it, then fades
+// out the moment the iframe fires its own load event — never a blank grey
+// rectangle while it's fetching.
+// ---------------------------------------------------------------------------
+(function () {
+  function init() {
+    const iframe = document.getElementById("map-iframe");
+    const loading = document.getElementById("map-loading");
+    if (!iframe || !loading) return;
+
+    function hide() {
+      loading.classList.add("is-hidden");
+    }
+
+    iframe.addEventListener("load", hide);
+  }
+
+  init();
+})();
+
+// ---------------------------------------------------------------------------
+// Page loader: a brief branded overlay while the hero image and fonts
+// finish loading, hidden on window's load event with a safety timeout so
+// it can never get stuck covering the page if a resource stalls.
+// ---------------------------------------------------------------------------
+(function () {
+  function init() {
+    const loader = document.getElementById("page-loader");
+    if (!loader) return;
+
+    let hidden = false;
+    function hide() {
+      if (hidden) return;
+      hidden = true;
+      loader.classList.add("is-hidden");
+      window.setTimeout(() => {
+        if (loader.parentNode) loader.parentNode.removeChild(loader);
+      }, 450);
+    }
+
+    if (document.readyState === "complete") {
+      hide();
+    } else {
+      window.addEventListener("load", hide);
+    }
+    // Never let a slow-loading resource keep the loader up indefinitely.
+    window.setTimeout(hide, 2500);
   }
 
   init();

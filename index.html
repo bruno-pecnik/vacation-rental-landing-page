@@ -67,9 +67,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=21">
+  <link rel="stylesheet" href="css/styles.css?v=23">
 </head>
 <body>
+
+  <div id="page-loader" aria-hidden="true">
+    <span class="page-loader__mark">CUBA</span>
+    <span class="page-loader__spinner"></span>
+  </div>
 
   <header class="site-header">
     <div class="main-bar">
@@ -112,8 +117,11 @@
     <div class="hero-bar">
       <div class="hero-bar__inner">
         <div class="hero-cta">
-          <p class="hero-cta__eyebrow" data-i18n="hero_cta_eyebrow">Direct Booking</p>
-          <p class="hero-cta__headline" data-i18n="hero_cta_headline">Book direct and we beat the Booking.com price</p>
+          <span class="hero-cta__badge">
+            <svg class="hero-cta__badge-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83ZM7 8a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/></svg>
+            <span data-i18n="hero_cta_eyebrow">Direct Booking</span>
+          </span>
+          <p class="hero-cta__headline" data-i18n="hero_cta_headline">Book direct — we beat the Booking.com price</p>
           <a class="whatsapp-btn whatsapp-btn--hero"
              href="https://wa.me/385953666731?text=Hi%2C%20I%27m%20interested%20in%20Luxury%20Apartments%20Cuba%20Novalja"
              target="_blank" rel="noopener">
@@ -180,13 +188,34 @@
           <p class="eyebrow" data-i18n="eyebrow_gallery">The Apartment</p>
           <h2 data-i18n="heading_gallery">Photos</h2>
           <div class="gallery" id="gallery">
-            <img src="images/living-room.jpg" alt="Living room with sofa and balcony access" loading="lazy">
-            <img src="images/bedroom.jpg" alt="Bedroom with double bed" loading="lazy">
-            <img src="images/open-plan-living.jpg" alt="Open-plan living area with staircase and kitchen" loading="lazy">
-            <img src="images/kitchen.jpg" alt="Fully equipped kitchen" loading="lazy">
-            <img src="images/pool-daytime.jpg" alt="Shared outdoor pool in daylight" loading="lazy">
-            <img src="images/exterior-palm.jpg" alt="Building exterior with palm tree and pool" loading="lazy">
-            <img src="images/dining-stairs-spare.jpg" alt="Dining area with staircase to the upper floor" loading="lazy">
+            <button type="button" class="gallery__item" aria-label="View photo 1 of 7 — larger">
+              <img src="images/living-room.jpg" alt="Living room with sofa and balcony access" loading="lazy">
+              <span class="gallery__zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/></svg></span>
+            </button>
+            <button type="button" class="gallery__item" aria-label="View photo 2 of 7 — larger">
+              <img src="images/bedroom.jpg" alt="Bedroom with double bed" loading="lazy">
+              <span class="gallery__zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/></svg></span>
+            </button>
+            <button type="button" class="gallery__item" aria-label="View photo 3 of 7 — larger">
+              <img src="images/open-plan-living.jpg" alt="Open-plan living area with staircase and kitchen" loading="lazy">
+              <span class="gallery__zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/></svg></span>
+            </button>
+            <button type="button" class="gallery__item" aria-label="View photo 4 of 7 — larger">
+              <img src="images/kitchen.jpg" alt="Fully equipped kitchen" loading="lazy">
+              <span class="gallery__zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/></svg></span>
+            </button>
+            <button type="button" class="gallery__item" aria-label="View photo 5 of 7 — larger">
+              <img src="images/pool-daytime.jpg" alt="Shared outdoor pool in daylight" loading="lazy">
+              <span class="gallery__zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/></svg></span>
+            </button>
+            <button type="button" class="gallery__item" aria-label="View photo 6 of 7 — larger">
+              <img src="images/exterior-palm.jpg" alt="Building exterior with palm tree and pool" loading="lazy">
+              <span class="gallery__zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/></svg></span>
+            </button>
+            <button type="button" class="gallery__item" aria-label="View photo 7 of 7 — larger">
+              <img src="images/dining-stairs-spare.jpg" alt="Dining area with staircase to the upper floor" loading="lazy">
+              <span class="gallery__zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/></svg></span>
+            </button>
           </div>
           <div class="gallery-dots" id="gallery-dots" role="tablist" aria-label="Choose a photo"></div>
         </div>
@@ -203,11 +232,18 @@
               <span class="map-embed__subtitle">Novalja, Pag Island &middot; Get directions</span>
             </span>
           </a>
-          <iframe
-            src="https://www.google.com/maps?q=Samora%C5%A1nji+put+94d%2C+Novalja%2C+Croatia&z=17&output=embed"
-            width="100%" height="380" style="border:0;" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Map showing the location of Luxury Apartments Cuba Novalja"></iframe>
+          <div class="map-embed__frame">
+            <div class="map-embed__loading" id="map-loading">
+              <span class="map-embed__spinner" aria-hidden="true"></span>
+              <span class="map-embed__loading-text" data-i18n="map_loading">Loading map…</span>
+            </div>
+            <iframe
+              id="map-iframe"
+              src="https://www.google.com/maps?q=Samora%C5%A1nji+put+94d%2C+Novalja%2C+Croatia&z=17&output=embed"
+              width="100%" height="380" style="border:0;" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Map showing the location of Luxury Apartments Cuba Novalja"></iframe>
+          </div>
         </div>
 
         <a class="booking-badge" href="https://www.booking.com/hotel/hr/luxury-apartments-cuba.en-gb.html" target="_blank" rel="noopener">
@@ -313,7 +349,7 @@
     </div>
   </footer>
 
-  <script src="js/translations.js?v=22" defer></script>
-  <script src="js/main.js?v=22" defer></script>
+  <script src="js/translations.js?v=23" defer></script>
+  <script src="js/main.js?v=23" defer></script>
 </body>
 </html>

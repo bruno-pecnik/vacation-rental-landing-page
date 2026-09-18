@@ -60,6 +60,46 @@ body {
   background-size: 26px 26px;
 }
 
+/* A brief branded loader over the whole page while the hero image and
+   fonts finish loading — js/main.js hides it on window's load event
+   (with a safety timeout so it can never get stuck showing). Removed
+   from the DOM entirely once hidden. */
+#page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  background: var(--color-navy-deep);
+  transition: opacity 0.4s ease;
+}
+
+#page-loader.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page-loader__mark {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.page-loader__spinner {
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: var(--color-whatsapp);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
 h1 {
   font-family: var(--font-heading);
   font-weight: 600;
@@ -541,11 +581,12 @@ main {
 /* A fixed-height window: the outgoing and incoming slides are both
    absolutely positioned inside it and cross over each other, so the
    viewport's own height never changes and the page never jumps. */
-/* Height is set explicitly in px by js/main.js (measured from each
-   slide's actual content) and transitions smoothly between reviews, so
-   a short one-line review gets a short box instead of sitting in a lot
-   of empty space sized for the longest review in the set. min-height is
-   just the floor for the instant before that JS runs. */
+/* js/main.js measures every review once (in the current language) and
+   sets this to the tallest one, so the box has one stable height while
+   flipping between reviews instead of visibly resizing each time. It's
+   only re-measured on a language change or a resize (translated text
+   can need more or less room), which is what the transition below is
+   for — a smooth resize for those rarer moments, not for every slide. */
 .reviews__viewport {
   position: relative;
   flex: 1 1 auto;
@@ -700,32 +741,92 @@ main {
   border-radius: 12px;
   padding: 2.25rem 2rem;
   margin: 2.5rem 0;
+  /* A soft lift off the white page — the same card language as the
+     rating badge, booking badge and map embed below, so this band reads
+     as its own distinct surface instead of just a colour change. */
+  box-shadow: 0 1px 2px rgba(0, 35, 73, 0.05), 0 18px 34px -18px rgba(0, 35, 73, 0.28);
 }
 
 .content-band > .eyebrow:first-child {
   margin-top: 0;
 }
 
+/* An asymmetric layout instead of a uniform grid of same-size tiles —
+   the first photo is featured large (a 2x2 block), the next four fill
+   the space beside it, and the last two share the final row. Real
+   photos read as a curated set this way instead of a flat wall of
+   equal squares. grid-auto-flow: dense lets those last two (each
+   spanning 2 columns) fill the row completely with no gaps. */
 .gallery {
   margin-top: 1.5rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 165px;
+  grid-auto-flow: dense;
   gap: 0.6rem;
 }
 
-.gallery img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
+.gallery__item:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.gallery__item:nth-child(6),
+.gallery__item:nth-child(7) {
+  grid-column: span 2;
+}
+
+.gallery__item {
+  position: relative;
   display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
   border-radius: 10px;
+  overflow: hidden;
+  background: none;
+  cursor: pointer;
   box-shadow: 0 6px 16px rgba(0, 35, 73, 0.14);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.gallery img:hover {
-  transform: translateY(-4px) scale(1.02);
+.gallery__item:hover,
+.gallery__item:focus-visible {
+  transform: translateY(-4px) scale(1.015);
   box-shadow: 0 14px 26px rgba(0, 35, 73, 0.2);
+}
+
+.gallery__item:focus-visible {
+  outline: 2px solid var(--color-whatsapp);
+  outline-offset: 2px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* A dim overlay with an expand icon — hidden until hover/focus, so the
+   grid reads as calm photos rather than a wall of visible buttons, but
+   still signals clearly that each one opens larger. */
+.gallery__zoom {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 20, 40, 0.32);
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.gallery__item:hover .gallery__zoom,
+.gallery__item:focus-visible .gallery__zoom {
+  opacity: 1;
 }
 
 /* Dot pagination for the mobile photo carousel below — irrelevant on
@@ -783,10 +884,23 @@ main {
     display: none;
   }
 
-  .gallery img {
+  .gallery__item {
     flex: 0 0 100%;
     height: 264px;
     scroll-snap-align: start;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* No hover state on touch, and the zoom hint would otherwise just
+     sit permanently dim on whichever photo was last tapped. */
+  .gallery__item:hover,
+  .gallery__item:focus-visible {
+    transform: none;
+  }
+
+  .gallery__zoom {
+    display: none;
   }
 
   .gallery-dots {
@@ -846,6 +960,102 @@ main {
   }
 }
 
+/* ==========================================================================
+   Photo lightbox — a single full-screen viewer reused for every gallery
+   photo, built once by js/main.js and toggled with .is-open rather than
+   living in the page markup for each image.
+   ========================================================================== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 5rem;
+  background: rgba(0, 12, 24, 0.92);
+}
+
+.lightbox.is-open {
+  display: flex;
+}
+
+.lightbox__img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox__close,
+.lightbox__arrow {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.lightbox__close:hover,
+.lightbox__arrow:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.lightbox__close {
+  top: 1.25rem;
+  right: 1.5rem;
+  width: 2.6rem;
+  height: 2.6rem;
+  font-size: 1.6rem;
+}
+
+.lightbox__arrow {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3.1rem;
+  height: 3.1rem;
+  font-size: 1.7rem;
+}
+
+.lightbox__arrow--prev {
+  left: 1.25rem;
+}
+
+.lightbox__arrow--next {
+  right: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .lightbox {
+    padding: 4.5rem 0.75rem;
+  }
+
+  .lightbox__close {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .lightbox__arrow {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.4rem;
+  }
+
+  .lightbox__arrow--prev {
+    left: 0.5rem;
+  }
+
+  .lightbox__arrow--next {
+    right: 0.5rem;
+  }
+}
+
 /* Map embed — given the same elevated-card treatment as the hero bar,
    so it reads as a designed element rather than a raw dropped-in widget */
 .map-embed {
@@ -857,9 +1067,53 @@ main {
   box-shadow: 0 12px 30px rgba(11, 22, 38, 0.12);
 }
 
+.map-embed__frame {
+  position: relative;
+}
+
 .map-embed iframe {
   display: block;
   width: 100%;
+}
+
+/* A branded skeleton sits over the map until the iframe actually fires
+   its load event — the iframe is loading="lazy" so this only appears
+   once a visitor scrolls near it, then fades out as soon as the map is
+   really ready instead of the visitor staring at a blank grey rectangle. */
+.map-embed__loading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: var(--color-pale-blue);
+  background-image: radial-gradient(circle, rgba(0, 35, 73, 0.07) 1px, transparent 1px);
+  background-size: 26px 26px;
+  transition: opacity 0.3s ease;
+}
+
+.map-embed__loading.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.map-embed__spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid rgba(0, 35, 73, 0.15);
+  border-top-color: var(--color-navy);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.map-embed__loading-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
 }
 
 /* A branded header bar sits above the map (not on top of it) — Google's
@@ -1200,6 +1454,49 @@ main {
   color: var(--color-white);
 }
 
+/* Entrance animation: the hero title, tagline and the direct-booking bar
+   rise and fade in on first load, staggered slightly so the page feels
+   composed rather than everything just being there at once. Skipped
+   entirely for anyone who's asked for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-title,
+  .hero-content .tagline,
+  .hero-bar__inner {
+    opacity: 0;
+    animation: hero-rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .hero-title {
+    animation-delay: 0.1s;
+  }
+
+  .hero-content .tagline {
+    animation-delay: 0.3s;
+  }
+
+  .hero-bar__inner {
+    animation-delay: 0.45s;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shared by the map and page loading spinners below. */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* The hero bar is a single, focused direct-booking callout right under
    the photo — eyebrow, headline, note and the WhatsApp button, with a
    left accent bar for emphasis. The spec list that used to sit beside it
@@ -1208,48 +1505,71 @@ main {
    band directly under the photo (no floating/overlap trick), so it can
    never get cropped or wrap out of view regardless of viewport height. */
 .hero-bar {
-  background: var(--color-navy-deep);
+  background-color: var(--color-navy-deep);
+  /* A soft green glow bleeding in from the left, fading into the plain
+     navy gradient — ties the bar to the WhatsApp button it leads to
+     instead of reading as one flat, dark slab. */
+  background-image:
+    radial-gradient(ellipse 55% 140% at 0% 50%, rgba(37, 162, 90, 0.24), transparent 65%),
+    linear-gradient(100deg, var(--color-navy-deep) 0%, var(--color-navy) 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .hero-bar__inner {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0.85rem 2rem;
+  padding: 1rem 2rem;
 }
 
+/* One row on desktop/tablet — badge, headline and the WhatsApp button
+   all on the same line — wrapping only when the viewport is genuinely
+   too narrow for that (the button drops to its own full-width line;
+   see the max-width: 640px rules below). */
 .hero-cta {
-  flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.4rem;
-  border-left: 3px solid var(--color-whatsapp);
-  padding-left: 1.25rem;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.25rem;
 }
 
-.hero-cta__eyebrow {
-  margin: 0;
-  font-size: 0.72rem;
+.hero-cta__badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(37, 162, 90, 0.18);
+  border: 1px solid rgba(111, 224, 160, 0.45);
+  font-size: 0.66rem;
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0.16em;
+  line-height: 1.1;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--color-whatsapp);
+  color: #8ff0bb;
+  white-space: nowrap;
+}
+
+.hero-cta__badge-icon {
+  width: 0.85em;
+  height: 0.85em;
+  flex-shrink: 0;
 }
 
 .hero-cta__headline {
   margin: 0;
+  flex: 1 1 auto;
+  min-width: 14em;
   font-family: var(--font-heading);
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.3;
   color: var(--color-white);
-  max-width: 20em;
 }
 
 .hero-bar .whatsapp-btn--hero {
-  margin-top: 0.1rem;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .section-body {
@@ -1340,12 +1660,14 @@ main {
   }
 
   .hero-bar__inner {
-    padding: 0.85rem 1.5rem;
+    padding: 1rem 1.5rem;
   }
 
   .whatsapp-btn--hero {
     width: 100%;
     justify-content: center;
+    margin-left: 0;
+    margin-top: 0.25rem;
   }
 
   .main-bar {
