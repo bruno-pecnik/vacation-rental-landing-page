@@ -16,6 +16,10 @@
     }
 
     document.querySelectorAll(".page-section").forEach((section) => {
+      // The contact section below also uses .page-section (for its
+      // decorative background/border treatment) but isn't one of the
+      // tab-switched sections, so it's left alone here.
+      if (!SECTION_IDS.includes(section.id)) return;
       section.hidden = section.id !== id;
     });
 
@@ -74,6 +78,15 @@
       const key = el.dataset.i18n;
       if (dict[key]) {
         el.textContent = dict[key];
+      }
+    });
+
+    // Placeholders aren't text content, so they need their own attribute
+    // and their own pass (the contact form's inputs use this).
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      const key = el.dataset.i18nPlaceholder;
+      if (dict[key]) {
+        el.setAttribute("placeholder", dict[key]);
       }
     });
 
@@ -473,6 +486,123 @@
     if (!prefersReducedMotion) {
       startAutoAdvance();
     }
+  }
+
+  init();
+})();
+
+// ---------------------------------------------------------------------------
+// Scroll reveal: each major block (an intro paragraph, the stat band, the
+// gallery, the map, a review, the host card, the contact form...) fades and
+// rises gently into place the first time it scrolls into view, instead of
+// the whole page just being there. The hidden starting state is applied by
+// CSS the moment the html.js-reveal class exists (added synchronously in
+// <head>, before this file even loads) so there's no flash of visible
+// content before it gets hidden — this script's only job is to flip each
+// element to .is-visible once it's actually in view, or to cancel the whole
+// effect (removing js-reveal) when it can't run properly.
+// ---------------------------------------------------------------------------
+(function () {
+  const SELECTOR = [
+    ".section-body > p",
+    ".section-body > h2",
+    ".stat-band",
+    ".rating-card",
+    ".booking-badge",
+    ".content-band",
+    ".map-embed",
+    ".host-profile",
+    ".contact-form",
+  ].join(", ");
+
+  function revealEverythingImmediately() {
+    document.documentElement.classList.remove("js-reveal");
+  }
+
+  function init() {
+    if (!document.documentElement.classList.contains("js-reveal")) return;
+
+    if (!("IntersectionObserver" in window)) {
+      revealEverythingImmediately();
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false;
+    if (prefersReducedMotion) {
+      revealEverythingImmediately();
+      return;
+    }
+
+    const targets = document.querySelectorAll(SELECTOR);
+    if (!targets.length) {
+      revealEverythingImmediately();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          obs.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+  }
+
+  init();
+})();
+
+// ---------------------------------------------------------------------------
+// Contact form: this is a static site with no backend to send a form to, so
+// instead of emailing anywhere it builds the same kind of wa.me message the
+// WhatsApp buttons elsewhere on the page use, and opens it in a new tab —
+// giving visitors who'd rather type into a form than open WhatsApp directly
+// a way to do that, while every message still ends up in WhatsApp exactly
+// like the direct buttons.
+// ---------------------------------------------------------------------------
+(function () {
+  const WHATSAPP_NUMBER = "385953666731";
+
+  function buildMessage(name, phone, message) {
+    const lines = [
+      "Hi, I'm interested in Luxury Apartments Cuba Novalja.",
+      "",
+      "Name: " + name,
+    ];
+    if (phone) {
+      lines.push("Phone: " + phone);
+    }
+    lines.push("Message: " + message);
+    return lines.join("\n");
+  }
+
+  function init() {
+    const form = document.getElementById("contact-form");
+    if (!form) return;
+
+    const nameInput = document.getElementById("contact-name");
+    const phoneInput = document.getElementById("contact-phone");
+    const messageInput = document.getElementById("contact-message");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const name = nameInput.value.trim();
+      const phone = phoneInput.value.trim();
+      const message = messageInput.value.trim();
+      if (!name || !message) return;
+
+      const text = buildMessage(name, phone, message);
+      const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
+      window.open(url, "_blank", "noopener");
+      form.reset();
+    });
   }
 
   init();

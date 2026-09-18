@@ -440,6 +440,76 @@ main {
   font-size: 1.15em;
 }
 
+/* The rating card: a solid score chip with a small speech-bubble
+   tail, paired with a two-line label (headline + source), so the
+   trust signal reads with real weight instead of a plain text pill. */
+.rating-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.25rem 0.75rem 0.75rem 0;
+  padding: 0.9rem 1.6rem 0.9rem 0.9rem;
+  background: var(--color-white);
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(0, 35, 73, 0.1);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.rating-card:hover {
+  box-shadow: 0 12px 26px rgba(0, 35, 73, 0.16);
+  transform: translateY(-1px);
+}
+
+.rating-card__score {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  flex-shrink: 0;
+  background: var(--color-navy);
+  border-radius: 7px 7px 7px 2px;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+/* A small tail peeking out under the score chip's near-sharp corner,
+   like a speech bubble, so it reads as a badge rather than a plain
+   rounded square. */
+.rating-card__score::after {
+  content: "";
+  position: absolute;
+  bottom: -0.3rem;
+  left: 0.35rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  background: var(--color-navy);
+  transform: rotate(45deg);
+  border-radius: 0 0 0 2px;
+}
+
+.rating-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.rating-card__headline {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+.rating-card__source {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
 /* Guest reviews: one large "spotlight" testimonial at a time rather than
    a row of small cards, with dot pagination beneath it — a calmer, more
    editorial presentation that also gives visitors a clear, clickable
@@ -899,6 +969,118 @@ main {
 }
 
 /* ==========================================================================
+   Contact form
+   ========================================================================== */
+/* This is a static site with no backend, so the form below (see
+   js/main.js) hands off to a wa.me link exactly like the WhatsApp
+   buttons elsewhere on the page — it's just a friendlier way in for
+   a visitor who'd rather fill in fields than open WhatsApp directly. */
+.contact-section {
+  border-top: 1px solid var(--color-line);
+}
+
+.contact-section .section-body {
+  max-width: 40rem;
+}
+
+.contact-form {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contact-form__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.contact-form__row label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.contact-form__row input,
+.contact-form__row textarea {
+  font: inherit;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: var(--color-white);
+  color: var(--color-ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-form__row textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+.contact-form__row input:focus,
+.contact-form__row textarea:focus {
+  outline: none;
+  border-color: var(--color-navy);
+  box-shadow: 0 0 0 3px rgba(0, 35, 73, 0.12);
+}
+
+.contact-form__submit {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  background: var(--color-whatsapp);
+  color: var(--color-white);
+  border: 1px solid var(--color-whatsapp);
+}
+
+.contact-form__submit:hover {
+  background: var(--color-whatsapp-dark);
+  border-color: var(--color-whatsapp-dark);
+}
+
+/* ==========================================================================
+   Scroll reveal
+   ========================================================================== */
+/* html.js-reveal is added synchronously in <head>, before any of this
+   content has even been parsed, so these start hidden from first
+   paint — js/main.js then adds .is-visible to each one (via
+   IntersectionObserver) the first time it scrolls into view, or
+   removes js-reveal entirely if it can't run the effect properly, so
+   nothing is ever left permanently invisible. */
+.js-reveal .section-body > p,
+.js-reveal .section-body > h2,
+.js-reveal .stat-band,
+.js-reveal .rating-card,
+.js-reveal .booking-badge,
+.js-reveal .content-band,
+.js-reveal .map-embed,
+.js-reveal .host-profile,
+.js-reveal .contact-form {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+/* Matches the exact selector list above, each with .is-visible appended,
+   so every rule here has the same specificity as its hidden-state
+   counterpart and reliably wins the cascade on source order alone —
+   a bare ".js-reveal .is-visible" rule is less specific than
+   ".js-reveal .section-body > p" and would silently lose to it,
+   leaving that paragraph or heading stuck invisible. */
+.js-reveal .section-body > p.is-visible,
+.js-reveal .section-body > h2.is-visible,
+.js-reveal .stat-band.is-visible,
+.js-reveal .rating-card.is-visible,
+.js-reveal .booking-badge.is-visible,
+.js-reveal .content-band.is-visible,
+.js-reveal .map-embed.is-visible,
+.js-reveal .host-profile.is-visible,
+.js-reveal .contact-form.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
    Responsive
    ========================================================================== */
 @media (max-width: 640px) {
@@ -913,6 +1095,15 @@ main {
 
   .page-section {
     padding: 0 0 3rem;
+  }
+
+  .rating-card {
+    gap: 0.85rem;
+    padding: 0.8rem 1.2rem 0.8rem 0.8rem;
+  }
+
+  .contact-section .section-body {
+    max-width: none;
   }
 }
 
