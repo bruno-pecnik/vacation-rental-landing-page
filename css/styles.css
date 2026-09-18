@@ -15,6 +15,10 @@
   --color-ink: #14181e;
   --color-white: #ffffff;
   --color-pale-blue: #eff5fb;
+  /* Same navy hue, a few steps deeper — paired with --color-pale-blue
+     as a diagonal gradient so the light bands actually shade from one
+     end to the other instead of sitting as a flat colour block. */
+  --color-pale-blue-deep: #d1e0f0;
   --color-text-muted: #626a75;
   --color-line: #e1e3e7;
   --color-whatsapp: #25a25a;
@@ -330,32 +334,6 @@ main {
   max-width: var(--measure);
 }
 
-/* Spec list — plain, editorial, not badge/pill styled */
-.specs {
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  padding: 0.9rem 0;
-  margin: 1.75rem 0;
-  border-top: 1px solid var(--color-line);
-  border-bottom: 1px solid var(--color-line);
-  font-size: 0.88rem;
-  color: var(--color-navy);
-}
-
-.specs li {
-  padding: 0.3rem 1rem;
-  border-right: 1px solid var(--color-line);
-}
-
-.specs li:first-child {
-  padding-left: 0;
-}
-
-.specs li:last-child {
-  border-right: none;
-}
-
 /* A full-bleed navy band commits to the brand colour as one bold
    statement instead of scattering it in small accents, the way
    Villa Diamond and Fleet Elevera anchor their key numbers on a solid
@@ -628,14 +606,13 @@ main {
 /* A rounded pale-blue "surface" band that separates a block of
    content (the gallery, the reviews) from the plain white sections
    around it — without it, everything just reads as one long white
-   page with no sense of moving between distinct zones. The same
-   quiet dot-grid and soft corner highlight used on the Novalja tab
-   is layered on top, so the band has some depth instead of reading
-   as one flat colour block. */
+   page with no sense of moving between distinct zones. A soft
+   diagonal shift from a deeper to a lighter blue, plus the same
+   quiet dot-grid used on the Novalja tab, gives the band real depth
+   instead of reading as one flat colour block. */
 .content-band {
-  background-color: var(--color-pale-blue);
-  background-image: radial-gradient(ellipse 60% 55% at 88% 0%, rgba(0, 35, 73, 0.05), transparent 70%),
-    radial-gradient(circle, rgba(0, 35, 73, 0.06) 1px, transparent 1px);
+  background-image: linear-gradient(135deg, var(--color-pale-blue-deep) 0%, var(--color-pale-blue) 100%),
+    radial-gradient(circle, rgba(0, 35, 73, 0.07) 1px, transparent 1px);
   background-size: auto, 26px 26px;
   border-radius: 12px;
   padding: 2.25rem 2rem;
@@ -937,12 +914,6 @@ main {
   .page-section {
     padding: 0 0 3rem;
   }
-
-  .specs li {
-    border-right: none;
-    padding: 0.25rem 0;
-    width: 100%;
-  }
 }
 
 
@@ -1002,11 +973,13 @@ main {
   color: var(--color-white);
 }
 
-/* The hero bar is the centerpiece of the whole page: the direct-booking
-   pitch and the WhatsApp button dominate on the left, specs are a quieter,
-   secondary column on the right. It's a plain solid band directly under the
-   photo now (no floating/overlap trick), so it can never get cropped or
-   wrap out of view regardless of viewport height. */
+/* The hero bar is a single, focused direct-booking callout right under
+   the photo — eyebrow, headline, note and the WhatsApp button, with a
+   left accent bar for emphasis. The spec list that used to sit beside it
+   was dropped: it just repeated the stat-band further down the page and
+   made this band feel both redundant and too tall. It's a plain solid
+   band directly under the photo (no floating/overlap trick), so it can
+   never get cropped or wrap out of view regardless of viewport height. */
 .hero-bar {
   background: var(--color-navy-deep);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -1015,10 +988,7 @@ main {
 .hero-bar__inner {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 1.75rem 2rem;
-  display: flex;
-  align-items: stretch;
-  gap: 2rem;
+  padding: 1.4rem 2rem;
 }
 
 .hero-cta {
@@ -1060,26 +1030,6 @@ main {
   margin-top: 0.15rem;
 }
 
-.specs--hero {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.55rem;
-  border: none;
-  border-left: 1px solid rgba(255, 255, 255, 0.14);
-  padding: 0 0 0 2rem;
-  margin: 0;
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.specs--hero li {
-  border-right: none;
-  padding: 0;
-  white-space: nowrap;
-}
-
 .section-body {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -1087,11 +1037,10 @@ main {
 }
 
 /* A quiet neutral tint on the second tab for rhythm between the panels,
-   with the same dot-grid the white panels get from <body> painted back
-   on top of it so every tab shares the same quiet texture. */
+   with the same diagonal shading and dot-grid the content bands use,
+   so every tab shares the same quiet texture. */
 #novalja {
-  background-color: var(--color-pale-blue);
-  background-image: radial-gradient(ellipse 55% 45% at 88% 0%, rgba(0, 35, 73, 0.055), transparent 70%),
+  background-image: linear-gradient(135deg, var(--color-pale-blue-deep) 0%, var(--color-pale-blue) 100%),
     radial-gradient(circle, rgba(0, 35, 73, 0.07) 1px, transparent 1px);
   background-size: auto, 26px 26px;
 }
@@ -1168,21 +1117,7 @@ main {
   }
 
   .hero-bar__inner {
-    flex-direction: column;
-    gap: 1.25rem;
-    padding: 1.5rem;
-  }
-
-  .specs--hero {
-    flex-direction: row;
-    flex-wrap: wrap;
-    border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-    padding: 1rem 0 0;
-  }
-
-  .specs--hero li {
-    padding-right: 0.85rem;
+    padding: 1.25rem 1.5rem;
   }
 
   .whatsapp-btn--hero {
