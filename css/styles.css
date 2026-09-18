@@ -880,7 +880,10 @@ main {
 
   .content-band--photos > .eyebrow,
   .content-band--photos > h2 {
-    padding: 0 1.25rem;
+    /* Matches .section-body's own side padding so this heading lines up
+       with every other heading on the page instead of sitting closer
+       to the screen edge than the rest of the content. */
+    padding: 0 2rem;
   }
 
   .gallery {
@@ -1711,6 +1714,14 @@ main {
     justify-content: center;
     margin-left: 0;
     margin-top: 0.25rem;
+    /* Some languages' button text is longer than others (Croatian,
+       Italian) — on a full-width mobile button that can be wider than
+       the pill itself if it's forced onto one line, so it's allowed to
+       wrap to a second line here instead of spilling out past the
+       rounded edges. */
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
   }
 
   .main-bar {
