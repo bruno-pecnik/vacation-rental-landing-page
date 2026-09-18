@@ -14,7 +14,7 @@
   --color-steel-light: #71a1d6;
   --color-ink: #14181e;
   --color-white: #ffffff;
-  --color-pale-blue: #e7f1fb;
+  --color-pale-blue: #eff5fb;
   --color-text-muted: #626a75;
   --color-line: #e1e3e7;
   --color-whatsapp: #25a25a;
@@ -625,12 +625,18 @@ main {
   background: var(--color-navy);
 }
 
-/* A soft off-white, rounded "surface" band that separates a block of
+/* A rounded pale-blue "surface" band that separates a block of
    content (the gallery, the reviews) from the plain white sections
    around it — without it, everything just reads as one long white
-   page with no sense of moving between distinct zones. */
+   page with no sense of moving between distinct zones. The same
+   quiet dot-grid and soft corner highlight used on the Novalja tab
+   is layered on top, so the band has some depth instead of reading
+   as one flat colour block. */
 .content-band {
-  background: var(--color-pale-blue);
+  background-color: var(--color-pale-blue);
+  background-image: radial-gradient(ellipse 60% 55% at 88% 0%, rgba(0, 35, 73, 0.05), transparent 70%),
+    radial-gradient(circle, rgba(0, 35, 73, 0.06) 1px, transparent 1px);
+  background-size: auto, 26px 26px;
   border-radius: 12px;
   padding: 2.25rem 2rem;
   margin: 2.5rem 0;
@@ -652,7 +658,14 @@ main {
   height: 220px;
   object-fit: cover;
   display: block;
-  border-radius: var(--radius);
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 35, 73, 0.14);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gallery img:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 14px 26px rgba(0, 35, 73, 0.2);
 }
 
 /* Dot pagination for the mobile photo carousel below — irrelevant on
