@@ -88,6 +88,11 @@
     } catch (e) {
       // localStorage can throw in some private-browsing contexts; not critical.
     }
+
+    // Lets other modules (the reviews carousel, which renders its text
+    // dynamically rather than through data-i18n elements) react to a
+    // language switch too.
+    document.dispatchEvent(new CustomEvent("langchange", { detail: { lang } }));
   }
 
   function init() {
@@ -115,33 +120,41 @@
 // pagination dots that jump straight to any review.
 // ---------------------------------------------------------------------------
 (function () {
+  // Only the stable bits live here (which review, how many stars, the
+  // en fallback quote flag) — the actual quote/author text is
+  // translated per language in translations.js, looked up by id, so the
+  // carousel reads in whichever language is currently selected.
   const REVIEWS = [
-    {
-      stars: 5,
-      quote: "Everything was great. Quiet location, next to Babe Beach \u2014 about 12 minutes on foot. Great owners.",
-      author: "Andrej, Slovakia",
-    },
-    {
-      stars: 5,
-      quote: "A few minutes' walk from the sea, with a choice of beaches nearby \u2014 sandy, pebble, rocky, even dog-friendly. The pool is excellent and cleaned every day.",
-      author: "Angerman, Hungary",
-    },
-    {
-      stars: 5,
-      quote: "We stayed as a group of four and had a wonderful time. The owner was very friendly and helpful, Uber and Bolt are easy to get, and the pool was a big plus.",
-      author: "Manuel, Italy",
-    },
-    {
-      stars: 5,
-      quote: "Absolutely perfect accommodation!",
-      author: "Radek, Czech Republic",
-    },
-    {
-      stars: 5,
-      quote: null,
-      author: "Artem, Ukraine",
-    },
+    { id: "andrej", stars: 5 },
+    { id: "angerman", stars: 5 },
+    { id: "manuel", stars: 5 },
+    { id: "radek", stars: 5 },
+    { id: "artem", stars: 5, noQuote: true },
   ];
+
+  const STORAGE_KEY = "preferredLang";
+
+  function currentDict() {
+    let lang = "en";
+    try {
+      lang = localStorage.getItem(STORAGE_KEY) || "en";
+    } catch (e) {
+      // ignore
+    }
+    return (window.translations && window.translations[lang]) || (window.translations && window.translations.en) || {};
+  }
+
+  function quoteTextFor(review, dict) {
+    if (review.noQuote) {
+      return dict.review_fallback_quote || "Rated 10/10 \u2014 Exceptional.";
+    }
+    const raw = dict["review_" + review.id + "_quote"];
+    return raw ? "\u201C" + raw + "\u201D" : "";
+  }
+
+  function authorTextFor(review, dict) {
+    return dict["review_" + review.id + "_author"] || "";
+  }
 
   const TRANSITION_MS = 500;
   const SLIDE_PX = 60;
@@ -153,6 +166,7 @@
 
   function buildSlide(index) {
     const review = REVIEWS[index];
+    const dict = currentDict();
 
     const slide = document.createElement("div");
     slide.className = "review-spotlight";
@@ -169,14 +183,12 @@
 
     const quote = document.createElement("p");
     quote.className = "review-spotlight__quote";
-    quote.textContent = review.quote
-      ? "\u201C" + review.quote + "\u201D"
-      : "Rated 10/10 \u2014 Exceptional.";
+    quote.textContent = quoteTextFor(review, dict);
     inner.appendChild(quote);
 
     const author = document.createElement("p");
     author.className = "review-spotlight__author";
-    author.textContent = review.author;
+    author.textContent = authorTextFor(review, dict);
     inner.appendChild(author);
 
     return slide;
@@ -250,6 +262,19 @@
 
     currentSlide = buildSlide(current);
     viewport.appendChild(currentSlide);
+
+    // Switching languages doesn't rebuild the slide (that would restart
+    // its slide/fade animation) — it just swaps the quote/author text
+    // inside whichever slide is currently showing.
+    document.addEventListener("langchange", () => {
+      if (!currentSlide) return;
+      const dict = currentDict();
+      const review = REVIEWS[current];
+      const quoteEl = currentSlide.querySelector(".review-spotlight__quote");
+      const authorEl = currentSlide.querySelector(".review-spotlight__author");
+      if (quoteEl) quoteEl.textContent = quoteTextFor(review, dict);
+      if (authorEl) authorEl.textContent = authorTextFor(review, dict);
+    });
 
     function stopAutoAdvance() {
       if (autoAdvanceTimer) {
@@ -406,7 +431,7 @@
     function startAutoAdvance() {
       stopAutoAdvance();
       // Only the narrow layout turns .gallery into a one-photo-at-a-time
-      // carousel -- on a grid there's nothing to advance.
+      // carousel — on a grid there's nothing to advance.
       if (!isMobile()) return;
       autoAdvanceTimer = window.setInterval(() => {
         step(1);

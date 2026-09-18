@@ -14,7 +14,7 @@
   --color-steel-light: #71a1d6;
   --color-ink: #14181e;
   --color-white: #ffffff;
-  --color-off-white: #f4f5f7;
+  --color-pale-blue: #e7f1fb;
   --color-text-muted: #626a75;
   --color-line: #e1e3e7;
   --color-whatsapp: #25a25a;
@@ -627,10 +627,10 @@ main {
 
 /* A soft off-white, rounded "surface" band that separates a block of
    content (the gallery, the reviews) from the plain white sections
-   around it -- without it, everything just reads as one long white
+   around it — without it, everything just reads as one long white
    page with no sense of moving between distinct zones. */
 .content-band {
-  background: var(--color-off-white);
+  background: var(--color-pale-blue);
   border-radius: 12px;
   padding: 2.25rem 2rem;
   margin: 2.5rem 0;
@@ -655,7 +655,7 @@ main {
   border-radius: var(--radius);
 }
 
-/* Dot pagination for the mobile photo carousel below -- irrelevant on
+/* Dot pagination for the mobile photo carousel below — irrelevant on
    wider screens where .gallery is still a plain grid, so hidden there. */
 .gallery-dots {
   display: none;
@@ -774,7 +774,7 @@ main {
   width: 100%;
 }
 
-/* A branded header bar sits above the map (not on top of it) -- Google's
+/* A branded header bar sits above the map (not on top of it) — Google's
    own embed already shows its own address/directions card inside the map
    itself, so overlaying a second one there just duplicated it. This one
    is always visible, on any device, and never collides with Google's UI. */
@@ -790,7 +790,7 @@ main {
 }
 
 .map-embed__header:hover {
-  background-color: var(--color-off-white);
+  background-color: var(--color-pale-blue);
 }
 
 .map-embed__pin {
@@ -831,7 +831,7 @@ main {
   letter-spacing: 0.02em;
 }
 
-/* A giant, near-invisible wordmark behind the footer text -- the quiet
+/* A giant, near-invisible wordmark behind the footer text — the quiet
    "brand watermark" flourish nulladies.hr and Fleet Elevera use to give
    a plain footer some presence. Falls back to a very faint solid fill
    for browsers without text-stroke support, so it never disappears. */
@@ -1077,7 +1077,7 @@ main {
    with the same dot-grid the white panels get from <body> painted back
    on top of it so every tab shares the same quiet texture. */
 #novalja {
-  background-color: var(--color-off-white);
+  background-color: var(--color-pale-blue);
   background-image: radial-gradient(ellipse 55% 45% at 88% 0%, rgba(0, 35, 73, 0.055), transparent 70%),
     radial-gradient(circle, rgba(0, 35, 73, 0.07) 1px, transparent 1px);
   background-size: auto, 26px 26px;
