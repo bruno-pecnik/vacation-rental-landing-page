@@ -324,3 +324,131 @@
 
   init();
 })();
+
+// ---------------------------------------------------------------------------
+// Mobile photo carousel: six small photos in a 2-column grid read poorly on
+// a phone, so below the 640px breakpoint .gallery becomes a native
+// scroll-snap row (touch-swipe support comes free from the browser) and
+// this just adds dot pagination plus a gentle auto-advance on top. On
+// wider screens .gallery stays a plain grid and this quietly no-ops.
+// ---------------------------------------------------------------------------
+(function () {
+  const AUTO_ADVANCE_MS = 4500;
+  const MOBILE_QUERY = "(max-width: 640px)";
+  let autoAdvanceTimer = null;
+  let currentIndex = 0;
+
+  function init() {
+    const gallery = document.getElementById("gallery");
+    const dotsContainer = document.getElementById("gallery-dots");
+    if (!gallery) return;
+
+    const slides = Array.from(gallery.querySelectorAll("img"));
+    const slideCount = slides.length;
+    if (slideCount === 0) return;
+
+    const dotEls = [];
+    const isMobile = () =>
+      window.matchMedia ? window.matchMedia(MOBILE_QUERY).matches : false;
+
+    function updateActiveDot(index) {
+      dotEls.forEach((dot, i) => {
+        const isActive = i === index;
+        dot.classList.toggle("active", isActive);
+        dot.setAttribute("aria-current", isActive ? "true" : "false");
+      });
+    }
+
+    function goTo(index, behavior) {
+      const clamped = (index + slideCount) % slideCount;
+      const slide = slides[clamped];
+      if (!slide) return;
+      const targetLeft =
+        slide.getBoundingClientRect().left -
+        gallery.getBoundingClientRect().left +
+        gallery.scrollLeft;
+      gallery.scrollTo({ left: targetLeft, behavior: behavior || "smooth" });
+      currentIndex = clamped;
+      updateActiveDot(currentIndex);
+    }
+
+    function step(delta) {
+      const proposed = currentIndex + delta;
+      const wraps = proposed < 0 || proposed >= slideCount;
+      goTo(proposed, wraps ? "auto" : "smooth");
+    }
+
+    if (dotsContainer) {
+      slides.forEach((_, i) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "gallery-dots__dot" + (i === 0 ? " active" : "");
+        dot.setAttribute("role", "tab");
+        dot.setAttribute("aria-current", i === 0 ? "true" : "false");
+        dot.setAttribute("aria-label", "Show photo " + (i + 1) + " of " + slideCount);
+        dot.addEventListener("click", () => {
+          if (i === currentIndex) return;
+          goTo(i);
+          restartAutoAdvance();
+        });
+        dotsContainer.appendChild(dot);
+        dotEls.push(dot);
+      });
+    }
+
+    function stopAutoAdvance() {
+      if (autoAdvanceTimer) {
+        window.clearInterval(autoAdvanceTimer);
+        autoAdvanceTimer = null;
+      }
+    }
+
+    function startAutoAdvance() {
+      stopAutoAdvance();
+      // Only the narrow layout turns .gallery into a one-photo-at-a-time
+      // carousel -- on a grid there's nothing to advance.
+      if (!isMobile()) return;
+      autoAdvanceTimer = window.setInterval(() => {
+        step(1);
+      }, AUTO_ADVANCE_MS);
+    }
+
+    function restartAutoAdvance() {
+      startAutoAdvance();
+    }
+
+    // A manual swipe fires scroll events throughout the gesture; wait for
+    // them to settle before trusting scrollLeft, then sync the dots and
+    // let auto-advance resume so it never fights the visitor's own swipe.
+    let scrollSettleTimer = null;
+    gallery.addEventListener("scroll", () => {
+      if (scrollSettleTimer) window.clearTimeout(scrollSettleTimer);
+      scrollSettleTimer = window.setTimeout(() => {
+        const width = gallery.clientWidth || 1;
+        const index = Math.round(gallery.scrollLeft / width);
+        const clamped = Math.max(0, Math.min(slideCount - 1, index));
+        if (clamped !== currentIndex) {
+          currentIndex = clamped;
+        }
+        updateActiveDot(currentIndex);
+        restartAutoAdvance();
+      }, 120);
+    });
+
+    gallery.addEventListener("touchstart", stopAutoAdvance, { passive: true });
+    gallery.addEventListener("mouseenter", stopAutoAdvance);
+    gallery.addEventListener("mouseleave", startAutoAdvance);
+
+    window.addEventListener("resize", restartAutoAdvance);
+
+    const prefersReducedMotion = window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false;
+
+    if (!prefersReducedMotion) {
+      startAutoAdvance();
+    }
+  }
+
+  init();
+})();

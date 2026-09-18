@@ -655,6 +655,12 @@ main {
   border-radius: var(--radius);
 }
 
+/* Dot pagination for the mobile photo carousel below -- irrelevant on
+   wider screens where .gallery is still a plain grid, so hidden there. */
+.gallery-dots {
+  display: none;
+}
+
 /* A transitional zone just above the mobile breakpoint where the
    section is still narrow enough that the full-size spotlight quote
    needs a couple of extra lines — without this, a tablet or a narrow
@@ -675,11 +681,47 @@ main {
 
 @media (max-width: 640px) {
   .gallery {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 0;
+    scrollbar-width: none;
+  }
+
+  .gallery::-webkit-scrollbar {
+    display: none;
   }
 
   .gallery img {
-    height: 160px;
+    flex: 0 0 100%;
+    height: 240px;
+    scroll-snap-align: start;
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+  }
+
+  .gallery-dots__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--color-line);
+    cursor: pointer;
+    transition: background-color 0.2s ease, width 0.2s ease;
+  }
+
+  .gallery-dots__dot.active {
+    width: 1.4rem;
+    border-radius: 999px;
+    background: var(--color-navy);
   }
 
   .reviews__carousel {
@@ -1137,11 +1179,15 @@ main {
 
   .main-bar {
     flex-wrap: wrap;
+    padding: 1rem 1.25rem;
+  }
+
+  .whatsapp-btn--nav {
+    display: none;
   }
 
   .lang-switcher {
-    width: 100%;
-    justify-content: flex-end;
+    gap: 0.15rem;
   }
 
 }
