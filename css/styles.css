@@ -39,11 +39,14 @@
   box-sizing: border-box;
 }
 
-/* Matches the footer's colour so a mobile browser's overscroll/rubber-
-   band bounce past the very bottom of the page shows this instead of
-   a flash of plain white beneath the footer. */
+/* Matches the footer's colour so any overscroll/rubber-band bounce past
+   the very bottom of the page shows this instead of a flash of plain
+   white beneath the footer, and turns off the bounce itself (Safari 16+,
+   Chrome, Firefox all honour this on the document element) so there is
+   nothing to reveal past the page's real edges in the first place. */
 html {
   background: var(--color-navy-deep);
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -53,6 +56,7 @@ body {
   background: var(--color-white);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
   /* A very faint dot grid gives the plain white panels some quiet
      texture instead of flat, empty white — subtle enough to sit behind
      body text without affecting readability. */
@@ -835,6 +839,12 @@ main {
   display: none;
 }
 
+/* "N / total" counter badge, shown only on the mobile carousel (see the
+   640px media query) in place of the hover-only zoom hint. */
+.gallery__count {
+  display: none;
+}
+
 /* A transitional zone just above the mobile breakpoint where the
    section is still narrow enough that the full-size spotlight quote
    needs a couple of extra lines — without this, a tablet or a narrow
@@ -850,12 +860,15 @@ main {
 }
 
 @media (max-width: 640px) {
-  /* The photo band breaks out to the full width of the screen instead of
-     sitting as an inset card with its own side padding — the same
-     100vw/negative-margin trick .stat-band uses higher up the page. The
-     eyebrow/heading get their own padding back below so the text still
-     lines up with the rest of the page; only the photos themselves (and
-     the band's own background) go edge to edge. */
+  /* The photo band still breaks out to the full width of the screen — the
+     same 100vw/negative-margin trick .stat-band uses higher up the page —
+     so the carousel reads as big and immersive rather than a small inset
+     card. The eyebrow/heading get their own padding back below so the
+     text still lines up with the rest of the page. The photos themselves
+     no longer go flush to the screen edges, though: each one is an inset,
+     rounded, shadowed card with a sliver of its neighbour peeking in on
+     either side, which both looks like an actual photo (not a flat wall
+     of pixels) and signals at a glance that it's swipeable. */
   .content-band--photos {
     width: 100vw;
     margin-left: calc(50% - 50vw);
@@ -876,7 +889,9 @@ main {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    gap: 0;
+    gap: 0.85rem;
+    padding: 0 1.5rem;
+    scroll-padding: 0 1.5rem;
     scrollbar-width: none;
   }
 
@@ -885,11 +900,11 @@ main {
   }
 
   .gallery__item {
-    flex: 0 0 100%;
-    height: 264px;
-    scroll-snap-align: start;
-    border-radius: 0;
-    box-shadow: none;
+    flex: 0 0 84%;
+    height: 250px;
+    scroll-snap-align: center;
+    border-radius: 16px;
+    box-shadow: 0 10px 26px rgba(0, 35, 73, 0.28);
   }
 
   /* No hover state on touch, and the zoom hint would otherwise just
@@ -901,6 +916,27 @@ main {
 
   .gallery__zoom {
     display: none;
+  }
+
+  /* A quiet "N / total" counter in the corner of each card stands in for
+     the hover zoom-hint (hidden on touch) and gives the carousel the same
+     sense of a curated set that the desktop grid has, instead of just a
+     bare photo. */
+  .gallery__count {
+    display: block;
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(0, 20, 40, 0.55);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    backdrop-filter: blur(2px);
+    pointer-events: none;
   }
 
   .gallery-dots {
@@ -1558,7 +1594,14 @@ main {
 
 .hero-cta__headline {
   margin: 0;
-  flex: 1 1 auto;
+  /* flex-basis: 0 (not auto) — the badge and button already have fixed
+     widths, so the headline should be sized purely from the remaining
+     space, not from its own natural (unwrapped) text width. With
+     basis: auto, a longer headline's full-line width got counted before
+     shrinking was applied, which could push the button onto its own
+     line even when everything actually fit once the headline wrapped
+     to two lines within its own box. */
+  flex: 1 1 0%;
   min-width: 14em;
   font-family: var(--font-heading);
   font-size: clamp(1.05rem, 1.7vw, 1.3rem);

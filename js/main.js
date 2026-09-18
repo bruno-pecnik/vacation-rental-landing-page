@@ -611,7 +611,7 @@
 // like the direct buttons.
 // ---------------------------------------------------------------------------
 (function () {
-  const WHATSAPP_NUMBER = "385953666731";
+  const WHATSAPP_NUMBER = "385981753381";
 
   function buildMessage(name, phone, message) {
     const lines = [
