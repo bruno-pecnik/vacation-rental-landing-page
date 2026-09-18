@@ -2,13 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>
+    // Runs before anything else so the browser never gets a chance to
+    // restore a previous scroll position — every visit (fresh load,
+    // reload, or coming back via the browser's back/forward cache) lands
+    // at the very top of the page instead of wherever was last scrolled.
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    window.addEventListener("pageshow", function () {
+      window.scrollTo(0, 0);
+    });
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Luxury Apartments Cuba Novalja</title>
   <meta name="description" content="Luxury Apartments Cuba Novalja — apartment info, location and direct contact. Book directly for the best rate.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=8">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=9">
 </head>
 <body>
 
@@ -80,7 +92,24 @@
 
     <section id="apartman" class="page-section">
       <div class="section-body">
-        <p data-i18n="desc_apartman">Luxury Apartments Cuba offers a spacious two-bedroom apartment with a private balcony, ideal for families or groups of up to five. Guests enjoy free WiFi, free parking, air conditioning, and access to a shared outdoor pool with garden views. Pets are welcome on request, and an airport shuttle can be arranged.</p>
+        <div class="intro-row">
+          <p data-i18n="desc_apartman">Luxury Apartments Cuba offers a spacious two-bedroom apartment with a private balcony, ideal for families or groups of up to five. Guests enjoy free WiFi, free parking, air conditioning, and access to a shared outdoor pool with garden views. Pets are welcome on request, and an airport shuttle can be arranged.</p>
+
+          <div class="stat-row">
+            <div class="stat-row__item">
+              <p class="stat-row__value">62 m²</p>
+              <p class="stat-row__label" data-i18n="stat_size_label">Total Surface</p>
+            </div>
+            <div class="stat-row__item">
+              <p class="stat-row__value">2</p>
+              <p class="stat-row__label" data-i18n="stat_bedrooms_label">Bedrooms</p>
+            </div>
+            <div class="stat-row__item">
+              <p class="stat-row__value">5</p>
+              <p class="stat-row__label" data-i18n="stat_guests_label">Guests</p>
+            </div>
+          </div>
+        </div>
 
         <a class="booking-badge" href="https://www.booking.com/hotel/hr/luxury-apartments-cuba.en-gb.html" target="_blank" rel="noopener">
           <span class="booking-badge__mark" aria-hidden="true">10</span>
@@ -149,7 +178,7 @@
     <p data-i18n="footer_copyright">&copy; 2026 Luxury Apartments Cuba Novalja</p>
   </footer>
 
-  <script src="js/translations.js?v=8" defer></script>
-  <script src="js/main.js?v=8" defer></script>
+  <script src="js/translations.js?v=9" defer></script>
+  <script src="js/main.js?v=9" defer></script>
 </body>
 </html>
