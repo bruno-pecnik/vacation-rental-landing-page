@@ -612,8 +612,22 @@
 // ---------------------------------------------------------------------------
 (function () {
   const WHATSAPP_NUMBER = "385981753381";
+  const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-  function buildMessage(name, phone, message) {
+  // Renders an <input type="date"> value ("YYYY-MM-DD") as "12 Jul 2026" —
+  // a fixed, always-in-English format regardless of the visitor's chosen
+  // site language, so the date in the WhatsApp message is unambiguous
+  // (no MM/DD-vs-DD/MM guessing) whichever language Nada reads it in.
+  function formatDate(isoDate) {
+    const parts = (isoDate || "").split("-");
+    if (parts.length !== 3) return isoDate || "";
+    const [year, month, day] = parts;
+    const monthIndex = parseInt(month, 10) - 1;
+    if (Number.isNaN(monthIndex) || monthIndex < 0 || monthIndex > 11) return isoDate;
+    return parseInt(day, 10) + " " + MONTH_NAMES[monthIndex] + " " + year;
+  }
+
+  function buildMessage(name, phone, checkin, checkout, message) {
     const lines = [
       "Hi, I'm interested in Luxury Apartments Cuba Novalja.",
       "",
@@ -621,6 +635,11 @@
     ];
     if (phone) {
       lines.push("Phone: " + phone);
+    }
+    if (checkin || checkout) {
+      const checkinText = checkin ? formatDate(checkin) : "?";
+      const checkoutText = checkout ? formatDate(checkout) : "?";
+      lines.push("Dates: " + checkinText + " – " + checkoutText);
     }
     lines.push("Message: " + message);
     return lines.join("\n");
@@ -632,17 +651,45 @@
 
     const nameInput = document.getElementById("contact-name");
     const phoneInput = document.getElementById("contact-phone");
+    const checkinInput = document.getElementById("contact-checkin");
+    const checkoutInput = document.getElementById("contact-checkout");
     const messageInput = document.getElementById("contact-message");
+
+    // Nobody can book the past, and a check-out before check-in is never
+    // valid — both fields stay optional, but when a visitor does pick
+    // dates, the picker itself steers them away from an impossible range
+    // instead of only catching it after the fact.
+    if (checkinInput && checkoutInput) {
+      const today = new Date();
+      const todayIso = today.getFullYear() + "-" +
+        String(today.getMonth() + 1).padStart(2, "0") + "-" +
+        String(today.getDate()).padStart(2, "0");
+      checkinInput.min = todayIso;
+      checkoutInput.min = todayIso;
+
+      checkinInput.addEventListener("change", () => {
+        if (checkinInput.value) {
+          checkoutInput.min = checkinInput.value;
+          if (checkoutInput.value && checkoutInput.value < checkinInput.value) {
+            checkoutInput.value = checkinInput.value;
+          }
+        } else {
+          checkoutInput.min = todayIso;
+        }
+      });
+    }
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
 
       const name = nameInput.value.trim();
       const phone = phoneInput.value.trim();
+      const checkin = checkinInput ? checkinInput.value.trim() : "";
+      const checkout = checkoutInput ? checkoutInput.value.trim() : "";
       const message = messageInput.value.trim();
       if (!name || !message) return;
 
-      const text = buildMessage(name, phone, message);
+      const text = buildMessage(name, phone, checkin, checkout, message);
       const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
       window.open(url, "_blank", "noopener");
       form.reset();

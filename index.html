@@ -40,7 +40,7 @@
       setTimeout(forceScrollTop, 100);
     });
   </script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Luxury Apartments Cuba Novalja</title>
   <meta name="description" content="Luxury Apartments Cuba Novalja — apartment info, location and direct contact. Book directly for the best rate.">
   <link rel="canonical" href="https://bruno-pecnik.github.io/vacation-rental-landing-page/">
@@ -67,7 +67,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=26">
+  <link rel="stylesheet" href="css/styles.css?v=27">
 </head>
 <body>
 
@@ -319,9 +319,24 @@
         </div>
 
         <div class="contact-form__row">
+          <span class="contact-form__group-label" data-i18n="contact_dates_label">Planned dates (optional)</span>
+          <div class="contact-form__dates">
+            <div class="contact-form__date-field">
+              <label for="contact-checkin" data-i18n="contact_checkin_label">Check-in</label>
+              <input type="date" id="contact-checkin" name="checkin">
+            </div>
+            <div class="contact-form__date-field">
+              <label for="contact-checkout" data-i18n="contact_checkout_label">Check-out</label>
+              <input type="date" id="contact-checkout" name="checkout">
+            </div>
+          </div>
+          <p class="contact-form__hint" data-i18n="contact_dates_hint">Optional — if your dates aren't fixed yet, just mention it in your message instead.</p>
+        </div>
+
+        <div class="contact-form__row">
           <label for="contact-message" data-i18n="contact_message_label">Message</label>
           <textarea id="contact-message" name="message" rows="4" required
-                    data-i18n-placeholder="contact_message_placeholder" placeholder="Dates, number of guests, questions&hellip;"></textarea>
+                    data-i18n-placeholder="contact_message_placeholder" placeholder="Number of guests, questions&hellip;"></textarea>
         </div>
 
         <button type="submit" class="whatsapp-btn contact-form__submit">
@@ -347,7 +362,7 @@
     </div>
   </footer>
 
-  <script src="js/translations.js?v=26" defer></script>
-  <script src="js/main.js?v=26" defer></script>
+  <script src="js/translations.js?v=27" defer></script>
+  <script src="js/main.js?v=27" defer></script>
 </body>
 </html>

@@ -1207,6 +1207,13 @@ main {
   color: rgba(255, 255, 255, 0.6);
   text-align: center;
   padding: 2.25rem 1.5rem;
+  /* On an iPhone with a home-indicator, the page isn't allowed to paint
+     into that reserved strip at all unless the viewport meta tag opts in
+     (viewport-fit=cover, set in index.html) — without it, that sliver at
+     the very bottom is left to the browser, which is the plain-white gap
+     some visitors see below the footer. env() resolves to 0 anywhere that
+     doesn't have an inset, so this is a no-op elsewhere. */
+  padding-bottom: calc(2.25rem + env(safe-area-inset-bottom, 0px));
   font-size: 0.78rem;
   letter-spacing: 0.02em;
 }
@@ -1316,10 +1323,37 @@ main {
   gap: 0.4rem;
 }
 
-.contact-form__row label {
+.contact-form__row label,
+.contact-form__group-label {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--color-navy);
+}
+
+/* The check-in/check-out pair sits side by side under one shared group
+   label — two small fields, so a two-column row reads more naturally
+   than stacking them full-width like the other rows. */
+.contact-form__dates {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.contact-form__date-field {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.contact-form__date-field label {
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.contact-form__date-field input {
+  width: 100%;
 }
 
 .contact-form__row input,
