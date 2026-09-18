@@ -108,6 +108,7 @@ a {
   background: var(--color-navy);
   color: var(--color-white);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .main-bar {
@@ -116,13 +117,31 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
-  padding: 1.6rem 2rem;
+  padding: 1.5rem 2rem;
+}
+
+/* A small wordmark so the bar carries the site's own identity instead of
+   being just a WhatsApp button and some flags on a flat colour block. */
+.main-bar__brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.main-bar__brand-text {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.3rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-white);
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
 .sub-nav {
@@ -356,31 +375,19 @@ main {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 2.25rem 1.5rem;
-  display: flex;
-  justify-content: center;
-  gap: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1.75rem 1rem;
 }
 
 .stat-band__item {
-  flex: 0 1 240px;
-  padding: 0 2.5rem;
-  border-right: 1px solid rgba(255, 255, 255, 0.16);
   text-align: center;
-}
-
-.stat-band__item:first-child {
-  padding-left: 0;
-}
-
-.stat-band__item:last-child {
-  padding-right: 0;
-  border-right: none;
 }
 
 .stat-band__value {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 2rem;
+  font-size: 1.85rem;
   font-weight: 700;
   color: var(--color-white);
   white-space: nowrap;
@@ -388,12 +395,28 @@ main {
 
 .stat-band__label {
   margin: 0.4rem 0 0;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--color-steel-light);
-  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .stat-band__inner {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-band__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 0.75rem;
+  }
+
+  .stat-band__value {
+    font-size: 1.5rem;
+  }
 }
 
 /* Booking.com trust badges — styled as small outlined pills rather than
@@ -443,8 +466,8 @@ main {
    a row of small cards, with dot pagination beneath it — a calmer, more
    editorial presentation that also gives visitors a clear, clickable
    sense of how many reviews there are and where they are in the set. */
-.reviews {
-  margin-top: 3rem;
+.reviews.content-band {
+  margin-top: 2.5rem;
 }
 
 .reviews__stage {
@@ -602,9 +625,23 @@ main {
   background: var(--color-navy);
 }
 
-/* Gallery placeholder (still awaiting real photos) */
+/* A soft off-white, rounded "surface" band that separates a block of
+   content (the gallery, the reviews) from the plain white sections
+   around it -- without it, everything just reads as one long white
+   page with no sense of moving between distinct zones. */
+.content-band {
+  background: var(--color-off-white);
+  border-radius: 12px;
+  padding: 2.25rem 2rem;
+  margin: 2.5rem 0;
+}
+
+.content-band > .eyebrow:first-child {
+  margin-top: 0;
+}
+
 .gallery {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.6rem;
@@ -637,26 +674,6 @@ main {
 }
 
 @media (max-width: 640px) {
-  .stat-band__inner {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 1.25rem 0;
-    padding: 1.75rem 1.25rem;
-  }
-
-  .stat-band__item {
-    flex: 1 1 30%;
-    padding: 0 0.75rem;
-  }
-
-  .stat-band__item:first-child {
-    padding-left: 0.75rem;
-  }
-
-  .stat-band__value {
-    font-size: 1.5rem;
-  }
-
   .gallery {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -702,7 +719,6 @@ main {
 /* Map embed — given the same elevated-card treatment as the hero bar,
    so it reads as a designed element rather than a raw dropped-in widget */
 .map-embed {
-  position: relative;
   margin-top: 2.5rem;
   margin-bottom: 2rem;
   border: 1px solid var(--color-line);
@@ -716,29 +732,23 @@ main {
   width: 100%;
 }
 
-/* Floating location card, overlaid on the map itself rather than sitting
-   as a separate line above it — the "address card on top of the map"
-   treatment Sotheby's uses for Villa Diamond's location section. */
-.map-embed__card {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  z-index: 2;
+/* A branded header bar sits above the map (not on top of it) -- Google's
+   own embed already shows its own address/directions card inside the map
+   itself, so overlaying a second one there just duplicated it. This one
+   is always visible, on any device, and never collides with Google's UI. */
+.map-embed__header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  max-width: calc(100% - 2rem);
-  padding: 0.85rem 1.1rem;
+  padding: 1rem 1.25rem;
   background: var(--color-white);
-  border-radius: 6px;
-  box-shadow: 0 8px 20px rgba(11, 22, 38, 0.18);
+  border-bottom: 1px solid var(--color-line);
   text-decoration: none;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
-.map-embed__card:hover {
-  box-shadow: 0 10px 26px rgba(11, 22, 38, 0.24);
-  transform: translateY(-1px);
+.map-embed__header:hover {
+  background-color: var(--color-off-white);
 }
 
 .map-embed__pin {
@@ -763,28 +773,6 @@ main {
 .map-embed__subtitle {
   font-size: 0.74rem;
   color: var(--color-text-muted);
-}
-
-@media (max-width: 480px) {
-  .map-embed__card {
-    top: 0.75rem;
-    left: 0.75rem;
-    padding: 0.65rem 0.85rem;
-    gap: 0.55rem;
-  }
-
-  .map-embed__pin {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .map-embed__title {
-    font-size: 0.8rem;
-  }
-
-  .map-embed__subtitle {
-    font-size: 0.68rem;
-  }
 }
 
 /* ==========================================================================
@@ -1051,13 +1039,6 @@ main {
   background-image: radial-gradient(ellipse 55% 45% at 88% 0%, rgba(0, 35, 73, 0.055), transparent 70%),
     radial-gradient(circle, rgba(0, 35, 73, 0.07) 1px, transparent 1px);
   background-size: auto, 26px 26px;
-}
-
-.section-divider {
-  height: 1px;
-  background: var(--color-line);
-  margin: 3rem 0;
-  max-width: var(--measure);
 }
 
 /* Host tab: a profile card pairing Nada's photo with her name, a short
