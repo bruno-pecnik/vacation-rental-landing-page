@@ -67,6 +67,7 @@
     de: "de",
     pl: "pl",
     cz: "cs",
+    hr: "hr",
   };
 
   const STORAGE_KEY = "preferredLang";
@@ -232,10 +233,13 @@
     incoming.style.opacity = "0";
     viewport.appendChild(incoming);
 
-    // Force layout so the browser registers the starting position above
-    // before we transition both slides to their resting/exit state.
-    // eslint-disable-next-line no-unused-expressions
-    incoming.offsetHeight;
+    // Reading offsetHeight both forces the layout the browser needs to
+    // register the starting position above (before we transition both
+    // slides to their resting/exit state) and gives the incoming slide's
+    // real content height, which the viewport then animates to — so a
+    // short review gets a short box and a long one gets a tall one,
+    // instead of every review sitting in a box sized for the longest.
+    viewport.style.height = incoming.offsetHeight + "px";
 
     const outgoing = currentSlide;
     outgoing.style.transform = "translateX(" + (direction > 0 ? -SLIDE_PX : SLIDE_PX) + "px)";
@@ -275,10 +279,12 @@
 
     currentSlide = buildSlide(current);
     viewport.appendChild(currentSlide);
+    viewport.style.height = currentSlide.offsetHeight + "px";
 
     // Switching languages doesn't rebuild the slide (that would restart
     // its slide/fade animation) — it just swaps the quote/author text
-    // inside whichever slide is currently showing.
+    // inside whichever slide is currently showing. The translated text
+    // can wrap differently, so the viewport's height is re-measured too.
     document.addEventListener("langchange", () => {
       if (!currentSlide) return;
       const dict = currentDict();
@@ -287,6 +293,15 @@
       const authorEl = currentSlide.querySelector(".review-spotlight__author");
       if (quoteEl) quoteEl.textContent = quoteTextFor(review, dict);
       if (authorEl) authorEl.textContent = authorTextFor(review, dict);
+      viewport.style.height = currentSlide.offsetHeight + "px";
+    });
+
+    // The slide's own width (and so how its text wraps) depends on the
+    // viewport's width, which a window resize or orientation change can
+    // alter — re-measure so the box stays sized to the content rather
+    // than getting stuck at whatever height fit the previous width.
+    window.addEventListener("resize", () => {
+      if (currentSlide) viewport.style.height = currentSlide.offsetHeight + "px";
     });
 
     function stopAutoAdvance() {
