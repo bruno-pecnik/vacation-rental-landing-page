@@ -304,7 +304,7 @@ main {
   color: #003580;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1em;
+  font-size: 1.15em;
 }
 
 /* Guest reviews */
@@ -485,6 +485,8 @@ main {
 
 .site-footer p {
   margin: 0;
+  text-align: center;
+  width: 100%;
 }
 
 /* ==========================================================================
