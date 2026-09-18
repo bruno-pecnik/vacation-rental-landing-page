@@ -7,8 +7,11 @@
      bands like the hero bar and footer. */
   --color-navy: #002349;
   --color-navy-deep: #001830;
-  --color-steel: #3d5a7d;
-  --color-steel-light: #8fa6c2;
+  /* Same hue and saturation as --color-navy, just lighter — so every
+     blue on the page reads as one family at different depths, not as
+     separate colours. */
+  --color-steel: #215083;
+  --color-steel-light: #71a1d6;
   --color-ink: #14181e;
   --color-white: #ffffff;
   --color-off-white: #f4f5f7;
@@ -50,21 +53,28 @@ body {
   background-size: 26px 26px;
 }
 
-h1, h2 {
+h1 {
   font-family: var(--font-heading);
   font-weight: 600;
   color: var(--color-navy);
   letter-spacing: -0.01em;
   margin: 0 0 0.5em;
-}
-
-h1 {
   font-size: clamp(2.4rem, 5vw, 3.8rem);
   line-height: 1.08;
   max-width: 16em;
 }
 
+/* Section headings repeat on every tab, so they stay in the body sans
+   font (bolder, to still carry the weight of a heading) rather than
+   switching to the serif each time — the serif is now reserved for the
+   hero title and Nada's name, where it reads as a deliberate flourish
+   instead of a second competing voice throughout the page. */
 h2 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--color-navy);
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
   font-size: clamp(1.5rem, 3vw, 2.1rem);
   line-height: 1.2;
 }
