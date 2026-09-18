@@ -225,8 +225,12 @@
     }, TRANSITION_MS);
   }
 
+  const AUTO_ADVANCE_MS = 6000;
+  let autoAdvanceTimer = null;
+
   function init() {
     const viewport = document.getElementById("reviews-viewport");
+    const carousel = document.querySelector(".reviews__carousel");
     if (!viewport) return;
 
     const prevBtn = document.getElementById("reviews-prev");
@@ -235,12 +239,55 @@
     currentGrid = buildGrid(start);
     viewport.appendChild(currentGrid);
 
+    function stopAutoAdvance() {
+      if (autoAdvanceTimer) {
+        window.clearInterval(autoAdvanceTimer);
+        autoAdvanceTimer = null;
+      }
+    }
+
+    function startAutoAdvance() {
+      stopAutoAdvance();
+      autoAdvanceTimer = window.setInterval(() => {
+        goTo(1, viewport, prevBtn, nextBtn);
+      }, AUTO_ADVANCE_MS);
+    }
+
+    function restartAutoAdvance() {
+      // A manual click shouldn't fight the next auto-advance tick — give
+      // the visitor a full interval before it resumes on its own.
+      startAutoAdvance();
+    }
+
     if (prevBtn) {
-      prevBtn.addEventListener("click", () => goTo(-1, viewport, prevBtn, nextBtn));
+      prevBtn.addEventListener("click", () => {
+        goTo(-1, viewport, prevBtn, nextBtn);
+        restartAutoAdvance();
+      });
     }
 
     if (nextBtn) {
-      nextBtn.addEventListener("click", () => goTo(1, viewport, prevBtn, nextBtn));
+      nextBtn.addEventListener("click", () => {
+        goTo(1, viewport, prevBtn, nextBtn);
+        restartAutoAdvance();
+      });
+    }
+
+    if (carousel) {
+      carousel.addEventListener("mouseenter", stopAutoAdvance);
+      carousel.addEventListener("mouseleave", startAutoAdvance);
+      carousel.addEventListener("focusin", stopAutoAdvance);
+      carousel.addEventListener("focusout", startAutoAdvance);
+    }
+
+    // Don't auto-advance testimonials for a visitor who's asked for
+    // reduced motion.
+    const prefersReducedMotion = window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false;
+
+    if (!prefersReducedMotion) {
+      startAutoAdvance();
     }
   }
 
