@@ -733,10 +733,9 @@ main {
    content (the gallery, the reviews) from the plain white sections
    around it — without it, everything just reads as one long white
    page with no sense of moving between distinct zones. A soft navy
-   glow tucked into one corner, plus the same quiet dot-grid used on
-   the Novalja tab, gives the band some depth without ever reading as
-   a dark or heavy patch — a light, uniform blue underneath it stays
-   the dominant colour throughout. */
+   glow tucked into one corner, plus a quiet dot-grid, gives the band
+   some depth without ever reading as a dark or heavy patch — a light,
+   uniform blue underneath it stays the dominant colour throughout. */
 .content-band {
   background-color: var(--color-pale-blue);
   background-image: radial-gradient(ellipse 70% 60% at 10% 0%, rgba(0, 35, 73, 0.08), transparent 70%),
@@ -1622,16 +1621,6 @@ main {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 3.5rem 2rem 0;
-}
-
-/* A quiet neutral tint on the second tab for rhythm between the panels,
-   with the same soft corner glow and dot-grid the content bands use,
-   so every tab shares the same quiet texture. */
-#novalja {
-  background-color: var(--color-pale-blue);
-  background-image: radial-gradient(ellipse 70% 60% at 10% 0%, rgba(0, 35, 73, 0.08), transparent 70%),
-    radial-gradient(circle, rgba(0, 35, 73, 0.07) 1px, transparent 1px);
-  background-size: auto, 26px 26px;
 }
 
 /* Host tab: a profile card pairing Nada's photo with her name, a short
