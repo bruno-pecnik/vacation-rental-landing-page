@@ -143,7 +143,6 @@
     { id: "angerman", stars: 5 },
     { id: "manuel", stars: 5 },
     { id: "radek", stars: 5 },
-    { id: "artem", stars: 5, noQuote: true },
   ];
 
   const STORAGE_KEY = "preferredLang";
