@@ -37,7 +37,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=11">
+  <link rel="stylesheet" href="css/styles.css?v=12">
 </head>
 <body>
 
@@ -164,10 +164,13 @@
         <div class="reviews">
           <p class="eyebrow" data-i18n="eyebrow_reviews">Guest Reviews</p>
           <h2 data-i18n="nav_reviews">What Guests Say</h2>
-          <div class="reviews__carousel">
-            <button type="button" class="reviews__arrow reviews__arrow--prev" id="reviews-prev" aria-label="Previous reviews">&#8249;</button>
-            <div class="reviews__viewport" id="reviews-viewport"></div>
-            <button type="button" class="reviews__arrow reviews__arrow--next" id="reviews-next" aria-label="Next reviews">&#8250;</button>
+          <div class="reviews__stage">
+            <div class="reviews__carousel">
+              <button type="button" class="reviews__arrow reviews__arrow--prev" id="reviews-prev" aria-label="Previous review">&#8249;</button>
+              <div class="reviews__viewport" id="reviews-viewport"></div>
+              <button type="button" class="reviews__arrow reviews__arrow--next" id="reviews-next" aria-label="Next review">&#8250;</button>
+            </div>
+            <div class="reviews__dots" id="reviews-dots" role="tablist" aria-label="Choose a review"></div>
           </div>
         </div>
       </div>
@@ -183,8 +186,26 @@
 
     <section id="host" class="page-section" hidden>
       <div class="section-body">
-        <p class="eyebrow" data-i18n="eyebrow_host">Your Hosts</p>
+        <p class="eyebrow" data-i18n="eyebrow_host">Meet Your Host</p>
         <h2 data-i18n="nav_host">Host</h2>
+
+        <div class="host-profile">
+          <div class="host-profile__photo">
+            <img src="images/host-nada.jpg" alt="Nada, host of Luxury Apartments Cuba Novalja" loading="lazy">
+          </div>
+          <div class="host-profile__info">
+            <p class="host-profile__eyebrow" data-i18n="host_eyebrow">Hosted by</p>
+            <h3 class="host-profile__name">Nada Pecnik</h3>
+            <p class="host-profile__greeting" data-i18n="host_greeting">Hello! I'm Nada, your host &mdash; always here for you.</p>
+            <p class="host-profile__languages">
+              <span class="host-profile__languages-label" data-i18n="host_languages_label">Languages spoken</span>
+              <span class="host-profile__languages-value" data-i18n="host_languages_value">German, English, Croatian</span>
+            </p>
+          </div>
+        </div>
+
+        <p data-i18n="desc_host_property">Luxury Apartments Cuba is set in a lovely area, surrounded by other beautiful houses with pools and gardens. Each apartment's living room opens onto a large terrace with direct access to the pool &mdash; a big pool that's pure pleasure to spend the day around.</p>
+
         <p data-i18n="desc_host">Luxury Apartments Cuba is run directly by the family that owns it &mdash; no management company, no call centre. We live nearby, so if anything comes up during your stay we're quick to help, and happy to share tips on our favourite beaches, restaurants, and things to do around Novalja. Message us on WhatsApp any time before or during your stay &mdash; we're glad to answer questions directly.</p>
       </div>
     </section>
@@ -205,7 +226,7 @@
     </div>
   </footer>
 
-  <script src="js/translations.js?v=11" defer></script>
-  <script src="js/main.js?v=11" defer></script>
+  <script src="js/translations.js?v=12" defer></script>
+  <script src="js/main.js?v=12" defer></script>
 </body>
 </html>

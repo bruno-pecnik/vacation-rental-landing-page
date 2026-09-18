@@ -110,8 +110,9 @@
 
 
 // ---------------------------------------------------------------------------
-// Guest reviews carousel: shows 3 real guest reviews at a time out of the
-// full set, with prev/next arrows that rotate the window by one review.
+// Guest reviews: a single "spotlight" testimonial at a time (rather than a
+// row of small cards), with prev/next arrows and a row of clickable
+// pagination dots that jump straight to any review.
 // ---------------------------------------------------------------------------
 (function () {
   const REVIEWS = [
@@ -142,80 +143,85 @@
     },
   ];
 
-  const VISIBLE = 3;
   const TRANSITION_MS = 500;
   const SLIDE_PX = 60;
 
-  let start = 0;
+  let current = 0;
   let animating = false;
-  let currentGrid = null;
+  let currentSlide = null;
+  const dotEls = [];
 
-  function buildGrid(startIndex) {
-    const grid = document.createElement("div");
-    grid.className = "reviews__grid";
+  function buildSlide(index) {
+    const review = REVIEWS[index];
 
-    for (let i = 0; i < VISIBLE; i++) {
-      const review = REVIEWS[(startIndex + i) % REVIEWS.length];
+    const slide = document.createElement("div");
+    slide.className = "review-spotlight";
 
-      const card = document.createElement("div");
-      card.className = "review-card";
+    const inner = document.createElement("div");
+    inner.className = "review-spotlight__inner";
+    slide.appendChild(inner);
 
-      const stars = document.createElement("p");
-      stars.className = "review-card__stars";
-      stars.setAttribute("aria-hidden", "true");
-      stars.textContent = "\u2605".repeat(review.stars);
-      card.appendChild(stars);
+    const stars = document.createElement("p");
+    stars.className = "review-spotlight__stars";
+    stars.setAttribute("aria-hidden", "true");
+    stars.textContent = "\u2605".repeat(review.stars);
+    inner.appendChild(stars);
 
-      const quote = document.createElement("p");
-      quote.className = "review-card__quote";
-      quote.textContent = review.quote
-        ? "\u201C" + review.quote + "\u201D"
-        : "Rated 10/10 \u2014 Exceptional.";
-      card.appendChild(quote);
+    const quote = document.createElement("p");
+    quote.className = "review-spotlight__quote";
+    quote.textContent = review.quote
+      ? "\u201C" + review.quote + "\u201D"
+      : "Rated 10/10 \u2014 Exceptional.";
+    inner.appendChild(quote);
 
-      const author = document.createElement("p");
-      author.className = "review-card__author";
-      author.textContent = review.author;
-      card.appendChild(author);
+    const author = document.createElement("p");
+    author.className = "review-spotlight__author";
+    author.textContent = review.author;
+    inner.appendChild(author);
 
-      grid.appendChild(card);
-    }
-
-    return grid;
+    return slide;
   }
 
-  // Rather than swapping content in place, a fresh set of 3 cards slides
-  // and fades in from the direction of travel while the old set slides
+  function updateDots(index) {
+    dotEls.forEach((dot, i) => {
+      const isActive = i === index;
+      dot.classList.toggle("active", isActive);
+      dot.setAttribute("aria-current", isActive ? "true" : "false");
+    });
+  }
+
+  // Rather than swapping content in place, the incoming slide slides and
+  // fades in from the direction of travel while the outgoing one slides
   // and fades out the opposite way — a real, visible motion instead of a
-  // flat cross-fade. Both sets are absolutely positioned inside a
+  // flat cross-fade. Both slides are absolutely positioned inside a
   // fixed-height viewport, so the page never jumps.
-  function goTo(direction, viewport, prevBtn, nextBtn) {
-    if (animating || !currentGrid) return;
+  function goTo(targetIndex, direction, viewport, prevBtn, nextBtn) {
+    if (animating || !currentSlide || targetIndex === current) return;
     animating = true;
     if (prevBtn) prevBtn.disabled = true;
     if (nextBtn) nextBtn.disabled = true;
 
-    const nextStart = (start + direction + REVIEWS.length) % REVIEWS.length;
-    const incoming = buildGrid(nextStart);
+    const incoming = buildSlide(targetIndex);
 
-    incoming.style.transform = "translateX(" + (direction > 0 ? SLIDE_PX : -SLIDE_PX) + "px) scale(0.97)";
+    incoming.style.transform = "translateX(" + (direction > 0 ? SLIDE_PX : -SLIDE_PX) + "px)";
     incoming.style.opacity = "0";
     viewport.appendChild(incoming);
 
     // Force layout so the browser registers the starting position above
-    // before we transition both sets to their resting/exit state.
+    // before we transition both slides to their resting/exit state.
     // eslint-disable-next-line no-unused-expressions
     incoming.offsetHeight;
 
-    const outgoing = currentGrid;
-    outgoing.style.transform = "translateX(" + (direction > 0 ? -SLIDE_PX : SLIDE_PX) + "px) scale(0.97)";
+    const outgoing = currentSlide;
+    outgoing.style.transform = "translateX(" + (direction > 0 ? -SLIDE_PX : SLIDE_PX) + "px)";
     outgoing.style.opacity = "0";
 
-    incoming.style.transform = "translateX(0) scale(1)";
+    incoming.style.transform = "translateX(0)";
     incoming.style.opacity = "1";
 
-    currentGrid = incoming;
-    start = nextStart;
+    currentSlide = incoming;
+    current = targetIndex;
+    updateDots(current);
 
     window.setTimeout(() => {
       if (outgoing.parentNode) outgoing.parentNode.removeChild(outgoing);
@@ -225,19 +231,25 @@
     }, TRANSITION_MS);
   }
 
+  function step(delta, viewport, prevBtn, nextBtn) {
+    const targetIndex = (current + delta + REVIEWS.length) % REVIEWS.length;
+    goTo(targetIndex, delta, viewport, prevBtn, nextBtn);
+  }
+
   const AUTO_ADVANCE_MS = 6000;
   let autoAdvanceTimer = null;
 
   function init() {
     const viewport = document.getElementById("reviews-viewport");
     const carousel = document.querySelector(".reviews__carousel");
+    const dotsContainer = document.getElementById("reviews-dots");
     if (!viewport) return;
 
     const prevBtn = document.getElementById("reviews-prev");
     const nextBtn = document.getElementById("reviews-next");
 
-    currentGrid = buildGrid(start);
-    viewport.appendChild(currentGrid);
+    currentSlide = buildSlide(current);
+    viewport.appendChild(currentSlide);
 
     function stopAutoAdvance() {
       if (autoAdvanceTimer) {
@@ -249,7 +261,7 @@
     function startAutoAdvance() {
       stopAutoAdvance();
       autoAdvanceTimer = window.setInterval(() => {
-        goTo(1, viewport, prevBtn, nextBtn);
+        step(1, viewport, prevBtn, nextBtn);
       }, AUTO_ADVANCE_MS);
     }
 
@@ -259,16 +271,35 @@
       startAutoAdvance();
     }
 
+    if (dotsContainer) {
+      REVIEWS.forEach((review, i) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "reviews__dot" + (i === current ? " active" : "");
+        dot.setAttribute("role", "tab");
+        dot.setAttribute("aria-current", i === current ? "true" : "false");
+        dot.setAttribute("aria-label", "Show review " + (i + 1) + " of " + REVIEWS.length);
+        dot.addEventListener("click", () => {
+          if (i === current) return;
+          const direction = i > current ? 1 : -1;
+          goTo(i, direction, viewport, prevBtn, nextBtn);
+          restartAutoAdvance();
+        });
+        dotsContainer.appendChild(dot);
+        dotEls.push(dot);
+      });
+    }
+
     if (prevBtn) {
       prevBtn.addEventListener("click", () => {
-        goTo(-1, viewport, prevBtn, nextBtn);
+        step(-1, viewport, prevBtn, nextBtn);
         restartAutoAdvance();
       });
     }
 
     if (nextBtn) {
       nextBtn.addEventListener("click", () => {
-        goTo(1, viewport, prevBtn, nextBtn);
+        step(1, viewport, prevBtn, nextBtn);
         restartAutoAdvance();
       });
     }

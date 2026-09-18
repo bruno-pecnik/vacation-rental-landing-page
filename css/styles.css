@@ -7,7 +7,6 @@
      bands like the hero bar and footer. */
   --color-navy: #002349;
   --color-navy-deep: #001830;
-  --color-navy-mid: #0b3766;
   --color-steel: #3d5a7d;
   --color-steel-light: #8fa6c2;
   --color-ink: #14181e;
@@ -240,6 +239,10 @@ main {
   position: relative;
   overflow: hidden;
   padding: 0 0 4.5rem;
+  /* A soft directional glow in one corner ties the navy brand colour
+     into the plain white panels, on top of the dot-grid from <body>,
+     so the background reads as designed rather than flat and empty. */
+  background-image: radial-gradient(ellipse 55% 45% at 88% 0%, rgba(0, 35, 73, 0.055), transparent 70%);
 }
 
 .page-section + .page-section {
@@ -249,7 +252,9 @@ main {
 /* A couple of large, faint outlined rings per section — a quiet
    editorial accent (rather than a filled shape) that reads as
    intentional design rather than decoration for its own sake. They sit
-   behind all content and never affect layout. */
+   behind all content and never affect layout. Alternating sides on
+   every other section keeps the rhythm from feeling like the same
+   sticker pasted onto each panel. */
 .page-section::before,
 .page-section::after {
   content: "";
@@ -273,6 +278,16 @@ main {
   bottom: -6rem;
   left: -6rem;
   border-color: rgba(0, 35, 73, 0.06);
+}
+
+.page-section:nth-of-type(even)::before {
+  right: auto;
+  left: -8rem;
+}
+
+.page-section:nth-of-type(even)::after {
+  left: auto;
+  right: -6rem;
 }
 
 .page-section > .section-body {
@@ -349,7 +364,7 @@ main {
 
 .stat-row__value {
   margin: 0;
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
   font-size: 1.9rem;
   font-weight: 700;
   color: var(--color-navy);
@@ -375,8 +390,8 @@ main {
   gap: 0.85em;
   margin: 1.25rem 0.75rem 0.75rem 0;
   padding: 0.9rem 1.7rem 0.9rem 0.8rem;
-  background: #003580;
-  border: 1px solid #003580;
+  background: var(--color-navy);
+  border: 1px solid var(--color-navy);
   border-radius: 4px;
   font-size: 1rem;
   font-weight: 600;
@@ -384,13 +399,13 @@ main {
   color: #ffffff;
   text-decoration: none;
   white-space: nowrap;
-  box-shadow: 0 6px 16px rgba(0, 53, 128, 0.25);
+  box-shadow: 0 6px 16px rgba(0, 35, 73, 0.25);
   transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
 
 .booking-badge:hover {
-  background: #00234f;
-  box-shadow: 0 8px 20px rgba(0, 53, 128, 0.32);
+  background: var(--color-navy-deep);
+  box-shadow: 0 8px 20px rgba(0, 35, 73, 0.32);
   transform: translateY(-1px);
 }
 
@@ -403,45 +418,103 @@ main {
   flex-shrink: 0;
   border-radius: 3px;
   background: #ffffff;
-  color: #003580;
-  font-family: var(--font-heading);
-  font-weight: 700;
+  color: var(--color-navy);
+  font-family: var(--font-body);
+  font-weight: 800;
   font-size: 1.15em;
 }
 
-/* Guest reviews */
+/* Guest reviews: one large "spotlight" testimonial at a time rather than
+   a row of small cards, with dot pagination beneath it — a calmer, more
+   editorial presentation that also gives visitors a clear, clickable
+   sense of how many reviews there are and where they are in the set. */
 .reviews {
   margin-top: 3rem;
 }
 
-.reviews__carousel {
+.reviews__stage {
   display: flex;
-  align-items: stretch;
-  gap: 1.25rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
   margin-top: 1.5rem;
 }
 
-/* A fixed-height window: the outgoing and incoming card sets are both
+.reviews__carousel {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* A fixed-height window: the outgoing and incoming slides are both
    absolutely positioned inside it and cross over each other, so the
    viewport's own height never changes and the page never jumps. */
 .reviews__viewport {
   position: relative;
   flex: 1 1 auto;
   min-width: 0;
-  min-height: 17.5rem;
+  min-height: 16rem;
   overflow: hidden;
 }
 
-.reviews__grid {
+.review-spotlight {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease-out;
   will-change: transform, opacity;
+}
+
+.review-spotlight__inner {
+  position: relative;
+  max-width: 42em;
+  margin: 0 auto;
+  padding: 2.75rem 1.5rem 0;
+  text-align: center;
+}
+
+/* A large, faint serif quotation mark behind the copy — a small
+   editorial flourish rather than a plain bordered box. */
+.review-spotlight__inner::before {
+  content: "\201C";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-heading);
+  font-size: 5.5rem;
+  line-height: 1;
+  color: rgba(0, 35, 73, 0.1);
+  pointer-events: none;
+}
+
+.review-spotlight__stars {
+  position: relative;
+  margin: 0 0 1rem;
+  color: #f2a83c;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+}
+
+.review-spotlight__quote {
+  position: relative;
+  margin: 0 0 1.25rem;
+  font-size: 1.28rem;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.review-spotlight__author {
+  position: relative;
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .reviews__arrow {
@@ -481,67 +554,37 @@ main {
   pointer-events: none;
 }
 
-.review-card {
-  position: relative;
-  overflow: hidden;
+/* Pagination dots beneath the testimonial: a real, clickable way to see
+   how many reviews there are and jump straight to one, styled as small
+   navy rings that fill solid and stretch into a pill when active — bold
+   and legible rather than the barely-there dots this replaces. */
+.reviews__dots {
   display: flex;
-  flex-direction: column;
-  min-height: 16rem;
-  padding: 1.75rem 1.5rem 1.5rem;
-  border: 1px solid var(--color-line);
-  border-top: 3px solid var(--color-navy);
-  border-radius: 6px;
-  background: var(--color-white);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  align-items: center;
+  gap: 0.6rem;
 }
 
-.review-card:hover {
-  box-shadow: 0 14px 30px rgba(0, 35, 73, 0.1);
-  transform: translateY(-2px);
+.reviews__dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  padding: 0;
+  border: 2px solid rgba(0, 35, 73, 0.45);
+  border-radius: 999px;
+  background: rgba(0, 35, 73, 0.12);
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, width 0.25s ease,
+    transform 0.15s ease;
 }
 
-/* A large, faint serif quotation mark behind the copy — a small
-   editorial flourish rather than a plain bordered box. */
-.review-card::before {
-  content: "\201C";
-  position: absolute;
-  top: -1.6rem;
-  left: 0.75rem;
-  font-family: var(--font-heading);
-  font-size: 7rem;
-  line-height: 1;
-  color: rgba(0, 35, 73, 0.07);
-  pointer-events: none;
+.reviews__dot:hover {
+  border-color: var(--color-navy);
+  transform: scale(1.15);
 }
 
-.review-card__stars,
-.review-card__quote,
-.review-card__author {
-  position: relative;
-  z-index: 1;
-}
-
-.review-card__stars {
-  margin: 0 0 0.6rem;
-  color: #f2a83c;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-}
-
-.review-card__quote {
-  flex: 1 1 auto;
-  margin: 0 0 0.75rem;
-  font-size: 0.92rem;
-  color: var(--color-ink);
-}
-
-.review-card__author {
-  margin: 0;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.reviews__dot.active {
+  width: 1.7rem;
+  border-color: var(--color-navy);
+  background: var(--color-navy);
 }
 
 /* Gallery placeholder (still awaiting real photos) */
@@ -558,6 +601,24 @@ main {
   object-fit: cover;
   display: block;
   border-radius: var(--radius);
+}
+
+/* A transitional zone just above the mobile breakpoint where the
+   section is still narrow enough that the full-size spotlight quote
+   needs a couple of extra lines — without this, a tablet or a narrow
+   browser window could clip the longest reviews. */
+@media (min-width: 641px) and (max-width: 900px) {
+  .review-spotlight__inner {
+    padding: 2.5rem 1rem 0;
+  }
+
+  .review-spotlight__quote {
+    font-size: 1.12rem;
+  }
+
+  .reviews__viewport {
+    min-height: 19rem;
+  }
 }
 
 @media (max-width: 640px) {
@@ -586,17 +647,25 @@ main {
 
   .reviews__carousel {
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
   }
 
   .reviews__viewport {
     order: 1;
     flex-basis: 100%;
-    min-height: 47rem;
+    min-height: 22rem;
   }
 
-  .reviews__grid {
-    grid-template-columns: 1fr;
+  .review-spotlight__inner {
+    padding: 2rem 0.5rem 0;
+  }
+
+  .review-spotlight__inner::before {
+    font-size: 3.5rem;
+  }
+
+  .review-spotlight__quote {
+    font-size: 1.05rem;
   }
 
   .reviews__arrow {
@@ -675,8 +744,9 @@ main {
 }
 
 .site-footer__dot {
-  margin: 0 0.6em;
-  color: rgba(255, 255, 255, 0.35);
+  margin: 0 0.7em;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 1.15em;
 }
 
 .site-footer__copyright {
@@ -850,9 +920,14 @@ main {
   padding: 3.5rem 2rem 0;
 }
 
-/* A quiet neutral tint on the second tab for rhythm between the two panels */
+/* A quiet neutral tint on the second tab for rhythm between the panels,
+   with the same dot-grid the white panels get from <body> painted back
+   on top of it so every tab shares the same quiet texture. */
 #novalja {
-  background: var(--color-off-white);
+  background-color: var(--color-off-white);
+  background-image: radial-gradient(ellipse 55% 45% at 88% 0%, rgba(0, 35, 73, 0.055), transparent 70%),
+    radial-gradient(circle, rgba(0, 35, 73, 0.07) 1px, transparent 1px);
+  background-size: auto, 26px 26px;
 }
 
 .section-divider {
@@ -860,6 +935,79 @@ main {
   background: var(--color-line);
   margin: 3rem 0;
   max-width: var(--measure);
+}
+
+/* Host tab: a profile card pairing Nada's photo with her name, a short
+   personal greeting and the languages she speaks — the "hosted by a real
+   person" framing that makes direct contact feel natural, sitting above
+   the more practical property/location copy. */
+.host-profile {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin: 0.5rem 0 2.5rem;
+  padding: 2rem;
+  background: var(--color-off-white);
+  border-radius: 8px;
+  border-left: 3px solid var(--color-navy);
+}
+
+.host-profile__photo {
+  flex: 0 0 auto;
+}
+
+.host-profile__photo img {
+  display: block;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 30%;
+  border: 3px solid var(--color-white);
+  box-shadow: 0 8px 24px rgba(0, 35, 73, 0.18);
+}
+
+.host-profile__info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.host-profile__eyebrow {
+  margin: 0 0 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+}
+
+.host-profile__name {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.host-profile__greeting {
+  margin: 0 0 0.9rem;
+  color: var(--color-ink);
+  max-width: 32em;
+}
+
+.host-profile__languages {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.host-profile__languages-label {
+  font-weight: 600;
+  color: var(--color-navy);
+  margin-right: 0.4em;
+}
+
+.host-profile__languages-value {
+  color: var(--color-text-muted);
 }
 
 @media (max-width: 640px) {
@@ -897,5 +1045,17 @@ main {
   .lang-switcher {
     width: 100%;
     justify-content: flex-end;
+  }
+
+  .host-profile {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.25rem;
+    padding: 1.75rem 1.5rem;
+  }
+
+  .host-profile__greeting {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
