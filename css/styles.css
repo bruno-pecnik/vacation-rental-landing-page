@@ -395,7 +395,8 @@ main {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease-out;
+  will-change: transform, opacity;
 }
 
 .reviews__arrow {
@@ -559,6 +560,11 @@ main {
   margin: 0;
   text-align: center;
   width: 100%;
+  /* The global `p { max-width: 42em }` rule below is relative to the
+     footer's own small font-size, not the root size, so it was capping
+     this line at ~524px and leaving it stuck flush-left instead of
+     letting it span (and center within) the full footer width. */
+  max-width: none;
 }
 
 /* ==========================================================================

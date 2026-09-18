@@ -143,8 +143,8 @@
   ];
 
   const VISIBLE = 3;
-  const TRANSITION_MS = 450;
-  const SLIDE_PX = 36;
+  const TRANSITION_MS = 500;
+  const SLIDE_PX = 60;
 
   let start = 0;
   let animating = false;
@@ -198,7 +198,7 @@
     const nextStart = (start + direction + REVIEWS.length) % REVIEWS.length;
     const incoming = buildGrid(nextStart);
 
-    incoming.style.transform = "translateX(" + (direction > 0 ? SLIDE_PX : -SLIDE_PX) + "px)";
+    incoming.style.transform = "translateX(" + (direction > 0 ? SLIDE_PX : -SLIDE_PX) + "px) scale(0.97)";
     incoming.style.opacity = "0";
     viewport.appendChild(incoming);
 
@@ -208,10 +208,10 @@
     incoming.offsetHeight;
 
     const outgoing = currentGrid;
-    outgoing.style.transform = "translateX(" + (direction > 0 ? -SLIDE_PX : SLIDE_PX) + "px)";
+    outgoing.style.transform = "translateX(" + (direction > 0 ? -SLIDE_PX : SLIDE_PX) + "px) scale(0.97)";
     outgoing.style.opacity = "0";
 
-    incoming.style.transform = "translateX(0)";
+    incoming.style.transform = "translateX(0) scale(1)";
     incoming.style.opacity = "1";
 
     currentGrid = incoming;
