@@ -37,7 +37,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=12">
+  <link rel="stylesheet" href="css/styles.css?v=13">
 </head>
 <body>
 
@@ -109,21 +109,21 @@
 
     <section id="apartman" class="page-section">
       <div class="section-body">
-        <div class="intro-row">
-          <p data-i18n="desc_apartman">Luxury Apartments Cuba offers a spacious two-bedroom apartment with a private balcony, ideal for families or groups of up to five. Guests enjoy free WiFi, free parking, air conditioning, and access to a shared outdoor pool with garden views. Pets are welcome on request, and an airport shuttle can be arranged.</p>
+        <p data-i18n="desc_apartman">Luxury Apartments Cuba offers a spacious two-bedroom apartment with a private balcony, ideal for families or groups of up to five. Guests enjoy free WiFi, free parking, air conditioning, and access to a shared outdoor pool with garden views. Pets are welcome on request, and an airport shuttle can be arranged.</p>
 
-          <div class="stat-row">
-            <div class="stat-row__item">
-              <p class="stat-row__value">62 m²</p>
-              <p class="stat-row__label" data-i18n="stat_size_label">Total Surface</p>
+        <div class="stat-band">
+          <div class="stat-band__inner">
+            <div class="stat-band__item">
+              <p class="stat-band__value">62 m²</p>
+              <p class="stat-band__label" data-i18n="stat_size_label">Total Surface</p>
             </div>
-            <div class="stat-row__item">
-              <p class="stat-row__value">2</p>
-              <p class="stat-row__label" data-i18n="stat_bedrooms_label">Bedrooms</p>
+            <div class="stat-band__item">
+              <p class="stat-band__value">2</p>
+              <p class="stat-band__label" data-i18n="stat_bedrooms_label">Bedrooms</p>
             </div>
-            <div class="stat-row__item">
-              <p class="stat-row__value">5</p>
-              <p class="stat-row__label" data-i18n="stat_guests_label">Guests</p>
+            <div class="stat-band__item">
+              <p class="stat-band__value">5</p>
+              <p class="stat-band__label" data-i18n="stat_guests_label">Guests</p>
             </div>
           </div>
         </div>
@@ -149,6 +149,13 @@
         <p data-i18n="desc_okolica">The apartment sits about 900&nbsp;m from Babe Beach and Gaj Beach, within easy walking distance of Novalja's town centre (around 1.3&nbsp;km). Rimski Kamenolom and the Sunčani Sat viewpoint are both close by. Zadar Airport is roughly 80&nbsp;km away — ask us about arranging an airport transfer.</p>
 
         <div class="map-embed">
+          <a class="map-embed__card" href="https://www.google.com/maps/dir/?api=1&destination=Samora%C5%A1nji+put+94d%2C+Novalja%2C+Croatia" target="_blank" rel="noopener">
+            <svg class="map-embed__pin" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2C7.86 2 4.5 5.36 4.5 9.5c0 5.5 6.06 11.14 7.03 12.02.27.24.67.24.94 0 .97-.88 7.03-6.52 7.03-12.02C19.5 5.36 16.14 2 12 2Zm0 10.25a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5Z"/></svg>
+            <span class="map-embed__text">
+              <span class="map-embed__title">Samorašnji put 94D</span>
+              <span class="map-embed__subtitle">Novalja, Pag Island &middot; Get directions</span>
+            </span>
+          </a>
           <iframe
             src="https://www.google.com/maps?q=Samora%C5%A1nji+put+94d%2C+Novalja%2C+Croatia&z=17&output=embed"
             width="100%" height="380" style="border:0;" loading="lazy"
@@ -193,15 +200,13 @@
           <div class="host-profile__photo">
             <img src="images/host-nada.jpg" alt="Nada, host of Luxury Apartments Cuba Novalja" loading="lazy">
           </div>
-          <div class="host-profile__info">
-            <p class="host-profile__eyebrow" data-i18n="host_eyebrow">Hosted by</p>
-            <h3 class="host-profile__name">Nada Pecnik</h3>
-            <p class="host-profile__greeting" data-i18n="host_greeting">Hello! I'm Nada, your host &mdash; always here for you.</p>
-            <p class="host-profile__languages">
-              <span class="host-profile__languages-label" data-i18n="host_languages_label">Languages spoken</span>
-              <span class="host-profile__languages-value" data-i18n="host_languages_value">German, English, Croatian</span>
-            </p>
-          </div>
+          <p class="host-profile__eyebrow" data-i18n="host_eyebrow">Hosted by</p>
+          <h3 class="host-profile__name">Nada Pecnik</h3>
+          <p class="host-profile__greeting" data-i18n="host_greeting">Hello! I'm Nada, your host &mdash; always here for you.</p>
+          <p class="host-profile__languages">
+            <span class="host-profile__languages-label" data-i18n="host_languages_label">Languages spoken</span>
+            <span class="host-profile__languages-value" data-i18n="host_languages_value">German, English, Croatian</span>
+          </p>
         </div>
 
         <p data-i18n="desc_host_property">Luxury Apartments Cuba is set in a lovely area, surrounded by other beautiful houses with pools and gardens. Each apartment's living room opens onto a large terrace with direct access to the pool &mdash; a big pool that's pure pleasure to spend the day around.</p>
@@ -213,6 +218,7 @@
   </main>
 
   <footer class="site-footer">
+    <p class="site-footer__watermark" aria-hidden="true">CUBA</p>
     <div class="site-footer__content">
       <p class="site-footer__address">Samorašnji put 94D, 53291 Novalja, Croatia</p>
       <p class="site-footer__links">
@@ -226,7 +232,7 @@
     </div>
   </footer>
 
-  <script src="js/translations.js?v=12" defer></script>
-  <script src="js/main.js?v=12" defer></script>
+  <script src="js/translations.js?v=13" defer></script>
+  <script src="js/main.js?v=13" defer></script>
 </body>
 </html>
