@@ -1409,14 +1409,17 @@ main {
    IntersectionObserver) the first time it scrolls into view, or
    removes js-reveal entirely if it can't run the effect properly, so
    nothing is ever left permanently invisible. */
-.js-reveal .section-body > p,
-.js-reveal .section-body > h2,
+/* Scoped to #apartman (see the matching comment in js/main.js) — the
+   Host tab's own heading/paragraphs/profile card are intentionally left
+   out of this hidden starting state so they're never at the mercy of a
+   scroll-triggered reveal that has no reason to run on a short tab. */
+.js-reveal #apartman .section-body > p,
+.js-reveal #apartman .section-body > h2,
 .js-reveal .stat-band,
 .js-reveal .rating-card,
 .js-reveal .booking-badge,
 .js-reveal .content-band,
 .js-reveal .map-embed,
-.js-reveal .host-profile,
 .js-reveal .contact-form {
   opacity: 0;
   transform: translateY(28px);
@@ -1429,14 +1432,13 @@ main {
    a bare ".js-reveal .is-visible" rule is less specific than
    ".js-reveal .section-body > p" and would silently lose to it,
    leaving that paragraph or heading stuck invisible. */
-.js-reveal .section-body > p.is-visible,
-.js-reveal .section-body > h2.is-visible,
+.js-reveal #apartman .section-body > p.is-visible,
+.js-reveal #apartman .section-body > h2.is-visible,
 .js-reveal .stat-band.is-visible,
 .js-reveal .rating-card.is-visible,
 .js-reveal .booking-badge.is-visible,
 .js-reveal .content-band.is-visible,
 .js-reveal .map-embed.is-visible,
-.js-reveal .host-profile.is-visible,
 .js-reveal .contact-form.is-visible {
   opacity: 1;
   transform: translateY(0);

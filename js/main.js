@@ -547,15 +547,23 @@
 // effect (removing js-reveal) when it can't run properly.
 // ---------------------------------------------------------------------------
 (function () {
+  // Scoped to #apartman specifically (plus the always-visible contact
+  // form): that's the one tab long enough for a scroll-triggered reveal
+  // to make sense as you move down it. #host is short, and — critically —
+  // querySelectorAll() runs once at load time, so if it were included
+  // here, switching to the Host tab (or landing directly on #host via a
+  // shared link) would only ever reveal its content once the visitor
+  // scrolls, since IntersectionObserver never got a chance to see it
+  // while the section was display:none. Until then, the whole tab reads
+  // as a blank page.
   const SELECTOR = [
-    ".section-body > p",
-    ".section-body > h2",
+    "#apartman .section-body > p",
+    "#apartman .section-body > h2",
     ".stat-band",
     ".rating-card",
     ".booking-badge",
     ".content-band",
     ".map-embed",
-    ".host-profile",
     ".contact-form",
   ].join(", ");
 
