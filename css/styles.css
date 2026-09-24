@@ -838,10 +838,13 @@ main {
   gap: 0.15rem;
 }
 
-/* Same gold, same use — reinforcing "great score" the way stars already
-   do for the guest-review quotes below, rather than a new convention. */
+/* Steel rather than gold: the same blue-grey accent already used for
+   small uppercase labels on light backgrounds elsewhere (see .eyebrow)
+   — the mirror of steel-light's role on navy surfaces (see
+   .booking-badge__icon) — instead of a gold that only ever meant
+   "rating" here and nowhere else in the palette. */
 .rating-card__stars {
-  color: var(--color-gold);
+  color: var(--color-steel);
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   line-height: 1;
