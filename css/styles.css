@@ -736,7 +736,10 @@ main {
    the guest quotes below, so this button reads as "reviews" without
    implying any specific score. Positioned above the sweep layer so it
    (and the label text below) stay visible as the colour travels
-   across underneath. */
+   across underneath. Steel-light rather than gold: the same muted-blue
+   accent already used for labels on other navy surfaces (see
+   .stat-band__label) instead of the star-rating gold, which read as
+   too warm/attention-grabbing for a mark that's just decorative. */
 .booking-badge__icon {
   position: relative;
   z-index: 1;
@@ -744,8 +747,8 @@ main {
   font-family: var(--font-heading);
   font-size: 1.7rem;
   line-height: 0.6;
-  color: var(--color-gold);
-  transition: transform 0.3s ease;
+  color: var(--color-steel-light);
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .booking-badge:hover .booking-badge__icon {
