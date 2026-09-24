@@ -599,13 +599,14 @@ main {
   text-decoration: none;
   white-space: nowrap;
   box-shadow: 0 6px 16px rgba(0, 35, 73, 0.25);
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
 .booking-badge:hover {
   background: var(--color-navy-deep);
-  box-shadow: 0 8px 20px rgba(0, 35, 73, 0.32);
-  transform: translateY(-1px);
+  border-color: var(--color-accent);
+  box-shadow: 0 12px 26px rgba(0, 35, 73, 0.34);
+  transform: translateY(-3px);
 }
 
 .booking-badge__mark {
@@ -621,6 +622,14 @@ main {
   font-family: var(--font-body);
   font-weight: 800;
   font-size: 1.15em;
+  transition: transform 0.25s ease;
+}
+
+/* The arrow steps forward on hover, rather than the badge simply
+   darkening in place — a small nudge that reads as "go" without
+   the neon/game-HUD feel already ruled out for this palette. */
+.booking-badge:hover .booking-badge__mark {
+  transform: translateX(4px);
 }
 
 /* The rating card: a solid score chip with a small speech-bubble
@@ -637,12 +646,16 @@ main {
   border-radius: var(--radius-md);
   text-decoration: none;
   box-shadow: 0 8px 20px rgba(0, 35, 73, 0.1);
-  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
+/* Same lift-plus-accent-edge language already used for the stat band
+   items on hover, so the page's clickable trust signals feel like one
+   family rather than each having its own one-off effect. */
 .rating-card:hover {
-  box-shadow: 0 12px 26px rgba(0, 35, 73, 0.16);
-  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(0, 35, 73, 0.2);
+  transform: translateY(-3px);
+  border-color: var(--color-accent);
 }
 
 .rating-card__score {

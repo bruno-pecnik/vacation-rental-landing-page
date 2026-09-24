@@ -4,7 +4,7 @@
 // and the browser back/forward buttons work as expected).
 // ---------------------------------------------------------------------------
 (function () {
-  const SECTION_IDS = ["apartman", "host"];
+  const SECTION_IDS = ["apartman", "host", "transfer"];
   const DEFAULT_SECTION = "apartman";
 
   // (Scroll restoration is disabled by an inline script at the very top
