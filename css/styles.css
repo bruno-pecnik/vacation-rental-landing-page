@@ -13,12 +13,13 @@
   --color-steel: #215083;
   --color-steel-light: #71a1d6;
   /* A third step between --color-steel and --color-steel-light, filling
-     the gap in that same blue scale — used for every clickable accent
-     (WhatsApp buttons, focus rings) that used to borrow WhatsApp's own
-     brand green. Same hue and saturation family as the rest of the
-     page, so the one loud, off-palette colour is gone; --color-steel
-     itself doubles as its hover/pressed state, so there's no second new
-     hex value to introduce for that. */
+     the gap in that same blue scale. Used where a hover/focus accent
+     needs to show up against a navy background (the stat band items,
+     the gallery's keyboard focus ring) — --color-navy itself would
+     disappear there. The WhatsApp buttons used to live here too, but
+     now use --color-navy directly (see .whatsapp-btn below) to match
+     the rest of the page's main CTAs instead of standing apart in a
+     lighter blue of their own. */
   --color-accent: #4272b0;
   --color-ink: #14181e;
   --color-white: #ffffff;
@@ -325,8 +326,12 @@ a {
   overflow: hidden;
   text-decoration: none;
   font-size: var(--text-md);
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  /* 600 rather than 700, and slightly tighter tracking — full-weight
+     Poppins in uppercase read heavier and more generic than the rest
+     of the page's type, closer to a coupon banner than a boutique
+     site's button label. */
+  font-weight: 600;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   padding: 0.85rem 1.4rem;
   border-radius: var(--radius-pill);
@@ -377,9 +382,9 @@ a {
 }
 
 .whatsapp-btn--nav {
-  background: var(--color-accent);
+  background: var(--color-navy);
   color: var(--color-white);
-  border: 1px solid var(--color-accent);
+  border: 1px solid var(--color-navy);
   font-size: var(--text-sm);
   padding: 0.75rem 1.25rem;
 }
@@ -390,9 +395,9 @@ a {
 }
 
 .whatsapp-btn--hero {
-  background: var(--color-accent);
+  background: var(--color-navy);
   color: var(--color-white);
-  border: 1px solid var(--color-accent);
+  border: 1px solid var(--color-navy);
   padding: 0.7rem 1.6rem;
   font-size: var(--text-lg);
   line-height: 1.2;
@@ -602,26 +607,26 @@ main {
 
 .booking-badge:hover {
   background: var(--color-navy-deep);
-  border-color: var(--color-accent);
   box-shadow: 0 12px 26px rgba(0, 35, 73, 0.34);
   transform: translateY(-3px);
 }
 
-/* A star rather than a directional arrow — this button's whole point is
-   "these are our guest ratings," so it borrows the same gold star
-   convention already used for the rating card and the review quotes,
-   instead of a generic "go here" glyph that had nothing to do with
-   reviews. */
+/* A single quotation mark rather than a star: a lone star read as a
+   1-star rating at a glance, which is the opposite of the point. The
+   quote mark instead echoes the same big faint " already used behind
+   the guest quotes below, so this button reads as "reviews" without
+   implying any specific score. */
 .booking-badge__icon {
   flex-shrink: 0;
-  width: 1.05em;
-  height: 1.05em;
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
+  line-height: 0.6;
   color: var(--color-gold);
   transition: transform 0.3s ease;
 }
 
 .booking-badge:hover .booking-badge__icon {
-  transform: scale(1.2) rotate(8deg);
+  transform: scale(1.2);
 }
 
 /* The rating card: a solid score chip with a small speech-bubble
@@ -645,13 +650,9 @@ main {
   transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
-/* Same lift-plus-accent-edge language already used for the stat band
-   items on hover, so the page's clickable trust signals feel like one
-   family rather than each having its own one-off effect. */
 .rating-card:hover {
   box-shadow: 0 16px 32px rgba(0, 35, 73, 0.2);
   transform: translateY(-3px);
-  border-color: var(--color-accent);
 }
 
 .rating-card__score {
@@ -711,6 +712,32 @@ main {
   line-height: 1;
 }
 
+.rating-card__star {
+  display: inline-block;
+}
+
+/* A quick twinkle across the five stars on hover, one after another,
+   rather than a border or outline appearing around the card — a small
+   bit of delight tied to what the card actually is (a rating), instead
+   of a generic "hovered" state applied to every trust badge alike. */
+@media (prefers-reduced-motion: no-preference) {
+  .rating-card:hover .rating-card__star {
+    animation: star-twinkle 0.45s ease;
+  }
+
+  .rating-card:hover .rating-card__star:nth-child(1) { animation-delay: 0s; }
+  .rating-card:hover .rating-card__star:nth-child(2) { animation-delay: 0.07s; }
+  .rating-card:hover .rating-card__star:nth-child(3) { animation-delay: 0.14s; }
+  .rating-card:hover .rating-card__star:nth-child(4) { animation-delay: 0.21s; }
+  .rating-card:hover .rating-card__star:nth-child(5) { animation-delay: 0.28s; }
+}
+
+@keyframes star-twinkle {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.45); }
+  100% { transform: scale(1); }
+}
+
 .rating-card__headline {
   font-size: 1rem;
   font-weight: 700;
@@ -726,8 +753,14 @@ main {
    a row of small cards, with dot pagination beneath it — a calmer, more
    editorial presentation that also gives visitors a clear, clickable
    sense of how many reviews there are and where they are in the set. */
+/* A visible break before this section starts, not just more margin —
+   the map, the Booking.com badge and these guest quotes are three
+   unrelated things that were reading as one continuous block with
+   nothing marking where one ends and the next begins. */
 .reviews.content-band {
-  margin-top: 2.5rem;
+  margin-top: 3rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--color-line);
 }
 
 .reviews__stage {
@@ -778,10 +811,21 @@ main {
   margin: 0 auto;
   padding: 2.75rem 1.5rem 0;
   text-align: center;
+  transition: transform 0.35s ease;
+}
+
+/* The whole quote gently grows on hover — a small invitation to read
+   rather than a static block of text sitting in the page. Scale, not
+   font-size, so nothing reflows or shifts underneath it. */
+@media (prefers-reduced-motion: no-preference) {
+  .review-spotlight__inner:hover {
+    transform: scale(1.035);
+  }
 }
 
 /* A large, faint serif quotation mark behind the copy — a small
-   editorial flourish rather than a plain bordered box. */
+   editorial flourish rather than a plain bordered box. Deepens
+   slightly along with the zoom above. */
 .review-spotlight__inner::before {
   content: "\201C";
   position: absolute;
@@ -793,6 +837,11 @@ main {
   line-height: 1;
   color: rgba(0, 35, 73, 0.1);
   pointer-events: none;
+  transition: color 0.35s ease;
+}
+
+.review-spotlight__inner:hover::before {
+  color: rgba(0, 35, 73, 0.18);
 }
 
 .review-spotlight__stars {
@@ -1553,9 +1602,9 @@ main {
 .contact-form__submit {
   align-self: flex-start;
   margin-top: 0.25rem;
-  background: var(--color-accent);
+  background: var(--color-navy);
   color: var(--color-white);
-  border: 1px solid var(--color-accent);
+  border: 1px solid var(--color-navy);
 }
 
 .contact-form__submit:hover {
