@@ -643,7 +643,15 @@ main {
    goes back to stacking, each still centred on its own. */
 .trust-row {
   display: flex;
-  align-items: center;
+  /* Stretch rather than center: the rating card's 3-line label makes it
+     naturally taller than the badge's single line, so centering left
+     them sitting at mismatched heights side by side. Stretching both to
+     the row's height and letting each card's own centered content float
+     in the middle of that shared height reads as a matched pair. On
+     narrow screens each already gets width: 100% and wraps onto its own
+     line, so stretch has nothing left to equalize there — the explicit
+     min-height further down still does that job on mobile. */
+  align-items: stretch;
   justify-content: center;
   flex-wrap: wrap;
   gap: 1.25rem;
