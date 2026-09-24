@@ -1328,24 +1328,29 @@ main {
   }
 
   .booking-badge {
+    /* Side-by-side (icon left, text right) reads fine on desktop where
+       the label is one line, but once the label wraps to two lines here
+       it put a lopsided shape on the button: the quote mark anchored to
+       one side, two left-aligned lines of text hugging it on the other,
+       and a lot of dead space wherever the shorter second line ended.
+       Stacking the mark above the label instead — both centered as a
+       column — reads as a deliberate pull-quote treatment and stays
+       symmetrical regardless of how the text wraps. */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    text-align: center;
     white-space: normal;
     font-size: var(--text-lg);
-    padding: 0.8rem 1.2rem 0.8rem 0.7rem;
-    /* Centering the icon against the whole flex line (the default,
-       still used on desktop where the label is one line) puts the
-       quote mark at the midpoint between the two lines once the label
-       wraps here — floating in the gap rather than reading as belonging
-       to either one. Top-aligning it instead reads as a proper
-       pull-quote mark leading the text. */
-    align-items: flex-start;
+    padding: 1.1rem 1.4rem;
   }
 
   .booking-badge__icon {
-    /* Optical nudge so the mark's own glyph (its tall cap-height sits
-       higher than its line-box, per line-height: 0.6 above) lines up
-       with the text's cap-height on the first line, instead of its box
-       alone lining up with the box the browser gives that first line. */
-    margin-top: 0.2rem;
+    /* No longer riding the first text line's baseline now that it sits
+       on its own row above the label, so the earlier optical nudge for
+       that side-by-side alignment no longer applies. */
+    margin-top: 0;
   }
 }
 
