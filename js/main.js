@@ -319,6 +319,23 @@
     viewport.appendChild(currentSlide);
     applyFixedHeight();
 
+    // On a cold load, the browser can still be waiting on Poppins/Playfair
+    // Display from Google Fonts at the moment applyFixedHeight() first
+    // runs above, so it measures the fallback system font's (usually
+    // narrower) metrics and locks that height in — then the real webfont
+    // swaps in a moment later, wrapping to more lines than the box was
+    // sized for and clipping the tallest review. A reload was "fixing"
+    // this only because the fonts were already cached by then. Re-measuring
+    // once document.fonts confirms every font is actually loaded closes
+    // that race regardless of cache state; document.fonts is undefined in
+    // very old browsers, which just keep whatever height they already
+    // measured.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        applyFixedHeight();
+      });
+    }
+
     // Switching languages doesn't rebuild the slide (that would restart
     // its slide/fade animation) — it just swaps the quote/author text
     // inside whichever slide is currently showing, then re-measures the

@@ -1331,6 +1331,21 @@ main {
     white-space: normal;
     font-size: var(--text-lg);
     padding: 0.8rem 1.2rem 0.8rem 0.7rem;
+    /* Centering the icon against the whole flex line (the default,
+       still used on desktop where the label is one line) puts the
+       quote mark at the midpoint between the two lines once the label
+       wraps here — floating in the gap rather than reading as belonging
+       to either one. Top-aligning it instead reads as a proper
+       pull-quote mark leading the text. */
+    align-items: flex-start;
+  }
+
+  .booking-badge__icon {
+    /* Optical nudge so the mark's own glyph (its tall cap-height sits
+       higher than its line-box, per line-height: 0.6 above) lines up
+       with the text's cap-height on the first line, instead of its box
+       alone lining up with the box the browser gives that first line. */
+    margin-top: 0.2rem;
   }
 }
 
@@ -1989,6 +2004,20 @@ main {
 
   .contact-section .section-body {
     max-width: none;
+  }
+
+  /* Side by side on desktop, the rating card and the reviews badge are
+     naturally different shapes (a compact score chip vs. a longer,
+     wrapping line of text) — fine when they're reading as two distinct
+     pills next to each other, but stacked on mobile that same mismatch
+     reads as one card being oddly bigger than the other right above/
+     below it. Matching them to the same width and a shared minimum
+     height (tall enough for the badge's two-line label) makes the pair
+     read as a matched set instead. */
+  .rating-card,
+  .booking-badge {
+    width: 100%;
+    min-height: 4.6rem;
   }
 }
 
