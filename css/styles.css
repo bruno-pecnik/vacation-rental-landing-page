@@ -207,8 +207,12 @@ a {
 
 .site-header.is-scrolled {
   background: var(--color-navy);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
-  border-bottom-color: rgba(255, 255, 255, 0.08);
+  /* The hairline needed real contrast to read as an edge once the bar
+     is a solid colour block sitting over ordinary page content — the
+     original 0.08 alpha all but disappeared against a light section
+     background further down the page. */
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.22);
+  border-bottom-color: rgba(255, 255, 255, 0.22);
 }
 
 .main-bar {
@@ -239,7 +243,7 @@ a {
 /* Sized to the header's own height rather than a fixed rem value, so it
    keeps working if the header's padding ever changes again. */
 .main-bar__brand-logo {
-  height: 44px;
+  height: 50px;
   width: auto;
   display: block;
 }
@@ -585,16 +589,20 @@ main {
    on the page. Centred and sized as a standalone landmark rather than a
    left-hugging inline link, since nothing else shares its line. */
 .booking-badge {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.7em;
   width: fit-content;
   margin: 1.5rem auto 1rem;
-  padding: 1.05rem 2.2rem;
+  padding: 1.15rem 2.5rem;
   background: var(--color-navy);
   border: 1px solid var(--color-navy);
   border-radius: var(--radius-sm);
+  /* Clips the hover sweep below to the button's own rounded corners
+     instead of it spilling past them as a hard rectangle. */
+  overflow: hidden;
   font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -602,11 +610,49 @@ main {
   text-decoration: none;
   white-space: nowrap;
   box-shadow: 0 6px 16px rgba(0, 35, 73, 0.25);
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* A flat darken-on-hover read as an incomplete effect on its own, so
+   the colour change now travels across the button instead of
+   switching everywhere at once — a filled layer sweeps in from the
+   left on a deeper navy, then retreats back the same way on the way
+   out, rather than the badge just being "on" or "off". Navy-on-navy
+   is a subtle jump by itself, so a thin bright edge rides along the
+   front of the fill — a brief gleam crossing the button rather than
+   a change so quiet it barely reads as an effect. */
+.booking-badge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    var(--color-navy-deep) 0%,
+    var(--color-navy-deep) 97%,
+    rgba(255, 255, 255, 0.55) 100%
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .booking-badge::before {
+    transition: transform 0.4s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-badge:hover::before {
+    transform: scaleX(1);
+  }
+}
+
+.booking-badge:hover::before {
+  transform: scaleX(1);
 }
 
 .booking-badge:hover {
-  background: var(--color-navy-deep);
   box-shadow: 0 12px 26px rgba(0, 35, 73, 0.34);
   transform: translateY(-3px);
 }
@@ -615,8 +661,12 @@ main {
    1-star rating at a glance, which is the opposite of the point. The
    quote mark instead echoes the same big faint " already used behind
    the guest quotes below, so this button reads as "reviews" without
-   implying any specific score. */
+   implying any specific score. Positioned above the sweep layer so it
+   (and the label text below) stay visible as the colour travels
+   across underneath. */
 .booking-badge__icon {
+  position: relative;
+  z-index: 1;
   flex-shrink: 0;
   font-family: var(--font-heading);
   font-size: 1.7rem;
@@ -627,6 +677,11 @@ main {
 
 .booking-badge:hover .booking-badge__icon {
   transform: scale(1.2);
+}
+
+.booking-badge > span:last-child {
+  position: relative;
+  z-index: 1;
 }
 
 /* The rating card: a solid score chip with a small speech-bubble
@@ -1306,11 +1361,21 @@ main {
   }
 }
 
+/* Wraps the map card with the same "divider + generous gap" treatment
+   used below for the reviews section, so the map reads as its own
+   distinct sub-section rather than a continuation of the surroundings
+   paragraph directly above it — the card styling on .map-embed itself
+   wasn't, on its own, enough of a break in the flow. */
+.map-section {
+  margin-top: 3.5rem;
+  margin-bottom: 2.75rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--color-line);
+}
+
 /* Map embed — given the same elevated-card treatment as the hero bar,
    so it reads as a designed element rather than a raw dropped-in widget */
 .map-embed {
-  margin-top: 2.5rem;
-  margin-bottom: 2rem;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -1319,6 +1384,17 @@ main {
 
 .map-embed__frame {
   position: relative;
+  overflow: hidden;
+  transition: transform 0.4s ease;
+}
+
+/* A gentle zoom on hover, the same idea as the guest-quote zoom above —
+   scoped to the frame rather than the whole card so the address header
+   text above it doesn't stretch along with the map. */
+@media (prefers-reduced-motion: no-preference) {
+  .map-embed:hover .map-embed__frame {
+    transform: scale(1.025);
+  }
 }
 
 .map-embed iframe {

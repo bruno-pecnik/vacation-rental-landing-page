@@ -67,7 +67,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=37">
+  <link rel="stylesheet" href="css/styles.css?v=38">
 </head>
 <body>
 
@@ -229,25 +229,27 @@
         <h2 data-i18n="nav_okolica">Surroundings</h2>
         <p data-i18n="desc_okolica">The apartment sits about 900&nbsp;m from Babe Beach and Gaj Beach, within easy walking distance of Novalja's town centre (around 1.3&nbsp;km). Rimski Kamenolom and the Sunčani Sat viewpoint are both close by. Zadar Airport is roughly 80&nbsp;km away — ask us about arranging an airport transfer.</p>
 
-        <div class="map-embed">
-          <a class="map-embed__header" href="https://www.google.com/maps/dir/?api=1&destination=Samora%C5%A1nji+put+94d%2C+Novalja%2C+Croatia" target="_blank" rel="noopener">
-            <svg class="map-embed__pin" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2C7.86 2 4.5 5.36 4.5 9.5c0 5.5 6.06 11.14 7.03 12.02.27.24.67.24.94 0 .97-.88 7.03-6.52 7.03-12.02C19.5 5.36 16.14 2 12 2Zm0 10.25a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5Z"/></svg>
-            <span class="map-embed__text">
-              <span class="map-embed__title">Samorašnji put 94D</span>
-              <span class="map-embed__subtitle">Novalja, Pag Island &middot; Get directions</span>
-            </span>
-          </a>
-          <div class="map-embed__frame">
-            <div class="map-embed__loading" id="map-loading">
-              <span class="map-embed__spinner" aria-hidden="true"></span>
-              <span class="map-embed__loading-text" data-i18n="map_loading">Loading map…</span>
+        <div class="map-section">
+          <div class="map-embed">
+            <a class="map-embed__header" href="https://www.google.com/maps/dir/?api=1&destination=Samora%C5%A1nji+put+94d%2C+Novalja%2C+Croatia" target="_blank" rel="noopener">
+              <svg class="map-embed__pin" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2C7.86 2 4.5 5.36 4.5 9.5c0 5.5 6.06 11.14 7.03 12.02.27.24.67.24.94 0 .97-.88 7.03-6.52 7.03-12.02C19.5 5.36 16.14 2 12 2Zm0 10.25a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5Z"/></svg>
+              <span class="map-embed__text">
+                <span class="map-embed__title">Samorašnji put 94D</span>
+                <span class="map-embed__subtitle">Novalja, Pag Island &middot; Get directions</span>
+              </span>
+            </a>
+            <div class="map-embed__frame">
+              <div class="map-embed__loading" id="map-loading">
+                <span class="map-embed__spinner" aria-hidden="true"></span>
+                <span class="map-embed__loading-text" data-i18n="map_loading">Loading map…</span>
+              </div>
+              <iframe
+                id="map-iframe"
+                src="https://www.google.com/maps?q=Samora%C5%A1nji+put+94d%2C+Novalja%2C+Croatia&z=17&output=embed"
+                width="100%" height="380" style="border:0;" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Map showing the location of Luxury Apartments Cuba Novalja"></iframe>
             </div>
-            <iframe
-              id="map-iframe"
-              src="https://www.google.com/maps?q=Samora%C5%A1nji+put+94d%2C+Novalja%2C+Croatia&z=17&output=embed"
-              width="100%" height="380" style="border:0;" loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              title="Map showing the location of Luxury Apartments Cuba Novalja"></iframe>
           </div>
         </div>
 
