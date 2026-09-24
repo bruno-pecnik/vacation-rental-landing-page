@@ -385,18 +385,29 @@ a {
   flex-shrink: 0;
 }
 
-/* This one lives in the header, which itself turns navy once scrolled
-   (.site-header.is-scrolled) — a navy border on a navy background left
-   the button with no visible edge at all, just floating white text.
-   A light, half-opaque border keeps it legible against either the
-   transparent/photo header at the top of the page or the solid navy
-   bar once scrolled. */
+/* This one lives in the header, which is transparent over the hero
+   photo at first (where the button already reads fine on its own —
+   no edge needed) and only turns solid navy once scrolled
+   (.site-header.is-scrolled) — the point where a navy-on-navy button
+   would otherwise vanish. Rather than a hard border/"lining" (the
+   look that didn't work out for the rating card earlier), a soft
+   light glow appears at that point instead — a crisp hairline right
+   at the edge plus a diffused halo just past it, so it reads as
+   light catching the button rather than an outlined shape. Kept as
+   box-shadow (not border) so it layers with the button's own drop
+   shadow in one property, and transitions smoothly via the box-shadow
+   entry already in .whatsapp-btn's own transition list. */
 .whatsapp-btn--nav {
   background: var(--color-navy);
   color: var(--color-white);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  border: 1px solid transparent;
   font-size: var(--text-sm);
   padding: 0.75rem 1.25rem;
+}
+
+.site-header.is-scrolled .whatsapp-btn--nav {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28), 0 0 16px rgba(255, 255, 255, 0.12),
+    0 4px 14px rgba(0, 24, 48, 0.22);
 }
 
 .whatsapp-btn--nav:hover {
@@ -404,19 +415,32 @@ a {
   border-color: var(--color-steel);
 }
 
+.site-header.is-scrolled .whatsapp-btn--nav:hover {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28), 0 0 16px rgba(255, 255, 255, 0.12),
+    0 10px 22px rgba(0, 24, 48, 0.3);
+}
+
+/* Sits on the hero bar's own navy/navy-deep gradient, which is the
+   same problem as the nav button above but permanent rather than
+   scroll-triggered — this background never turns transparent, so the
+   glow is always on rather than conditional. */
 .whatsapp-btn--hero {
   background: var(--color-navy);
   color: var(--color-white);
-  border: 1px solid var(--color-navy);
+  border: 1px solid transparent;
   padding: 0.7rem 1.6rem;
   font-size: var(--text-lg);
   line-height: 1.2;
   flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28), 0 0 16px rgba(255, 255, 255, 0.12),
+    0 4px 14px rgba(0, 24, 48, 0.22);
 }
 
 .whatsapp-btn--hero:hover {
   background: var(--color-steel);
   border-color: var(--color-steel);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28), 0 0 16px rgba(255, 255, 255, 0.12),
+    0 10px 22px rgba(0, 24, 48, 0.3);
 }
 
 /* ==========================================================================
