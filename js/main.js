@@ -563,6 +563,7 @@
     ".rating-card",
     ".booking-badge",
     ".content-band",
+    ".location-intro",
     ".map-embed",
     ".contact-form",
   ].join(", ");

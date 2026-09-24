@@ -385,10 +385,16 @@ a {
   flex-shrink: 0;
 }
 
+/* This one lives in the header, which itself turns navy once scrolled
+   (.site-header.is-scrolled) — a navy border on a navy background left
+   the button with no visible edge at all, just floating white text.
+   A light, half-opaque border keeps it legible against either the
+   transparent/photo header at the top of the page or the solid navy
+   bar once scrolled. */
 .whatsapp-btn--nav {
   background: var(--color-navy);
   color: var(--color-white);
-  border: 1px solid var(--color-navy);
+  border: 1px solid rgba(255, 255, 255, 0.45);
   font-size: var(--text-sm);
   padding: 0.75rem 1.25rem;
 }
@@ -584,6 +590,19 @@ main {
   }
 }
 
+/* Houses the rating card and the reviews badge side by side — two
+   separate trust signals that read better as one row than as two
+   stacked, unrelated lines. Wraps on narrow screens, where the pair
+   goes back to stacking, each still centred on its own. */
+.trust-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 1.5rem auto 1rem;
+}
+
 /* Booking.com trust badges — styled as small outlined pills rather than
    plain underlined links, consistent with the rest of the button language
    on the page. Centred and sized as a standalone landmark rather than a
@@ -595,7 +614,7 @@ main {
   justify-content: center;
   gap: 0.7em;
   width: fit-content;
-  margin: 1.5rem auto 1rem;
+  margin: 0;
   padding: 1.15rem 2.5rem;
   background: var(--color-navy);
   border: 1px solid var(--color-navy);
@@ -610,49 +629,48 @@ main {
   text-decoration: none;
   white-space: nowrap;
   box-shadow: 0 6px 16px rgba(0, 35, 73, 0.25);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: background 0.25s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-/* A flat darken-on-hover read as an incomplete effect on its own, so
-   the colour change now travels across the button instead of
-   switching everywhere at once — a filled layer sweeps in from the
-   left on a deeper navy, then retreats back the same way on the way
-   out, rather than the badge just being "on" or "off". Navy-on-navy
-   is a subtle jump by itself, so a thin bright edge rides along the
-   front of the fill — a brief gleam crossing the button rather than
-   a change so quiet it barely reads as an effect. */
+/* The same restrained "light catching the surface" treatment already
+   used on the WhatsApp buttons (see .whatsapp-btn::before above),
+   reused here instead of inventing a separate effect — a diagonal
+   highlight sweeps once on hover while the background itself eases to
+   a deeper navy, rather than a hard colour wipe. */
 .booking-badge::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    var(--color-navy-deep) 0%,
-    var(--color-navy-deep) 97%,
-    rgba(255, 255, 255, 0.55) 100%
-  );
-  transform: scaleX(0);
-  transform-origin: left;
+  top: 0;
+  left: -60%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+  transform: skewX(-18deg);
+  pointer-events: none;
   z-index: 0;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .booking-badge::before {
-    transition: transform 0.4s ease;
+    transition: left 0.65s ease;
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
   .booking-badge:hover::before {
-    transform: scaleX(1);
+    left: 130%;
   }
 }
 
-.booking-badge:hover::before {
-  transform: scaleX(1);
-}
-
-.booking-badge:hover {
+/* Also matched as ".js-reveal .booking-badge.is-visible:hover" below:
+   the scroll-reveal rules further down set this same `transform`
+   property with 3 classes' worth of specificity once an element has
+   been revealed (".js-reveal .booking-badge.is-visible"), which beats
+   a plain ".booking-badge:hover" (2) outright — in practice the lift
+   silently never showed once a visitor had scrolled to it, which is
+   effectively always. The second selector matches that specificity so
+   hover keeps working after the reveal has run. */
+.booking-badge:hover,
+.js-reveal .booking-badge.is-visible:hover {
+  background: var(--color-navy-deep);
   box-shadow: 0 12px 26px rgba(0, 35, 73, 0.34);
   transform: translateY(-3px);
 }
@@ -687,15 +705,15 @@ main {
 /* The rating card: a solid score chip with a small speech-bubble
    tail, paired with a two-line label (headline + source), so the
    trust signal reads with real weight instead of a plain text pill.
-   Centred and given room to breathe, like the booking badge below it,
-   rather than hugging the left edge of the column. */
+   Sits side by side with the Booking.com reviews badge in .trust-row
+   below rather than centred on its own line. */
 .rating-card {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.25rem;
   width: fit-content;
-  margin: 1.5rem auto 1rem;
+  margin: 0;
   padding: 1.1rem 2.6rem 1.1rem 1.1rem;
   background: var(--color-white);
   border: 1px solid var(--color-line);
@@ -705,7 +723,11 @@ main {
   transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
-.rating-card:hover {
+/* See the matching comment on .booking-badge:hover above — the same
+   specificity fix is needed here so the lift still applies once the
+   card has been through its scroll-reveal entrance. */
+.rating-card:hover,
+.js-reveal .rating-card.is-visible:hover {
   box-shadow: 0 16px 32px rgba(0, 35, 73, 0.2);
   transform: translateY(-3px);
 }
@@ -1361,20 +1383,31 @@ main {
   }
 }
 
-/* Wraps the map card with the same "divider + generous gap" treatment
-   used below for the reviews section, so the map reads as its own
-   distinct sub-section rather than a continuation of the surroundings
-   paragraph directly above it — the card styling on .map-embed itself
-   wasn't, on its own, enough of a break in the flow. */
-.map-section {
-  margin-top: 3.5rem;
-  margin-bottom: 2.75rem;
+/* The photo gallery above and this "Surroundings" text are different
+   sub-sections too — the same divider treatment marks that boundary,
+   mirroring the one just below the map and the one above the reviews. */
+.location-intro {
+  margin-top: 3rem;
   padding-top: 2.25rem;
   border-top: 1px solid var(--color-line);
 }
 
+/* The map is its own sub-section, distinct from both the surroundings
+   text above it and the Booking.com trust badges below it — the
+   divider sits after the card (not before it) so it reads as closing
+   off "the map" specifically, right before the badges start. */
+.map-section {
+  margin-top: 3rem;
+  padding-bottom: 2.25rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
 /* Map embed — given the same elevated-card treatment as the hero bar,
-   so it reads as a designed element rather than a raw dropped-in widget */
+   so it reads as a designed element rather than a raw dropped-in widget.
+   The hover zoom applies to the whole card (address header included),
+   not just the map itself, so hovering anywhere on it — not only the
+   map area — reads as one block getting a closer look. */
 .map-embed {
   border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
@@ -1382,19 +1415,24 @@ main {
   box-shadow: 0 12px 30px rgba(11, 22, 38, 0.12);
 }
 
-.map-embed__frame {
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.4s ease;
+@media (prefers-reduced-motion: no-preference) {
+  .map-embed {
+    transition: transform 0.4s ease;
+  }
+
+  /* See the matching comment on .booking-badge:hover further up — the
+     scroll-reveal rules set this same `transform` property with higher
+     specificity once .map-embed has been revealed, which would
+     otherwise silently cancel this hover scale for every visitor who's
+     actually scrolled to it. */
+  .map-embed:hover,
+  .js-reveal .map-embed.is-visible:hover {
+    transform: scale(1.02);
+  }
 }
 
-/* A gentle zoom on hover, the same idea as the guest-quote zoom above —
-   scoped to the frame rather than the whole card so the address header
-   text above it doesn't stretch along with the map. */
-@media (prefers-reduced-motion: no-preference) {
-  .map-embed:hover .map-embed__frame {
-    transform: scale(1.025);
-  }
+.map-embed__frame {
+  position: relative;
 }
 
 .map-embed iframe {
@@ -1707,6 +1745,7 @@ main {
 .js-reveal .rating-card,
 .js-reveal .booking-badge,
 .js-reveal .content-band,
+.js-reveal .location-intro,
 .js-reveal .map-embed,
 .js-reveal .contact-form {
   opacity: 0;
@@ -1726,6 +1765,7 @@ main {
 .js-reveal .rating-card.is-visible,
 .js-reveal .booking-badge.is-visible,
 .js-reveal .content-band.is-visible,
+.js-reveal .location-intro.is-visible,
 .js-reveal .map-embed.is-visible,
 .js-reveal .contact-form.is-visible {
   opacity: 1;
