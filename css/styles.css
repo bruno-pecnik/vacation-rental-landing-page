@@ -1851,6 +1851,14 @@ main {
   flex-direction: column;
   gap: 0.35rem;
   min-width: 0;
+  /* Belt-and-suspenders against native <input type="date"> rendering a
+     hair wider than the box its CSS width resolves to — some browsers'
+     built-in calendar-icon layout isn't perfectly contained by
+     width: 100%/border-box, which is what was pushing this field
+     further right than the phone input above it despite both having
+     identical CSS widths. Clipping here guarantees this field can never
+     read wider than that box, whatever the cause. */
+  overflow: hidden;
 }
 
 .contact-form__date-field label {
@@ -1861,6 +1869,14 @@ main {
 
 .contact-form__date-field input {
   width: 100%;
+  min-width: 0;
+}
+
+/* Also trims the picker icon's own default inline margin — the other
+   commonly-cited source of this same overflow, in both Safari and
+   Chrome (Chrome still uses the -webkit- pseudo-element name here). */
+.contact-form__date-field input::-webkit-calendar-picker-indicator {
+  margin-inline-start: 0;
 }
 
 .contact-form__row input,
