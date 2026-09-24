@@ -91,6 +91,15 @@
       }
     });
 
+    // Same idea for aria-label (the privacy-dialog close button uses this,
+    // since its visible content is just a "×" glyph, not real text).
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+      const key = el.dataset.i18nAriaLabel;
+      if (dict[key]) {
+        el.setAttribute("aria-label", dict[key]);
+      }
+    });
+
     document.querySelectorAll(".lang-switcher button").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.lang === lang);
     });
@@ -860,6 +869,34 @@
     }
     // Never let a slow-loading resource keep the loader up indefinitely.
     window.setTimeout(hide, 2500);
+  }
+
+  init();
+})();
+
+// ---------------------------------------------------------------------------
+// Privacy-policy dialog: a native <dialog> opened from the footer link.
+// showModal()/close() give us focus-trapping and Escape-to-close for free,
+// so the only wiring needed here is the open button and a click-outside
+// (backdrop) close.
+// ---------------------------------------------------------------------------
+(function () {
+  function init() {
+    const dialog = document.getElementById("privacy-policy-dialog");
+    const trigger = document.getElementById("privacy-policy-trigger");
+    const closeBtn = document.getElementById("privacy-dialog-close");
+    if (!dialog || !trigger || typeof dialog.showModal !== "function") return;
+
+    trigger.addEventListener("click", () => dialog.showModal());
+    if (closeBtn) closeBtn.addEventListener("click", () => dialog.close());
+
+    // A click that lands on the <dialog> element itself (rather than on
+    // .privacy-dialog__inner) is a click on the backdrop area, since the
+    // dialog has no padding of its own — treat it the same as the close
+    // button.
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
   }
 
   init();

@@ -67,7 +67,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=40">
+  <link rel="stylesheet" href="css/styles.css?v=41">
 </head>
 <body>
 
@@ -142,6 +142,8 @@
 
     <section id="apartman" class="page-section">
       <div class="section-body">
+        <p class="eyebrow" data-i18n="eyebrow_about">About</p>
+        <h2 data-i18n="heading_about">The Apartment</h2>
         <p data-i18n="desc_apartman">Luxury Apartments Cuba offers a spacious two-bedroom apartment with a private balcony, ideal for families or groups of up to five. Guests enjoy free WiFi, free parking, air conditioning, and access to a shared outdoor pool with garden views. Pets are welcome on request, and an airport shuttle can be arranged.</p>
 
         <div class="stat-band">
@@ -378,12 +380,45 @@
         <a href="https://wa.me/385981753381?text=Hi%2C%20I%27m%20interested%20in%20Luxury%20Apartments%20Cuba%20Novalja" target="_blank" rel="noopener" data-i18n="whatsapp_cta">Message us on WhatsApp</a>
         <span class="site-footer__dot" aria-hidden="true">&middot;</span>
         <a href="https://www.booking.com/hotel/hr/luxury-apartments-cuba.en-gb.html" target="_blank" rel="noopener">Booking.com</a>
+        <span class="site-footer__dot" aria-hidden="true">&middot;</span>
+        <button type="button" class="site-footer__link-btn" id="privacy-policy-trigger" data-i18n="footer_privacy_link">Privacy Policy</button>
       </p>
       <p class="site-footer__copyright" data-i18n="footer_copyright">&copy; 2026 Luxury Apartments Cuba Novalja</p>
     </div>
   </footer>
 
-  <script src="js/translations.js?v=28" defer></script>
-  <script src="js/main.js?v=31" defer></script>
+  <dialog id="privacy-policy-dialog" class="privacy-dialog" aria-labelledby="privacy-dialog-title">
+    <div class="privacy-dialog__inner">
+      <button type="button" class="privacy-dialog__close" id="privacy-dialog-close" data-i18n-aria-label="dialog_close" aria-label="Close">&times;</button>
+      <h2 id="privacy-dialog-title" data-i18n="footer_privacy_link">Privacy Policy</h2>
+      <p class="privacy-dialog__meta">Last updated: September 2026</p>
+      <p class="privacy-dialog__note" data-i18n="privacy_dialog_note">This policy is provided in English.</p>
+      <div class="privacy-dialog__body">
+        <h3>Who we are</h3>
+        <p>Luxury Apartments Cuba Novalja is a privately owned vacation rental at Samorašnji put 94D, 53291 Novalja, Croatia. For the purposes of this policy, we are the data controller for this website. You can reach us by phone or WhatsApp at +385 98 175 3381.</p>
+
+        <h3>This website does not collect or store personal data</h3>
+        <p>This is a simple informational website with no backend server or database behind it. We don't ask you to create an account, we don't run analytics or advertising trackers, and we don't sell or share data with anyone &mdash; because none is collected here in the first place.</p>
+
+        <h3>The contact form</h3>
+        <p>The form on this page doesn't submit anything to us or to any server. When you fill it in and press &ldquo;Send via WhatsApp&rdquo;, your browser simply opens a pre-filled WhatsApp conversation addressed to us, using the text you typed. That message is then sent directly from your own device through WhatsApp, and is covered by WhatsApp's (Meta's) own privacy policy, not ours. We only see your message once you actually send it there.</p>
+
+        <h3>Your language preference</h3>
+        <p>Your choice of display language is remembered locally in your own browser (using what's called &ldquo;local storage&rdquo;), purely so the site opens in the right language next time. That stays on your device &mdash; it's never sent to us or to anyone else, which is also why this site has no cookie banner.</p>
+
+        <h3>Embedded third-party content</h3>
+        <p>This page loads two services from Google: Google Fonts (for the typefaces) and Google Maps (to show our location). Loading them can cause your browser to connect directly to Google's servers, which may process technical information such as your IP address under Google's own privacy policy. We also link out to Booking.com and to WhatsApp; once you follow one of those links, that site's own privacy policy applies instead of ours.</p>
+
+        <h3>Your rights</h3>
+        <p>Because we don't operate a database of personal data through this website, there is normally nothing here for us to access, correct or delete on your behalf. If you've messaged us directly (by WhatsApp, phone, or through Booking.com), you can ask us at any time to see, correct or delete that correspondence &mdash; just contact us using the details above. You can also lodge a complaint with Croatia's data protection authority, AZOP (Agencija za zaštitu osobnih podataka), at azop.hr.</p>
+
+        <h3>Changes to this policy</h3>
+        <p>We may update this page occasionally to reflect changes to the website. The &ldquo;last updated&rdquo; date above will always show the current version.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="js/translations.js?v=29" defer></script>
+  <script src="js/main.js?v=32" defer></script>
 </body>
 </html>
