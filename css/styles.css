@@ -89,13 +89,21 @@ body {
   margin: 0;
   font-family: var(--font-body);
   color: var(--color-ink);
-  background: var(--color-white);
+  /* Matches <html> and the footer/page-loader, rather than white: the
+     actual white page background comes from .page-section below, which
+     now paints its own opaque white on top of this. Without that, this
+     navy would show through everywhere. Keeping body itself navy (not
+     white) is what fixes the bottom Safari safe-area/overscroll strip —
+     on iOS that strip samples body's background-color, not <html>'s, so
+     <html> alone being navy wasn't enough. */
+  background-color: var(--color-navy-deep);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: none;
   /* A very faint dot grid gives the plain white panels some quiet
      texture instead of flat, empty white — subtle enough to sit behind
-     body text without affecting readability. */
+     body text without affecting readability. Only visible through the
+     opaque .page-section panels above it, same as before. */
   background-image: radial-gradient(circle, rgba(0, 35, 73, 0.07) 1px, transparent 1px);
   background-size: 26px 26px;
 }
@@ -465,6 +473,21 @@ main {
   position: relative;
   overflow: hidden;
   padding: 0 0 4.5rem;
+  /* Now that <body> itself is navy (see body's own rule, for the Safari
+     safe-area fix), each section needs to paint its own opaque white —
+     otherwise the whole page would read as navy, not just the safe
+     area/overscroll edges. <main> (this element's parent) is boxed at
+     max-width 1120px and centered, so without breaking out of that box
+     below, this white would only ever cover that centre column, leaving
+     <body>'s new navy showing as two bars down the left/right edges on
+     any viewport wider than 1120px. width: 100vw + the negative margin
+     is the standard "full-bleed from a centered container" trick — it
+     stretches just the background/box to the true viewport edges while
+     .section-body's own max-width + auto margins still keep the actual
+     content centered exactly as before. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  background-color: var(--color-white);
   /* A soft directional glow in one corner ties the navy brand colour
      into the plain white panels, on top of the dot-grid from <body>,
      so the background reads as designed rather than flat and empty. */
