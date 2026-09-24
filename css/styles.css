@@ -1832,6 +1832,19 @@ main {
   gap: 0.75rem;
 }
 
+/* Two native date inputs side by side get cramped on a phone-width
+   screen — some browsers give <input type="date"> a fairly wide,
+   non-negotiable internal layout for its day/month/year segments, which
+   can end up overpowering the flex-shrink here and leave the pair
+   crowding each other and the row's right edge. Stacking them removes
+   the width fight entirely: each field gets the full row width, with
+   the same gap now running between them vertically instead. */
+@media (max-width: 480px) {
+  .contact-form__dates {
+    flex-direction: column;
+  }
+}
+
 .contact-form__date-field {
   flex: 1 1 0%;
   display: flex;
@@ -2253,6 +2266,16 @@ main {
 
   .lang-switcher {
     gap: 0.5rem;
+  }
+
+  /* At the default clamp, the hero title's minimum size (2.4rem) is
+     already wider than a phone screen can fit on one line for a name
+     this long, and on the narrowest phones it wraps a third time —
+     "Luxury" / "Apartments Cuba" / "Novalja" — which reads as choppy
+     for a headline. Sized down, it holds at two lines across the
+     common phone widths instead. */
+  .hero-title {
+    font-size: 2.125rem;
   }
 
 }
