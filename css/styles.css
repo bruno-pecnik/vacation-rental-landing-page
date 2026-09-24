@@ -2050,7 +2050,28 @@ main {
 
 .hero {
   position: relative;
+  /* min-height: 68vh alone made the box's own shape wider (shorter,
+     relative to its width) than the photo's native 1024×461 ratio on
+     most desktop viewports — 68% of a ~900px-tall window is only
+     ~610px, well short of the ~900px the photo would need at that
+     width to show uncropped, so object-fit: cover below had to shave
+     the top and bottom, cutting the roofline off. Pinning aspect-ratio
+     to the photo's own ratio makes the box at least that tall for any
+     given width, so cover never has anything left to crop away — the
+     min-height only still matters as a floor on narrow/tall mobile
+     viewports, where the aspect-ratio value alone would make the band
+     too short and it falls back to cropping the sides instead, same as
+     before. */
+  aspect-ratio: 1024 / 461;
   min-height: 68vh;
+  /* Explicit rather than the block default's implicit 100%: with width
+     left as "auto", min-height overriding the aspect-ratio-derived
+     height on narrow/tall (mobile) viewports left the browser treating
+     that new, taller height as the definite axis and re-deriving width
+     from IT via the same ratio instead — blowing the box out to ~1030px
+     wide inside a 390px parent. Pinning width explicitly keeps it the
+     one definite axis aspect-ratio is allowed to size height from. */
+  width: 100%;
   display: flex;
   align-items: flex-end;
   color: var(--color-white);
