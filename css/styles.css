@@ -12,13 +12,19 @@
      separate colours. */
   --color-steel: #215083;
   --color-steel-light: #71a1d6;
+  /* A third step between --color-steel and --color-steel-light, filling
+     the gap in that same blue scale — used for every clickable accent
+     (WhatsApp buttons, focus rings) that used to borrow WhatsApp's own
+     brand green. Same hue and saturation family as the rest of the
+     page, so the one loud, off-palette colour is gone; --color-steel
+     itself doubles as its hover/pressed state, so there's no second new
+     hex value to introduce for that. */
+  --color-accent: #3868a8;
   --color-ink: #14181e;
   --color-white: #ffffff;
   --color-pale-blue: #eff5fb;
   --color-text-muted: #626a75;
   --color-line: #e1e3e7;
-  --color-whatsapp: #25a25a;
-  --color-whatsapp-dark: #1c7d46;
 
   --font-heading: "Playfair Display", Georgia, serif;
   --font-body: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -197,7 +203,15 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
-  padding: 1.5rem 2rem;
+  /* Constrained to the same column as the rest of the page (sub-nav,
+     hero bar, section content all already do this) instead of running
+     edge-to-edge — on a wide screen the brand mark and WhatsApp button
+     were sitting far past the content's own right edge below them.
+     Vertical padding trimmed from 1.5rem to 1.1rem: at 95px tall the
+     bar was noticeably deeper than it needed to be for its content. */
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1.1rem 2rem;
 }
 
 /* A small wordmark so the bar carries the site's own identity instead of
@@ -324,22 +338,22 @@ a {
 }
 
 .whatsapp-btn--nav {
-  background: var(--color-whatsapp);
+  background: var(--color-accent);
   color: var(--color-white);
-  border: 1px solid var(--color-whatsapp);
+  border: 1px solid var(--color-accent);
   font-size: var(--text-sm);
   padding: 0.75rem 1.25rem;
 }
 
 .whatsapp-btn--nav:hover {
-  background: var(--color-whatsapp-dark);
-  border-color: var(--color-whatsapp-dark);
+  background: var(--color-steel);
+  border-color: var(--color-steel);
 }
 
 .whatsapp-btn--hero {
-  background: var(--color-whatsapp);
+  background: var(--color-accent);
   color: var(--color-white);
-  border: 1px solid var(--color-whatsapp);
+  border: 1px solid var(--color-accent);
   padding: 0.7rem 1.6rem;
   font-size: var(--text-lg);
   line-height: 1.2;
@@ -347,8 +361,8 @@ a {
 }
 
 .whatsapp-btn--hero:hover {
-  background: var(--color-whatsapp-dark);
-  border-color: var(--color-whatsapp-dark);
+  background: var(--color-steel);
+  border-color: var(--color-steel);
 }
 
 /* ==========================================================================
@@ -357,7 +371,16 @@ a {
 main {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 2rem;
+  /* No horizontal padding here on purpose: main's only children are
+     .page-section elements, each of which already centres and pads
+     its own .section-body independently. Padding on both main AND
+     section-body was stacking (32px + 32px), pushing the rating card,
+     gallery heading and contact fields 40px further right than the
+     stat band's own numbers — which self-centre against the full
+     viewport instead of against this already-padded main. Removing
+     main's own padding leaves exactly one inset in effect, so
+     everything lines up on the same left edge. */
+  padding: 0;
 }
 
 .page-section {
@@ -444,7 +467,11 @@ main {
 .stat-band__inner {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 2.25rem 1.5rem;
+  /* 2rem horizontal, matching every other section's side inset (the
+     stat numbers were sitting 8px further left than the rating card
+     and gallery below them, since this band re-centres itself against
+     the full viewport rather than nesting inside main). */
+  padding: 2.25rem 2rem;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1.75rem 1rem;
@@ -844,7 +871,7 @@ main {
 }
 
 .gallery__item:focus-visible {
-  outline: 2px solid var(--color-whatsapp);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -1433,14 +1460,14 @@ main {
 .contact-form__submit {
   align-self: flex-start;
   margin-top: 0.25rem;
-  background: var(--color-whatsapp);
+  background: var(--color-accent);
   color: var(--color-white);
-  border: 1px solid var(--color-whatsapp);
+  border: 1px solid var(--color-accent);
 }
 
 .contact-form__submit:hover {
-  background: var(--color-whatsapp-dark);
-  border-color: var(--color-whatsapp-dark);
+  background: var(--color-steel);
+  border-color: var(--color-steel);
 }
 
 /* ==========================================================================
@@ -1494,10 +1521,6 @@ main {
   .site-header {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  main {
-    padding: 0 1.25rem;
   }
 
   .page-section {
