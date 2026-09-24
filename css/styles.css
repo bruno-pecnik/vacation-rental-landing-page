@@ -582,17 +582,20 @@ main {
 
 /* Booking.com trust badges — styled as small outlined pills rather than
    plain underlined links, consistent with the rest of the button language
-   on the page. */
+   on the page. Centred and sized as a standalone landmark rather than a
+   left-hugging inline link, since nothing else shares its line. */
 .booking-badge {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.85em;
-  margin: 1.25rem 0.75rem 0.75rem 0;
-  padding: 0.9rem 1.7rem 0.9rem 0.8rem;
+  justify-content: center;
+  gap: 0.7em;
+  width: fit-content;
+  margin: 1.5rem auto 1rem;
+  padding: 1.05rem 2.2rem;
   background: var(--color-navy);
   border: 1px solid var(--color-navy);
   border-radius: var(--radius-sm);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   color: #ffffff;
@@ -609,38 +612,36 @@ main {
   transform: translateY(-3px);
 }
 
-.booking-badge__mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.1em;
-  height: 2.1em;
+/* A star rather than a directional arrow — this button's whole point is
+   "these are our guest ratings," so it borrows the same gold star
+   convention already used for the rating card and the review quotes,
+   instead of a generic "go here" glyph that had nothing to do with
+   reviews. */
+.booking-badge__icon {
   flex-shrink: 0;
-  border-radius: var(--radius-sm);
-  background: #ffffff;
-  color: var(--color-navy);
-  font-family: var(--font-body);
-  font-weight: 800;
-  font-size: 1.15em;
-  transition: transform 0.25s ease;
+  width: 1.05em;
+  height: 1.05em;
+  color: var(--color-gold);
+  transition: transform 0.3s ease;
 }
 
-/* The arrow steps forward on hover, rather than the badge simply
-   darkening in place — a small nudge that reads as "go" without
-   the neon/game-HUD feel already ruled out for this palette. */
-.booking-badge:hover .booking-badge__mark {
-  transform: translateX(4px);
+.booking-badge:hover .booking-badge__icon {
+  transform: scale(1.2) rotate(8deg);
 }
 
 /* The rating card: a solid score chip with a small speech-bubble
    tail, paired with a two-line label (headline + source), so the
-   trust signal reads with real weight instead of a plain text pill. */
+   trust signal reads with real weight instead of a plain text pill.
+   Centred and given room to breathe, like the booking badge below it,
+   rather than hugging the left edge of the column. */
 .rating-card {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 1rem;
-  margin: 1.25rem 0.75rem 0.75rem 0;
-  padding: 0.9rem 1.6rem 0.9rem 0.9rem;
+  justify-content: center;
+  gap: 1.25rem;
+  width: fit-content;
+  margin: 1.5rem auto 1rem;
+  padding: 1.1rem 2.6rem 1.1rem 1.1rem;
   background: var(--color-white);
   border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
