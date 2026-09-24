@@ -611,6 +611,32 @@
 })();
 
 // ---------------------------------------------------------------------------
+// Header: transparent over the hero photo at the top of the page, filling
+// in to the site's usual navy once the visitor scrolls past it. Toggled by
+// scroll position rather than an IntersectionObserver on the hero itself,
+// since the header needs to react immediately as the page loads already
+// scrolled (a reload mid-page, or a shared #host link) — not only on the
+// first scroll gesture.
+// ---------------------------------------------------------------------------
+(function () {
+  const SCROLL_THRESHOLD = 60;
+
+  function init() {
+    const header = document.querySelector(".site-header");
+    if (!header) return;
+
+    function syncHeaderState() {
+      header.classList.toggle("is-scrolled", window.scrollY > SCROLL_THRESHOLD);
+    }
+
+    syncHeaderState();
+    window.addEventListener("scroll", syncHeaderState, { passive: true });
+  }
+
+  init();
+})();
+
+// ---------------------------------------------------------------------------
 // Contact form: this is a static site with no backend to send a form to, so
 // instead of emailing anywhere it builds the same kind of wa.me message the
 // WhatsApp buttons elsewhere on the page use, and opens it in a new tab —
