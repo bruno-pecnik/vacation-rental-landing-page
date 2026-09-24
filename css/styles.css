@@ -122,12 +122,9 @@ body {
 }
 
 .page-loader__mark {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
+  width: 200px;
+  height: auto;
+  max-width: 60vw;
 }
 
 .page-loader__spinner {
@@ -231,21 +228,19 @@ a {
 }
 
 /* A small wordmark so the bar carries the site's own identity instead of
-   being just a WhatsApp button and some flags on a flat colour block —
-   bolder, bigger and more generously spaced than a plain nav label. */
+   being just a WhatsApp button and some flags on a flat colour block. */
 .main-bar__brand {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
 }
 
-.main-bar__brand-text {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-white);
+/* Sized to the header's own height rather than a fixed rem value, so it
+   keeps working if the header's padding ever changes again. */
+.main-bar__brand-logo {
+  height: 44px;
+  width: auto;
+  display: block;
 }
 
 .header-actions {
