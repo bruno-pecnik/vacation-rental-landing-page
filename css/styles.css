@@ -2239,6 +2239,20 @@ main {
   color: var(--color-white);
 }
 
+/* The actual money-saving claim — "cheaper than Booking.com" — was
+   set in the exact same plain white as its lead-in clause, so despite
+   being the whole point of the bar, it read as flat as everything
+   around it. Gold now appears nowhere else on the page except here:
+   after being retired from decorative repeats (star ratings, the
+   quote mark) for meaning "rating" everywhere and nothing anywhere,
+   it's used exactly once, for the one line on the page that's
+   actually a deal — which also avoids repeating the glowing/HUD-like
+   treatment already ruled out for this bar (see the comment on
+   .hero-bar above). */
+.hero-cta__highlight {
+  color: var(--color-gold);
+}
+
 .hero-bar .whatsapp-btn--hero {
   flex-shrink: 0;
   margin-left: auto;
