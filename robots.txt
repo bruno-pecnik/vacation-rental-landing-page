@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bruno-pecnik.github.io/vacation-rental-landing-page/sitemap.xml

@@ -42,7 +42,14 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Luxury Apartments Cuba Novalja</title>
-  <meta name="description" content="Luxury Apartments Cuba Novalja — apartment info, location and direct contact. Book directly for the best rate.">
+  <!-- Leads with the direct-booking discount rather than a plain listing
+       description -- this is the one line most visitors will actually
+       read before clicking, in the Google result itself, so it carries
+       the site's real reason to exist (skip the OTA commission) instead
+       of just restating the page's contents. Kept under ~150 characters
+       so it doesn't get truncated in a typical desktop search result. -->
+  <meta name="description" content="Reserve direct for the best price — no middleman, no hidden fees. Private 62 m² apartment in Novalja, Pag Island, Croatia. Message us on WhatsApp.">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://bruno-pecnik.github.io/vacation-rental-landing-page/">
   <meta name="theme-color" content="#001830">
 
@@ -54,15 +61,61 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Luxury Apartments Cuba Novalja">
   <meta property="og:title" content="Luxury Apartments Cuba Novalja">
-  <meta property="og:description" content="A private 62 m² apartment in Novalja, Pag Island, just steps from the beach. Book directly for the best rate.">
+  <meta property="og:description" content="Reserve direct for the best price — no middleman, no hidden fees. Private 62 m² apartment in Novalja, Pag Island, just minutes from the beach.">
   <meta property="og:image" content="https://bruno-pecnik.github.io/vacation-rental-landing-page/images/og-cover.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://bruno-pecnik.github.io/vacation-rental-landing-page/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Luxury Apartments Cuba Novalja">
-  <meta name="twitter:description" content="A private 62 m² apartment in Novalja, Pag Island, just steps from the beach. Book directly for the best rate.">
+  <meta name="twitter:description" content="Reserve direct for the best price — no middleman, no hidden fees. Private 62 m² apartment in Novalja, Pag Island, just minutes from the beach.">
   <meta name="twitter:image" content="https://bruno-pecnik.github.io/vacation-rental-landing-page/images/og-cover.jpg">
+
+  <!-- LodgingBusiness structured data: lets Google understand this page as
+       the official page for a specific, named place (not just an article
+       about one), which is what makes an exact-name search like "Luxury
+       Apartments Cuba Novalja" eligible to show this site with its own
+       identity -- name, address, phone -- rather than as a plain blue
+       link. Every value below is real, already-published information
+       (the same address/phone/amenities/Booking.com link already on this
+       page) -- nothing here is invented for SEO's sake. aggregateRating
+       is deliberately left out: the page shows a 10/10 "Exceptional"
+       score, but Google's own guidelines require a real review COUNT
+       alongside the score for rating markup to be valid, and that count
+       isn't published anywhere on this page to source truthfully. Add it
+       once the actual Booking.com review count is known. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    "@id": "https://bruno-pecnik.github.io/vacation-rental-landing-page/",
+    "name": "Luxury Apartments Cuba Novalja",
+    "description": "Private two-bedroom, 62 m² apartment in Novalja on Pag Island, Croatia — balcony, terrace, free WiFi and parking, air conditioning, and a shared outdoor pool. Sleeps up to five guests.",
+    "url": "https://bruno-pecnik.github.io/vacation-rental-landing-page/",
+    "image": "https://bruno-pecnik.github.io/vacation-rental-landing-page/images/og-cover.jpg",
+    "telephone": "+385981753381",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Samorašnji put 94D",
+      "addressLocality": "Novalja",
+      "addressRegion": "Ličko-senjska županija",
+      "postalCode": "53291",
+      "addressCountry": "HR"
+    },
+    "sameAs": [
+      "https://www.booking.com/hotel/hr/luxury-apartments-cuba.en-gb.html"
+    ],
+    "petsAllowed": true,
+    "amenityFeature": [
+      { "@type": "LocationFeatureSpecification", "name": "Free WiFi", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Free parking", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Air conditioning", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Private balcony", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Terrace", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Shared outdoor pool", "value": true }
+    ]
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
