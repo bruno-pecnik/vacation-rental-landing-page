@@ -2561,19 +2561,26 @@ main {
      needed -- on a tall phone that left the section/tab bar peeking in
      at the very bottom of the first screen, which read as the layout
      just running out of room rather than a deliberate stopping point.
-     Stretching the whole hero to fill the visible screen (100svh, not
-     100vh -- svh already excludes a mobile browser's own address bar,
-     so the cue below never ends up hidden behind it) gives the first
-     screen a clean, deliberate edge instead, with a scroll cue marking
-     it as one. min-height:100vh is a fallback for the handful of
-     browsers that don't support svh yet; svh overrides it wherever it
-     is supported. Desktop/tablet are untouched -- this is mobile-only,
-     where the peeking-tab-bar problem existed in the first place. */
+     Stretching the whole hero to fill the visible screen fixes that --
+     but it has to be 100dvh, not 100svh: svh is a *fixed* number (the
+     height when the browser's address bar is fully expanded), so the
+     moment Safari's toolbar shrinks to its compact/floating mode on
+     scroll -- which it does almost immediately -- the real viewport
+     gets taller than that fixed number, and the section stops filling
+     it, leaving the exact peeking-tab-bar gap this was meant to fix,
+     just a bit further down. dvh instead tracks the *current* visible
+     height live, growing and shrinking with the toolbar, so the section
+     always matches whatever's actually on screen. min-height:100vh is
+     a fallback for the handful of browsers with neither svh nor dvh;
+     dvh overrides it wherever it's supported (which is effectively
+     everywhere dvh matters, i.e. mobile Safari/Chrome). Desktop/tablet
+     are untouched -- this is mobile-only, where the peeking-tab-bar
+     problem existed in the first place. */
   .hero-section {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    min-height: 100svh;
+    min-height: 100dvh;
   }
 
   .hero {
@@ -2603,7 +2610,7 @@ main {
   .hero-cta {
     /* A bit more breathing room between the message and the button now
        that the bar isn't just wrapping tightly around them. */
-    gap: 1.5rem;
+    gap: 1.75rem;
   }
 
   /* The glass-card framing on .hero-cta__card (further up) exists to
@@ -2617,13 +2624,39 @@ main {
      "plain text on a dark backdrop" treatment the hero title and
      tagline already use on the photo just above, so the whole first
      screen reads as one consistent language rather than a borderless
-     top half and a boxed bottom half. */
+     top half and a boxed bottom half.
+
+     The badge and headline also stack (eyebrow on its own line, then
+     the headline below) instead of sitting side by side -- the same
+     eyebrow-then-heading rhythm already used everywhere else on the
+     page (Location/Surroundings, Guest Reviews, Meet Your Host), and
+     it reads as a considered layout rather than a squeezed-together
+     leftover from the card version, where side-by-side was only there
+     to fit both on one line inside a narrow box. */
   .hero-cta__card {
     background: none;
     border: none;
     padding: 0;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  /* Both sized up from the boxed-card version: that sizing was tuned to
+     fit comfortably inside a small pill-shaped card, but stacked on an
+     open dark backdrop with real room to breathe, the same small sizes
+     read as leftover rather than intentional -- the point of freeing
+     this text from its box was for it to actually use the space. */
+  .hero-cta__badge {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+  }
+
+  .hero-cta__headline {
+    font-size: 1.4rem;
+    line-height: 1.35;
   }
 
   .hero-scroll-cue {
