@@ -2170,6 +2170,15 @@ main {
   color: var(--color-white);
 }
 
+/* Hidden by default (desktop/tablet never show it — the hero-bar there
+   is only ever as tall as its own content, so there's nothing below
+   the button to scroll past before the tabs). Shown and positioned in
+   the max-width: 640px block further down, where the mobile hero is
+   stretched to fill the screen. */
+.hero-scroll-cue {
+  display: none;
+}
+
 /* Entrance animation: the hero title, tagline and the direct-booking bar
    rise and fade in on first load, staggered slightly so the page feels
    composed rather than everything just being there at once. Skipped
@@ -2203,6 +2212,15 @@ main {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes hero-scroll-cue-bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(7px);
   }
 }
 
@@ -2536,6 +2554,93 @@ main {
      common phone widths instead. */
   .hero-title {
     font-size: 2.125rem;
+  }
+
+  /* The photo plus its title/tagline, and the direct-booking bar right
+     under it, used to add up to whatever height their own content
+     needed -- on a tall phone that left the section/tab bar peeking in
+     at the very bottom of the first screen, which read as the layout
+     just running out of room rather than a deliberate stopping point.
+     Stretching the whole hero to fill the visible screen (100svh, not
+     100vh -- svh already excludes a mobile browser's own address bar,
+     so the cue below never ends up hidden behind it) gives the first
+     screen a clean, deliberate edge instead, with a scroll cue marking
+     it as one. min-height:100vh is a fallback for the handful of
+     browsers that don't support svh yet; svh overrides it wherever it
+     is supported. Desktop/tablet are untouched -- this is mobile-only,
+     where the peeking-tab-bar problem existed in the first place. */
+  .hero-section {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .hero {
+    /* Keeps its own aspect-ratio/min-height-derived size rather than
+       being stretched or squeezed by the flex column above. */
+    flex: 0 0 auto;
+  }
+
+  .hero-bar {
+    /* Grows to take up whatever room .hero-section's new min-height
+       adds beyond the photo's own height, instead of staying only as
+       tall as the CTA content -- and centers that content vertically
+       in the space it's given, rather than pinning it to the top with
+       a growing gap underneath. position:relative so the scroll cue
+       below can anchor to this box's bottom edge specifically, not the
+       page's. */
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero-bar__inner {
+    width: 100%;
+  }
+
+  .hero-cta {
+    /* A bit more breathing room between the message and the button now
+       that the bar isn't just wrapping tightly around them. */
+    gap: 1.5rem;
+  }
+
+  /* The glass-card framing on .hero-cta__card (further up) exists to
+     separate the discount message from the navy bar when that bar is
+     only ever as tall as its own content -- but now that the bar fills
+     the rest of the screen above, the message already has the whole
+     dark area as its backdrop, so a boxed card around a couple of
+     short lines just reads as an odd little frame floating in a lot of
+     empty navy, not "nicely laid out". Dropping the box lets the
+     eyebrow/headline sit directly on the bar instead -- the same
+     "plain text on a dark backdrop" treatment the hero title and
+     tagline already use on the photo just above, so the whole first
+     screen reads as one consistent language rather than a borderless
+     top half and a boxed bottom half. */
+  .hero-cta__card {
+    background: none;
+    border: none;
+    padding: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .hero-scroll-cue {
+    display: block;
+    position: absolute;
+    left: 50%;
+    bottom: 1.1rem;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-scroll-cue {
+      animation: hero-scroll-cue-bounce 1.8s ease-in-out infinite;
+    }
   }
 
 }
