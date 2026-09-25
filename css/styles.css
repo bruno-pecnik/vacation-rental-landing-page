@@ -2369,14 +2369,22 @@ main {
 
 /* At full section width (up to --max-width, 1120px) the 16:9 desktop crop
    renders around 630px tall, tall enough that it can push the paragraph
-   and CTA button below the fold on common laptop viewport heights. Capping
-   the width keeps the whole map visible (no cropping, so both the Novalja
-   and airport markers stay in frame) while leaving more of the section
-   readable without scrolling. Mobile keeps the full-width 3:2 crop, which
-   doesn't have this problem at phone viewport heights. */
+   and CTA button below the fold on common laptop viewport heights, so the
+   map, the copy and the button are all capped to a narrower shared column
+   instead. Left-aligned, that column just sat awkwardly off to one side
+   with a wall of empty space beside it, so the whole block is centered as
+   a unit -- matching how the guest-review quotes just below on the page
+   are already centered rather than left-aligned. The eyebrow/heading
+   above stay put at the section's usual left edge, consistent with every
+   other section, since it's this content block specifically that reads
+   better as a centered, self-contained "card" than as a stretched line of
+   text. Mobile is untouched (full width, left-aligned), which didn't have
+   either problem at phone viewport widths. */
 @media (min-width: 641px) {
-  .transfer-map {
+  .transfer-content {
     max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
   }
 }
 
