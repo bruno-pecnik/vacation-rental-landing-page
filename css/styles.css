@@ -259,6 +259,11 @@ a {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
+  /* Explicit rather than relying on the browser's own auto-cursor-for-links
+     default: some engines don't resolve that default to a pointer once the
+     link itself is a flex container, and fall back to a text-selection
+     cursor over the logo instead. */
+  cursor: pointer;
 }
 
 /* Sized to the header's own height rather than a fixed rem value, so it
@@ -2365,6 +2370,31 @@ main {
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* A static route-map screenshot reads as inert next to the rest of the
+   page's motion (carousel, hover states, the smooth-scrolling logo), so it
+   gets its own slow, ambient drift -- a gentle scale-and-drift "Ken Burns"
+   loop rather than anything that reads as a deliberate transition. 14s and
+   a small range (3% scale, a few px of drift) keep it in the background;
+   .transfer-map's own overflow:hidden clips the scaled-up edges. Gated
+   behind prefers-reduced-motion like every other animation on the page. */
+@media (prefers-reduced-motion: no-preference) {
+  .transfer-map img {
+    animation: transfer-map-drift 14s ease-in-out infinite;
+  }
+
+  @keyframes transfer-map-drift {
+    0% {
+      transform: scale(1) translate(0, 0);
+    }
+    50% {
+      transform: scale(1.035) translate(-0.6%, -1%);
+    }
+    100% {
+      transform: scale(1) translate(0, 0);
+    }
+  }
 }
 
 /* At full section width (up to --max-width, 1120px) the 16:9 desktop crop
