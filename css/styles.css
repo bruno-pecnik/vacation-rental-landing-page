@@ -85,6 +85,19 @@ html {
   overscroll-behavior-y: none;
 }
 
+/* The logo links to "#apartman" as a plain anchor (unlike the tab nav
+   links, which intercept their clicks and switch sections without ever
+   touching the browser's own scroll position), so it's the one place a
+   native browser jump-to-anchor actually happens. Without this it's an
+   instant teleport; smooth-scrolling it reads as a deliberate "take me
+   back to the top" motion instead. Gated behind prefers-reduced-motion
+   like every other animation on the page. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);

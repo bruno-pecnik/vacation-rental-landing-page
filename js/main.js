@@ -185,6 +185,10 @@
   let animating = false;
   let currentSlide = null;
   const dotEls = [];
+  // Set by init() once its viewport/applyFixedHeight closures exist; goTo()
+  // calls it whenever the current slide changes so the height-correcting
+  // ResizeObserver (see init()) always watches the right element.
+  let syncObservedSlide = function () {};
 
   function buildSlide(index) {
     const review = REVIEWS[index];
@@ -259,6 +263,7 @@
     currentSlide = incoming;
     current = targetIndex;
     updateDots(current);
+    syncObservedSlide();
 
     window.setTimeout(() => {
       if (outgoing.parentNode) outgoing.parentNode.removeChild(outgoing);
@@ -334,6 +339,32 @@
       document.fonts.ready.then(() => {
         applyFixedHeight();
       });
+    }
+
+    // Belt-and-suspenders backstop for the same race: document.fonts.ready
+    // covers the common case, but it's still one specific event among
+    // several things that can change how tall the current slide actually
+    // renders (a slow/late font swap resolving after "ready" already
+    // fired, an OS-level font substitution, a browser quirk). Rather than
+    // trying to enumerate every possible cause, this watches the real
+    // rendered height of whichever slide is currently showing and
+    // re-measures whenever it changes for any reason — so a mismatch
+    // self-corrects instead of leaving the tallest review clipped.
+    let resizeObserver = null;
+    let pendingHeightSync = null;
+    if ("ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(() => {
+        if (pendingHeightSync) window.cancelAnimationFrame(pendingHeightSync);
+        pendingHeightSync = window.requestAnimationFrame(() => {
+          pendingHeightSync = null;
+          applyFixedHeight();
+        });
+      });
+      syncObservedSlide = function () {
+        resizeObserver.disconnect();
+        if (currentSlide) resizeObserver.observe(currentSlide);
+      };
+      syncObservedSlide();
     }
 
     // Switching languages doesn't rebuild the slide (that would restart
@@ -418,6 +449,54 @@
       carousel.addEventListener("focusin", stopAutoAdvance);
       carousel.addEventListener("focusout", startAutoAdvance);
     }
+
+    // Touch swipe: the arrows and dots work fine with a mouse, but on a
+    // touchscreen a horizontal swipe across the quote itself is the more
+    // natural gesture. Only decided at touchend (comparing the total
+    // horizontal vs. vertical movement) and never calls preventDefault, so
+    // a swipe or scroll that's actually more vertical still scrolls the
+    // page normally instead of being captured by the carousel.
+    const SWIPE_THRESHOLD_PX = 40;
+    let touchStartX = null;
+    let touchStartY = null;
+
+    viewport.addEventListener(
+      "touchstart",
+      (event) => {
+        if (event.touches.length !== 1) return;
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+        stopAutoAdvance();
+      },
+      { passive: true }
+    );
+
+    viewport.addEventListener(
+      "touchend",
+      (event) => {
+        if (touchStartX === null) return;
+        const touch = event.changedTouches[0];
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+        touchStartX = null;
+        touchStartY = null;
+        if (Math.abs(deltaX) >= SWIPE_THRESHOLD_PX && Math.abs(deltaX) > Math.abs(deltaY)) {
+          step(deltaX < 0 ? 1 : -1, viewport, prevBtn, nextBtn);
+        }
+        restartAutoAdvance();
+      },
+      { passive: true }
+    );
+
+    viewport.addEventListener(
+      "touchcancel",
+      () => {
+        touchStartX = null;
+        touchStartY = null;
+        restartAutoAdvance();
+      },
+      { passive: true }
+    );
 
     // Don't auto-advance testimonials for a visitor who's asked for
     // reduced motion.
