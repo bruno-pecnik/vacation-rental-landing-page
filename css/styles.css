@@ -472,6 +472,17 @@ main {
 .page-section {
   position: relative;
   overflow: hidden;
+  /* The logo's href="#apartman" is a plain anchor link (unlike the
+     nav-links, which intercept their own clicks and never actually
+     scroll), so a native browser jump lands here directly. Without
+     this, that jump puts this section's own top flush against the
+     viewport's top edge — right where the fixed header already sits —
+     scrolling the sub-nav tabs above it entirely out of view. The
+     offset (fixed header height + sub-nav height, kept current by
+     js/main.js) leaves exactly enough room for both to still be
+     visible, landing on the same layout the page shows on a fresh
+     load. The fallback covers the brief instant before that JS runs. */
+  scroll-margin-top: var(--section-scroll-offset, 160px);
   padding: 0 0 4.5rem;
   /* Now that <body> itself is navy (see body's own rule, for the Safari
      safe-area fix), each section needs to paint its own opaque white —

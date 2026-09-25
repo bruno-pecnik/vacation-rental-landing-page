@@ -664,6 +664,39 @@
 })();
 
 // ---------------------------------------------------------------------------
+// Anchor-jump offset: the logo links to "#apartman", and the fixed header
+// plus the (normal-flow, non-fixed) sub-nav both need to stay clear of
+// whatever a browser-native jump to that hash lands on — otherwise the
+// jump puts the section's own top edge (its "About" eyebrow) right under
+// the fixed header, scrolling the sub-nav tabs entirely off-screen above
+// it. scroll-margin-top on each section fixes that, but a static px value
+// would drift out of sync with the header (83px on mobile once the nav
+// wraps, 86px above that) and go stale the next time either one's size
+// changes — so it's measured for real and kept in a CSS variable instead.
+// ---------------------------------------------------------------------------
+(function () {
+  function syncScrollOffset() {
+    const header = document.querySelector(".site-header");
+    const subnav = document.querySelector(".sub-nav");
+    if (!header || !subnav) return;
+    const offset = header.getBoundingClientRect().height + subnav.getBoundingClientRect().height;
+    document.documentElement.style.setProperty("--section-scroll-offset", offset + "px");
+  }
+
+  function init() {
+    syncScrollOffset();
+    window.addEventListener("resize", syncScrollOffset);
+    // Fonts swapping in can change the header/sub-nav's wrapped height
+    // after the initial measurement.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(syncScrollOffset);
+    }
+  }
+
+  init();
+})();
+
+// ---------------------------------------------------------------------------
 // Contact form: this is a static site with no backend to send a form to, so
 // instead of emailing anywhere it builds the same kind of wa.me message the
 // WhatsApp buttons elsewhere on the page use, and opens it in a new tab —
