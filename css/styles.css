@@ -2354,6 +2354,19 @@ main {
   height: auto;
 }
 
+/* At full section width (up to --max-width, 1120px) the 16:9 desktop crop
+   renders around 630px tall, tall enough that it can push the paragraph
+   and CTA button below the fold on common laptop viewport heights. Capping
+   the width keeps the whole map visible (no cropping, so both the Novalja
+   and airport markers stay in frame) while leaving more of the section
+   readable without scrolling. Mobile keeps the full-width 3:2 crop, which
+   doesn't have this problem at phone viewport heights. */
+@media (min-width: 641px) {
+  .transfer-map {
+    max-width: 640px;
+  }
+}
+
 .host-profile__eyebrow {
   margin: 0;
   font-size: var(--text-xs);
