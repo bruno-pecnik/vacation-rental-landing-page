@@ -664,6 +664,47 @@
 })();
 
 // ---------------------------------------------------------------------------
+// Header WhatsApp button vs. the hero-cta bar's own WhatsApp button: on
+// desktop both are visible at once in the very first screen, which reads
+// as two near-identical buttons rather than one clear call to action. The
+// header's is fixed and stays reachable for the rest of the page though
+// (the hero-cta bar's scrolls away with the hero), so it can't just be
+// removed -- it's hidden only while the hero-cta bar is still in view, and
+// reappears the moment that bar has scrolled out from under the fixed
+// header. rootMargin shrinks the observed viewport by the header's own
+// height so the handoff lands exactly when the bar would start being
+// covered by it, with no gap where neither button is visible.
+// (Mobile hides the header button unconditionally via CSS regardless of
+// this class, since the hero-cta bar is already the sole CTA there.)
+// ---------------------------------------------------------------------------
+(function () {
+  function init() {
+    const header = document.querySelector(".site-header");
+    const heroBar = document.querySelector(".hero-bar");
+    if (!header || !heroBar || !("IntersectionObserver" in window)) return;
+
+    let observer = null;
+
+    function setUp() {
+      if (observer) observer.disconnect();
+      const headerHeight = header.getBoundingClientRect().height;
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          header.classList.toggle("hero-cta-in-view", entry.isIntersecting);
+        },
+        { rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 0 }
+      );
+      observer.observe(heroBar);
+    }
+
+    setUp();
+    window.addEventListener("resize", setUp);
+  }
+
+  init();
+})();
+
+// ---------------------------------------------------------------------------
 // Anchor-jump offset: the logo links to "#apartman", and the fixed header
 // plus the (normal-flow, non-fixed) sub-nav both need to stay clear of
 // whatever a browser-native jump to that hash lands on — otherwise the
