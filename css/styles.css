@@ -2248,12 +2248,24 @@ main {
   gap: 0.9rem 1.25rem;
 }
 
-/* The message no longer sits directly on the navy bar — it's lifted
-   into its own white card, so the one thing on the page that's an
-   actual deal reads as a distinct, designed callout rather than just
-   another line of text on a coloured strip. Every colour inside it
-   (steel, navy, accent) is already part of the palette; nothing here
-   is gold or anything else invented just for this card. */
+/* A frosted-glass pane rather than a solid white card: solid white gave
+   the discount message the strongest possible pop against the navy bar,
+   but that was also the complaint -- it read as louder than everything
+   else on the page. Dropping the fill to a faint white wash (8%, not the
+   more obvious-looking ~14% first tried) plus a blur lets the bar's own
+   navy gradient show through, so the card recedes into the bar instead
+   of floating on top of it (hence no lift/box-shadow any more either --
+   a shadow reads as "raised surface", which fights the recessed-glass
+   look). -webkit-backdrop-filter covers Safari; a browser with neither
+   just shows the faint navy-on-navy tint with no blur, which still
+   reads fine. Every colour used inside this pane (white, steel-light)
+   is one already used for text on navy elsewhere on the page (see
+   .stat-band__label), so this isn't a new treatment invented just for
+   this card -- it's the same "light text on navy" pairing used
+   throughout, just applied to a translucent surface instead of a solid
+   white one. 8% (not less) is also the floor for contrast, not just
+   taste: any fainter and .hero-cta__badge's small uppercase label drops
+   below AA's 4.5:1 minimum for small text. */
 .hero-cta__card {
   display: flex;
   align-items: center;
@@ -2261,10 +2273,12 @@ main {
   gap: 0.5rem 1.5rem;
   flex: 1 1 0%;
   min-width: 14em;
-  background: var(--color-white);
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: var(--radius-md);
   padding: 0.85rem 1.4rem;
-  box-shadow: 0 10px 24px rgba(0, 12, 26, 0.28);
 }
 
 /* A plain tracked label — the same quiet "eyebrow" language used for
@@ -2272,7 +2286,11 @@ main {
    Your Host) — rather than its own separate component. The earlier
    version was a glassy outlined pill with a mint-green icon, which read
    less like a hotel's own understated tag and more like a status badge
-   lifted from a game's HUD. */
+   lifted from a game's HUD (that was about the badge's own shape/icon,
+   not this card's translucency, so it doesn't rule out the frosted-glass
+   card treatment above). Steel-light rather than the plain --color-steel
+   used when this sat on white — same "light label on a navy surface"
+   pairing already used for .stat-band__label just below on the page. */
 .hero-cta__badge {
   display: inline-flex;
   align-items: center;
@@ -2282,7 +2300,7 @@ main {
   line-height: 1.1;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--color-steel);
+  color: var(--color-steel-light);
   white-space: nowrap;
 }
 
@@ -2297,18 +2315,20 @@ main {
   font-size: clamp(1.02rem, 1.6vw, 1.22rem);
   font-weight: 600;
   line-height: 1.3;
-  color: var(--color-navy-deep);
+  color: var(--color-white);
 }
 
 /* The actual money-saving claim — "cheaper than Booking.com" — used to
    be set in the same plain colour as its lead-in clause, so despite
    being the whole point of the bar, it read as flat as everything
-   around it. Accent blue (already used elsewhere for links/focus) is
-   what gives it its own identity here now that the message lives on
-   white rather than navy, where gold was standing in for "this is the
-   deal" as the one colour that isn't part of the actual palette. */
+   around it. Steel-light gives it its own identity here (accent blue,
+   the choice from when this card was solid white, drops to a ~2:1
+   contrast ratio against the frosted navy background -- nowhere near
+   legible -- so it moved to the same light-on-navy blue used for
+   .hero-cta__badge above and .stat-band__label elsewhere, which stays
+   above 4.5:1 even at this card's faintest, worst-case background). */
 .hero-cta__highlight {
-  color: var(--color-accent);
+  color: var(--color-steel-light);
   font-weight: 700;
 }
 
