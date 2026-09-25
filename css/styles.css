@@ -2333,6 +2333,27 @@ main {
   box-shadow: 0 8px 24px rgba(0, 35, 73, 0.18);
 }
 
+/* Airport Transfer section: a route-map screenshot (Zadar Airport to
+   Novalja) gives guests an at-a-glance sense of the drive before the copy
+   explains timing and how to arrange it. The two sources are art-directed
+   rather than just scaled -- the desktop crop is a wide 16:9 banner, the
+   mobile crop is a tighter 3:2 so the route and its labels stay legible
+   at phone width instead of shrinking to a sliver. */
+.transfer-map {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0 2rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 35, 73, 0.14);
+}
+
+.transfer-map img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .host-profile__eyebrow {
   margin: 0;
   font-size: var(--text-xs);
