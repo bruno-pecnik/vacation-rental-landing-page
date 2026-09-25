@@ -2398,7 +2398,13 @@ main {
 .transfer-map {
   display: block;
   width: 100%;
-  margin: 0.5rem 0 2rem;
+  /* 1.5rem above, matching the gap every other section uses between its
+     own heading and the first content block below it (.gallery,
+     .reviews__stage) -- this one had been left at a much tighter 0.5rem,
+     which read as cramped/rushed next to a big rectangular photo instead
+     of a couple of lines of text, where the same small gap is barely
+     noticeable. */
+  margin: 1.5rem 0 2rem;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: 0 6px 16px rgba(0, 35, 73, 0.14);
