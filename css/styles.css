@@ -698,7 +698,10 @@ main {
   padding: 1.15rem 2.5rem;
   background: var(--color-navy);
   border: 1px solid var(--color-navy);
-  border-radius: var(--radius-sm);
+  /* Matches .rating-card's radius -- the two sit side by side in
+     .trust-row as a paired set of trust signals, so a different corner
+     radius between them read as an inconsistency rather than a choice. */
+  border-radius: var(--radius-md);
   /* Clips the hover sweep below to the button's own rounded corners
      instead of it spilling past them as a hard rectangle. */
   overflow: hidden;
